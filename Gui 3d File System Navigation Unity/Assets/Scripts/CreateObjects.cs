@@ -15,14 +15,11 @@ public class CreateObjects : MonoBehaviour
 
     DataNode currentSelectedNode;
 
-    // Start is called before the first frame update
-    void Start()
+
+    void Start()  // CREATES DRIVES
     {
-
-       // txtSelectedNode.text = "";
-       // txtHoveredOverNode.text = "";
-
-
+        //txtSelectedNode.text = "";
+        //txtHoveredOverNode.text = "";
 
         float index = 0;
         foreach (var drive in DriveInfo.GetDrives())
@@ -39,31 +36,47 @@ public class CreateObjects : MonoBehaviour
 
             // Position the game object in world space
             gObj.transform.position = new Vector3(x, y, z);
-            gObj.transform.localScale = new Vector3(10, 1, 10);
+            gObj.transform.localScale = new Vector3(1, 1, 1);
             gObj.name = drive.Name;
 
             //color
             var cubeRenderer = gObj.GetComponent<Renderer>();
             cubeRenderer.material.SetColor("_Color", Color.gray);
 
-
             // Add DataNode component and update the attributes for later usage
             gObj.AddComponent<DataNode>();
             DataNode dn = gObj.GetComponent<DataNode>();
             dn.Name = drive.Name;
             dn.Size = drive.TotalSize;
+            dn.FullName = drive.RootDirectory.FullName;
+            dn.IsDrive = true;
 
             index += 12f;
         }
 
-        // Set a variable to the My Documents path.
-       
     }
 
     RaycastHit hitInfo = new RaycastHit();
-
     void Update()
     {
+        #region HANDLE MOUSE INTERACTION
+        // Create a raycase from the screen-space into World Space, store the data in hitInfo Object
+        bool Hoverhit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
+        if (Hoverhit)
+        {
+            if (hitInfo.transform.GetComponent<DataNode>() != null)
+            {
+                // if there is a hit, we want to get the DataNode component to extract the information
+                DataNode dn = hitInfo.transform.GetComponent<DataNode>();
+                txtHoveredOverNode.text = $"{dn.FullName}";
+            }
+        }
+        else
+        {
+            txtHoveredOverNode.text = $"";
+        }
+        #endregion
+
         // Check to see if the Left Mouse Button was clicked
         if (Input.GetMouseButtonDown(0))
         {
@@ -71,9 +84,11 @@ public class CreateObjects : MonoBehaviour
             bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
             if (hit)
             {
-                // if there is a hit, we want to get the DataNode component to extract the information
-                DataNode dn = hitInfo.transform.GetComponent<DataNode>();
-                txtSelectedNode.text = $"{dn.Name} and {dn.Size}";
+                var gObj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                gObj.transform.position = new Vector3(10 + transform.position.x, 10 + transform.position.y, 10 + transform.position.z);
+                gObj.transform.SetParent(transform);
+                gObj.transform.LookAt(transform);
+                gObj.transform.Translate(Vector3.forward * -(10 % 2), Space.Self);
             }
         }
     }
