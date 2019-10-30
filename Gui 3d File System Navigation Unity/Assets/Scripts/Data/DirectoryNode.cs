@@ -90,7 +90,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
             return this;
         }
 
-        private void OnMouseDown()
+        /*private void OnMouseDown()
         {
             if (isShowingInternal)
             {
@@ -101,7 +101,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
                 Populate(PrimitiveType.Capsule, PrimitiveType.Cube);
             }
             return;
-        }
+        }*/
 
         private void Start()
         {
