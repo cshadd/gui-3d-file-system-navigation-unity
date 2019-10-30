@@ -1,8 +1,15 @@
+using System.IO;
+
 namespace Gui3dFileSystemNavigationUnity.Data
 {
-    // To be used later?
     public class ExtendedInfo
     {
-        public ExtendedInfo() : base() { return; }
+        private FileSystemInfo Container { get; set; }
+
+        public ExtendedInfo(FileSystemInfo container = null)
+        {
+            Container = container;
+            return;
+        }
     }
 }

@@ -7,24 +7,25 @@ namespace Gui3dFileSystemNavigationUnity.Data
     {
         public DriveInfo BaseContainer { get; protected set; }
 
-        public DriveNode() : base() { return; }
+        public DriveNode(string path = null) : base(path) { return; }
 
-        public new ISystemNode<DirectoryInfo> Assign(DirectoryInfo container)
-        {
-            return Assign(container, null);
-        }
-        public new ISystemNode<DirectoryInfo> Assign(DirectoryInfo container, DirectoryNode parent)
+        public new ISystemNode<DirectoryInfo> Assign(DirectoryInfo container,
+            ISystemNode<DirectoryInfo> parent = null)
         {
             base.Assign(container, parent);
             BaseContainer = new DriveInfo(container.FullName);
             return this;
         }
-
-        public ISystemNode<DirectoryInfo> Assign(DriveInfo container)
+        public ISystemNode<DirectoryInfo> Assign(DriveInfo container,
+            DirectoryNode parent = null)
         {
-            return Assign(container, null);
+            base.Assign(new DirectoryInfo(container.Name), parent);
+            BaseContainer = container;
+            // Debug.LogWarning(Container + ", " + BaseContainer + ", " + Container.GetType() + ", " + BaseContainer.GetType() + ", " + Container.Equals(BaseContainer));
+            return this;
         }
-        public ISystemNode<DirectoryInfo> Assign(DriveInfo container, DirectoryNode parent)
+        public ISystemNode<DirectoryInfo> Assign(DriveInfo container,
+            ISystemNode<DirectoryInfo> parent = null)
         {
             base.Assign(new DirectoryInfo(container.Name), parent);
             BaseContainer = container;
