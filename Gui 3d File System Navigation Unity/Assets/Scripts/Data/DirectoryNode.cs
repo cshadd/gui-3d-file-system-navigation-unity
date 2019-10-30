@@ -7,15 +7,25 @@ namespace Gui3dFileSystemNavigationUnity.Data
     public class DirectoryNode : SystemNode<DirectoryInfo>
     {
         [SerializeField]
-        public List<DirectoryNode> directoryNodes;
+        public List<ISystemNode<DirectoryInfo>> directoryNodes;
         [SerializeField]
-        public List<FileNode> fileNodes;
+        public List<ISystemNode<FileInfo>> fileNodes;
         [SerializeField]
         private bool isShowingInternal;
 
         public DirectoryNode() : base() { return; }
 
-        public ISystemNode<DirectoryInfo> Populate(PrimitiveType directoryPrimitiveType, PrimitiveType filePrimitiveType)
+        public ISystemNode<DirectoryInfo> Assign(DirectoryInfo container,
+            DirectoryNode parent)
+        {
+            return base.Assign(container, parent);
+        }
+        public override ISystemNode<DirectoryInfo> Grab(string path)
+        {
+            return Assign(new DirectoryInfo(path));
+        }
+        public ISystemNode<DirectoryInfo> Populate(PrimitiveType directoryPrimitiveType,
+            PrimitiveType filePrimitiveType)
         {
             if (Container.Exists && !isShowingInternal)
             {
@@ -85,12 +95,12 @@ namespace Gui3dFileSystemNavigationUnity.Data
             // For some reason directoryNodes is null even though
             // it is being serialized, a fix around this is to
             // create a new instance.
-            directoryNodes = new List<DirectoryNode>();
+            directoryNodes = new List<ISystemNode<DirectoryInfo>>();
 
             // For some reason fileNodes is null even though
             // it is being serialized, a fix around this is to
             // create a new instance.
-            fileNodes = new List<FileNode>();
+            fileNodes = new List<ISystemNode<FileInfo>>();
             return;
         }
 
