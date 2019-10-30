@@ -8,18 +8,21 @@ namespace Gui3dFileSystemNavigationUnity.Data
     public class DirectoryNode : SystemNode<DirectoryInfo>
     {
         [SerializeField]
-        public List<ISystemNode<DirectoryInfo>> directoryNodes;
+        public List<DirectoryNode> directoryNodes;
         [SerializeField]
-        public List<ISystemNode<FileInfo>> fileNodes;
+        public List<FileNode> fileNodes;
         [SerializeField]
         private bool isShowingInternal;
+        [SerializeField]
+        public DirectoryNode parentDirectory;
 
         public DirectoryNode(string path = null) : base(null) { return; }
 
         public ISystemNode<DirectoryInfo> Assign(DirectoryInfo container,
             DirectoryNode parent = null)
         {
-            return base.Assign(container, parent);
+            parentDirectory = parent;
+            return base.Assign(container);
         }
         public override ISystemNode<DirectoryInfo> Grab(string path)
         {
@@ -105,22 +108,21 @@ namespace Gui3dFileSystemNavigationUnity.Data
             // For some reason directoryNodes is null even though
             // it is being serialized, a fix around this is to
             // create a new instance.
-            directoryNodes = new List<ISystemNode<DirectoryInfo>>();
+            directoryNodes = new List<DirectoryNode>();
 
             // For some reason fileNodes is null even though
             // it is being serialized, a fix around this is to
             // create a new instance.
-            fileNodes = new List<ISystemNode<FileInfo>>();
+            fileNodes = new List<FileNode>();
             return;
         }
 
         public new ISystemNode<DirectoryInfo> Unassign()
         {
-            base.Unassign();
             Depopulate();
             directoryNodes = null;
             fileNodes = null;
-            return this;
+            return base.Unassign();
         }
     }
 }
