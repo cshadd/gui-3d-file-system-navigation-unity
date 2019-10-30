@@ -26,7 +26,6 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 var driveNode = cylinder.AddComponent<DriveNode>();
                 driveNode.Assign(drive);
                 driveNodes.Add(driveNode);
-                new DriveNode();
                 drivePosition += 5;
             }
         }

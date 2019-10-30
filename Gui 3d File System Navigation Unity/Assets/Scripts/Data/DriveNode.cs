@@ -17,14 +17,14 @@ namespace Gui3dFileSystemNavigationUnity.Data
             return this;
         }
         public ISystemNode<DirectoryInfo> Assign(DriveInfo container,
-            DirectoryNode parent)
+            DirectoryNode parent = null)
         {
             base.Assign(new DirectoryInfo(container.Name), parent);
             BaseContainer = container;
             return this;
         }
         public ISystemNode<DirectoryInfo> Assign(DriveInfo container,
-            ISystemNode<DirectoryInfo> parent = null)
+            ISystemNode<DirectoryInfo> parent)
         {
             base.Assign(new DirectoryInfo(container.Name), parent);
             BaseContainer = container;
