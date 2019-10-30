@@ -21,18 +21,19 @@ namespace Gui3dFileSystemNavigationUnity.Data
         {
             base.Assign(new DirectoryInfo(container.Name), parent);
             BaseContainer = container;
-            // Debug.LogWarning(Container + ", " + BaseContainer + ", " + Container.GetType() + ", " + BaseContainer.GetType() + ", " + Container.Equals(BaseContainer));
             return this;
         }
         public ISystemNode<DirectoryInfo> Assign(DriveInfo container,
-            ISystemNode<DirectoryInfo> parent = null)
+            ISystemNode<DirectoryInfo> parent)
         {
             base.Assign(new DirectoryInfo(container.Name), parent);
             BaseContainer = container;
-            // Debug.LogWarning(Container + ", " + BaseContainer + ", " + Container.GetType() + ", " + BaseContainer.GetType() + ", " + Container.Equals(BaseContainer));
             return this;
         }
-
+        public override ISystemNode<DirectoryInfo> Grab(string path)
+        {
+            return Assign(new DirectoryInfo(path));
+        }
         public new ISystemNode<DirectoryInfo> Unassign()
         {
             base.Unassign();
