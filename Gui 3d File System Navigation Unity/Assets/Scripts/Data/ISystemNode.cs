@@ -6,7 +6,6 @@ namespace Gui3dFileSystemNavigationUnity.Data
         where T : FileSystemInfo
     {
         T Container { get; }
-        ExtendedInfo ExtendedInfo { get; }
 
         ISystemNode<T> Assign(T container,
             ISystemNode<DirectoryInfo> parent = null);

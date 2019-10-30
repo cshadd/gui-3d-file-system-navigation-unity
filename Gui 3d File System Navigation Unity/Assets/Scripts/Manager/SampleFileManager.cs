@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace Gui3dFileSystemNavigationUnity.Manager
 {
-    public class FileSystemStartupManager : MonoBehaviour
+    public class SampleFileManager : MonoBehaviour
     {
         [SerializeField]
         private List<DriveNode> driveNodes;
 
-        private FileSystemStartupManager() : base()
+        private SampleFileManager() : base()
         {
             return;
         }
@@ -26,6 +26,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 var driveNode = cylinder.AddComponent<DriveNode>();
                 driveNode.Assign(drive);
                 driveNodes.Add(driveNode);
+                new DriveNode();
                 drivePosition += 5;
             }
         }

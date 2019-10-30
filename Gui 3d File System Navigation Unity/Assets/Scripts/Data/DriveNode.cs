@@ -17,11 +17,10 @@ namespace Gui3dFileSystemNavigationUnity.Data
             return this;
         }
         public ISystemNode<DirectoryInfo> Assign(DriveInfo container,
-            DirectoryNode parent = null)
+            DirectoryNode parent)
         {
             base.Assign(new DirectoryInfo(container.Name), parent);
             BaseContainer = container;
-            // Debug.LogWarning(Container + ", " + BaseContainer + ", " + Container.GetType() + ", " + BaseContainer.GetType() + ", " + Container.Equals(BaseContainer));
             return this;
         }
         public ISystemNode<DirectoryInfo> Assign(DriveInfo container,
@@ -29,10 +28,12 @@ namespace Gui3dFileSystemNavigationUnity.Data
         {
             base.Assign(new DirectoryInfo(container.Name), parent);
             BaseContainer = container;
-            // Debug.LogWarning(Container + ", " + BaseContainer + ", " + Container.GetType() + ", " + BaseContainer.GetType() + ", " + Container.Equals(BaseContainer));
             return this;
         }
-
+        public override ISystemNode<DirectoryInfo> Grab(string path)
+        {
+            return Assign(new DirectoryInfo(path));
+        }
         public new ISystemNode<DirectoryInfo> Unassign()
         {
             base.Unassign();
