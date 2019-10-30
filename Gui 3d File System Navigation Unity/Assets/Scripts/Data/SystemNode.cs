@@ -12,7 +12,11 @@ namespace Gui3dFileSystemNavigationUnity.Data
         public T Container { get; protected set; }
         public ExtendedInfo ExtendedInfo { get; protected set; }
 
-        protected SystemNode() : base() { return; }
+        protected SystemNode() : this(null) { return; }
+        protected SystemNode(string path) : base() {
+            Grab(path);
+            return;
+        }
 
         public abstract ISystemNode<T> Grab(string path);
 
