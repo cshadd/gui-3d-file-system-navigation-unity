@@ -52,7 +52,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
 
                     extendedInfo.isAccessDenied = false;
                 }
-                catch (UnauthorizedAccessException ex)
+                catch (UnauthorizedAccessException)
                 {
                     Debug.LogWarning("SystemNode cannot be expanded, access denied.");
                 }
