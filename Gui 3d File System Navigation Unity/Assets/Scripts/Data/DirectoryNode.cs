@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -7,18 +8,21 @@ namespace Gui3dFileSystemNavigationUnity.Data
     public class DirectoryNode : SystemNode<DirectoryInfo>
     {
         [SerializeField]
-        public List<ISystemNode<DirectoryInfo>> directoryNodes;
+        public List<DirectoryNode> directoryNodes;
         [SerializeField]
-        public List<ISystemNode<FileInfo>> fileNodes;
+        public List<FileNode> fileNodes;
         [SerializeField]
         private bool isShowingInternal;
+        [SerializeField]
+        public DirectoryNode parentDirectory;
 
         public DirectoryNode(string path = null) : base(null) { return; }
 
         public ISystemNode<DirectoryInfo> Assign(DirectoryInfo container,
             DirectoryNode parent = null)
         {
-            return base.Assign(container, parent);
+            parentDirectory = parent;
+            return base.Assign(container);
         }
         public override ISystemNode<DirectoryInfo> Grab(string path)
         {
@@ -29,22 +33,31 @@ namespace Gui3dFileSystemNavigationUnity.Data
         {
             if (Container.Exists && !isShowingInternal)
             {
-                foreach (DirectoryInfo directory in Container.GetDirectories())
+                try
                 {
-                    var directoryGameObject = GameObject.CreatePrimitive(directoryPrimitiveType);
-                    directoryGameObject.transform.parent = this.transform;
-                    var directoryNode = directoryGameObject.AddComponent<DirectoryNode>();
-                    directoryNode.Assign(directory, this);
-                    directoryNodes.Add(directoryNode);
-                }
+                    foreach (DirectoryInfo directory in Container.GetDirectories())
+                    {
+                        var directoryGameObject = GameObject.CreatePrimitive(directoryPrimitiveType);
+                        directoryGameObject.transform.parent = transform;
+                        var directoryNode = directoryGameObject.AddComponent<DirectoryNode>();
+                        directoryNode.Assign(directory, this);
+                        directoryNodes.Add(directoryNode);
+                    }
 
-                foreach (FileInfo file in Container.GetFiles())
+                    foreach (FileInfo file in Container.GetFiles())
+                    {
+                        var fileGameObject = GameObject.CreatePrimitive(filePrimitiveType);
+                        fileGameObject.transform.parent = transform;
+                        var fileNode = fileGameObject.AddComponent<FileNode>();
+                        fileNode.Assign(file, this);
+                        fileNodes.Add(fileNode);
+                    }
+
+                    extendedInfo.isAccessDenied = false;
+                }
+                catch (UnauthorizedAccessException)
                 {
-                    var fileGameObject = GameObject.CreatePrimitive(filePrimitiveType);
-                    fileGameObject.transform.parent = this.transform;
-                    var fileNode = fileGameObject.AddComponent<FileNode>();
-                    fileNode.Assign(file, this);
-                    fileNodes.Add(fileNode);
+                    Debug.LogWarning("SystemNode cannot be expanded, access denied.");
                 }
 
                 isShowingInternal = true;
@@ -95,22 +108,21 @@ namespace Gui3dFileSystemNavigationUnity.Data
             // For some reason directoryNodes is null even though
             // it is being serialized, a fix around this is to
             // create a new instance.
-            directoryNodes = new List<ISystemNode<DirectoryInfo>>();
+            directoryNodes = new List<DirectoryNode>();
 
             // For some reason fileNodes is null even though
             // it is being serialized, a fix around this is to
             // create a new instance.
-            fileNodes = new List<ISystemNode<FileInfo>>();
+            fileNodes = new List<FileNode>();
             return;
         }
 
         public new ISystemNode<DirectoryInfo> Unassign()
         {
-            base.Unassign();
             Depopulate();
             directoryNodes = null;
             fileNodes = null;
-            return this;
+            return base.Unassign();
         }
     }
 }

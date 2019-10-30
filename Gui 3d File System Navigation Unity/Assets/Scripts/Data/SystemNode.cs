@@ -9,9 +9,6 @@ namespace Gui3dFileSystemNavigationUnity.Data
         [SerializeField]
         public ExtendedInfo extendedInfo;
 
-        [SerializeField]
-        protected ISystemNode<DirectoryInfo> parentDirectory;
-
         public T Container { get; protected set; }
 
         protected SystemNode(string path = null) : base() {
@@ -21,15 +18,14 @@ namespace Gui3dFileSystemNavigationUnity.Data
 
         public abstract ISystemNode<T> Grab(string path);
 
-        public ISystemNode<T> Assign(T container,
-            ISystemNode<DirectoryInfo> parent = null)
+        public ISystemNode<T> Assign(T container)
         {
             Container = container;
             extendedInfo = new ExtendedInfo(Container);
-            parentDirectory = parent;
-            if (Container.Exists) {
-                Debug.Log("SystemNode assigned: " + Container.FullName);
+            if (Container.Exists)
+            {
                 gameObject.name = Container.FullName;
+                Debug.Log("SystemNode assigned: " + Container.FullName);
             }
             else
             {
@@ -37,12 +33,11 @@ namespace Gui3dFileSystemNavigationUnity.Data
             }
             return this;
         }
-
         public ISystemNode<T> Unassign() {
-            Debug.Log("SystemNode unassigned: " + Container.FullName);
-            Container = null;
+            extendedInfo.Unassign();
             extendedInfo = null;
-            parentDirectory = null;
+            Container = null;
+            Debug.Log("SystemNode unassigned: " + Container.FullName);
             return this;
         }
     }
