@@ -28,8 +28,25 @@ namespace Gui3dFileSystemNavigationUnity.Data
         {
             return Assign(new DirectoryInfo(path));
         }
+        public ISystemNode<DirectoryInfo> Populate()
+        {
+            var sample = new GameObject();
+            Populate(sample, sample);
+            Destroy(sample);
+            return this;
+        }
         public ISystemNode<DirectoryInfo> Populate(PrimitiveType directoryPrimitiveType,
             PrimitiveType filePrimitiveType)
+        {
+            var sample1 = GameObject.CreatePrimitive(directoryPrimitiveType);
+            var sample2 = GameObject.CreatePrimitive(filePrimitiveType);
+            Populate(sample1, sample2);
+            Destroy(sample1);
+            Destroy(sample2);
+            return this;
+        }
+        public ISystemNode<DirectoryInfo> Populate(GameObject directoryTemplate,
+    GameObject fileTemplate)
         {
             if (Container.Exists && !isShowingInternal)
             {
@@ -37,7 +54,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
                 {
                     foreach (DirectoryInfo directory in Container.GetDirectories())
                     {
-                        var directoryGameObject = GameObject.CreatePrimitive(directoryPrimitiveType);
+                        var directoryGameObject = Instantiate(directoryTemplate);
                         directoryGameObject.transform.parent = transform;
                         var directoryNode = directoryGameObject.AddComponent<DirectoryNode>();
                         directoryNode.Assign(directory, this);
@@ -46,7 +63,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
 
                     foreach (FileInfo file in Container.GetFiles())
                     {
-                        var fileGameObject = GameObject.CreatePrimitive(filePrimitiveType);
+                        var fileGameObject = Instantiate(fileTemplate);
                         fileGameObject.transform.parent = transform;
                         var fileNode = fileGameObject.AddComponent<FileNode>();
                         fileNode.Assign(file, this);
@@ -57,14 +74,14 @@ namespace Gui3dFileSystemNavigationUnity.Data
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    Debug.LogWarning("SystemNode cannot be expanded, access denied.");
+                    Debug.LogWarning("SystemNode cannot be expanded, access denied: "
+                        + Container.FullName);
                 }
 
                 isShowingInternal = true;
             }
             return this;
         }
-
         public ISystemNode<DirectoryInfo> Depopulate()
         {
             if (Container.Exists && isShowingInternal)
@@ -89,7 +106,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
             }
             return this;
         }
-
+        #region SAMPLE
         /*private void OnMouseDown()
         {
             if (isShowingInternal)
@@ -102,7 +119,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
             }
             return;
         }*/
-
+        #endregion
         private void Start()
         {
             // For some reason directoryNodes is null even though
@@ -116,7 +133,6 @@ namespace Gui3dFileSystemNavigationUnity.Data
             fileNodes = new List<FileNode>();
             return;
         }
-
         public new ISystemNode<DirectoryInfo> Unassign()
         {
             Depopulate();
