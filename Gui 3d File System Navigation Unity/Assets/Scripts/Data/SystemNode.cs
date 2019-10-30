@@ -12,20 +12,15 @@ namespace Gui3dFileSystemNavigationUnity.Data
         public T Container { get; protected set; }
         public ExtendedInfo ExtendedInfo { get; protected set; }
 
-        protected SystemNode() : this(null) { return; }
-        protected SystemNode(string path) : base() {
+        protected SystemNode(string path = null) : base() {
             Grab(path);
             return;
         }
 
         public abstract ISystemNode<T> Grab(string path);
 
-        public ISystemNode<T> Assign(T container)
-        {
-            return Assign(container, null);
-        }
         public ISystemNode<T> Assign(T container,
-            ISystemNode<DirectoryInfo> parent)
+            ISystemNode<DirectoryInfo> parent = null)
         {
             Container = container;
             ExtendedInfo = new ExtendedInfo(Container);

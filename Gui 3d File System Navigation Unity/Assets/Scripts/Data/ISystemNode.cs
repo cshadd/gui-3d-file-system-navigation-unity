@@ -8,8 +8,8 @@ namespace Gui3dFileSystemNavigationUnity.Data
         T Container { get; }
         ExtendedInfo ExtendedInfo { get; }
 
-        ISystemNode<T> Assign(T container);
-        ISystemNode<T> Assign(T container, ISystemNode<DirectoryInfo> parent);
+        ISystemNode<T> Assign(T container,
+            ISystemNode<DirectoryInfo> parent = null);
         ISystemNode<T> Grab(string path);
         ISystemNode<T> Unassign();
     }

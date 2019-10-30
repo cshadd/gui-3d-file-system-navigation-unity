@@ -13,11 +13,10 @@ namespace Gui3dFileSystemNavigationUnity.Data
         [SerializeField]
         private bool isShowingInternal;
 
-        public DirectoryNode() : this(null) { return; }
-        public DirectoryNode(string path) : base(path) { return; }
+        public DirectoryNode(string path = null) : base(null) { return; }
 
         public ISystemNode<DirectoryInfo> Assign(DirectoryInfo container,
-            DirectoryNode parent)
+            DirectoryNode parent = null)
         {
             return base.Assign(container, parent);
         }

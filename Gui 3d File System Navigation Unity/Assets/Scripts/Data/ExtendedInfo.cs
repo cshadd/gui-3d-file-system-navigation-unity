@@ -6,8 +6,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
     {
         private FileSystemInfo Container { get; set; }
 
-        private ExtendedInfo() : this(null) { return; }
-        public ExtendedInfo(FileSystemInfo container)
+        public ExtendedInfo(FileSystemInfo container = null)
         {
             Container = container;
             return;
