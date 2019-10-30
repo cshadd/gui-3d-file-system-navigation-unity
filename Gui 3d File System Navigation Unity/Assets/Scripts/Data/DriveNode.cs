@@ -1,47 +1,42 @@
 using System.IO;
+using UnityEngine;
 
 namespace Gui3dFileSystemNavigationUnity.Data
 {
     public class DriveNode : DirectoryNode
     {
-        private new DriveInfo Container { get; set; }
+        public DriveInfo BaseContainer { get; protected set; }
 
-        private DirectoryInfo BaseContainer
-        {
-            get
-            {
-                return base.Container;
-            }
-        }
+        public DriveNode() : base() { return; }
 
-        public DriveNode() : base()
+        public new ISystemNode<DirectoryInfo> Assign(DirectoryInfo container)
         {
-            return;
+            return Assign(container, null);
         }
-
-        public new void Assign(DirectoryInfo container)
+        public new ISystemNode<DirectoryInfo> Assign(DirectoryInfo container, DirectoryNode parent)
         {
-            Assign(container, null);
-            return;
-        }
-        public new void Assign(DirectoryInfo container, DirectoryNode parent)
-        {
-            Assign(new DriveInfo(container.FullName), parent);
-            return;
+            base.Assign(container, parent);
+            BaseContainer = new DriveInfo(container.FullName);
+            return this;
         }
 
-        public void Assign(DriveInfo container)
+        public ISystemNode<DirectoryInfo> Assign(DriveInfo container)
         {
-            Assign(container, null);
-            return;
+            return Assign(container, null);
         }
-        public void Assign(DriveInfo container, DirectoryNode parent)
+        public ISystemNode<DirectoryInfo> Assign(DriveInfo container, DirectoryNode parent)
         {
             base.Assign(new DirectoryInfo(container.Name), parent);
-            Container = container;
-
+            BaseContainer = container;
             // Debug.LogWarning(Container + ", " + BaseContainer + ", " + Container.GetType() + ", " + BaseContainer.GetType() + ", " + Container.Equals(BaseContainer));
-            return;
+            return this;
+        }
+
+        public new ISystemNode<DirectoryInfo> Unassign()
+        {
+            base.Unassign();
+            BaseContainer = null;
+            return this;
         }
     }
 }

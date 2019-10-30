@@ -5,7 +5,11 @@ namespace Gui3dFileSystemNavigationUnity.Data
     public interface ISystemNode<T>
         where T : FileSystemInfo
     {
-        void Assign(T container);
-        void Assign(T container, DirectoryNode parent);
+        T Container { get; }
+        ExtendedInfo ExtendedInfo { get; }
+
+        ISystemNode<T> Assign(T container);
+        ISystemNode<T> Assign(T container, DirectoryNode parent);
+        ISystemNode<T> Unassign();
     }
 }

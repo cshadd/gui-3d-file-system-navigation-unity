@@ -4,9 +4,6 @@ namespace Gui3dFileSystemNavigationUnity.Data
 {
     public class FileNode : SystemNode<FileInfo>
     {
-        public FileNode() : base()
-        {
-            return;
-        }
+        public FileNode() : base() { return; }
     }
 }

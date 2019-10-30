@@ -7,53 +7,78 @@ namespace Gui3dFileSystemNavigationUnity.Data
     public class DirectoryNode : SystemNode<DirectoryInfo>
     {
         [SerializeField]
-        private List<DirectoryNode> directoryNodes;
+        public List<DirectoryNode> directoryNodes;
         [SerializeField]
-        private List<FileNode> fileNodes;
+        public List<FileNode> fileNodes;
         [SerializeField]
         private bool isShowingInternal;
 
-        public DirectoryNode() : base()
+        public DirectoryNode() : base() { return; }
+
+        public ISystemNode<DirectoryInfo> Populate(PrimitiveType directoryPrimitiveType, PrimitiveType filePrimitiveType)
         {
-            return;
+            if (Container.Exists && !isShowingInternal)
+            {
+                foreach (DirectoryInfo directory in Container.GetDirectories())
+                {
+                    var directoryGameObject = GameObject.CreatePrimitive(directoryPrimitiveType);
+                    directoryGameObject.transform.parent = this.transform;
+                    var directoryNode = directoryGameObject.AddComponent<DirectoryNode>();
+                    directoryNode.Assign(directory, this);
+                    directoryNodes.Add(directoryNode);
+                }
+
+                foreach (FileInfo file in Container.GetFiles())
+                {
+                    var fileGameObject = GameObject.CreatePrimitive(filePrimitiveType);
+                    fileGameObject.transform.parent = this.transform;
+                    var fileNode = fileGameObject.AddComponent<FileNode>();
+                    fileNode.Assign(file, this);
+                    fileNodes.Add(fileNode);
+                }
+
+                isShowingInternal = true;
+            }
+            return this;
         }
 
-        public new void OnMouseDown()
+        public ISystemNode<DirectoryInfo> Depopulate()
         {
-            base.OnMouseDown();
-            if (Container.Exists)
+            if (Container.Exists && isShowingInternal)
             {
-                var directoryPosition = 5;
-                var filePosition = 5;
-                if (!isShowingInternal)
+                foreach (DirectoryNode directoryNode in directoryNodes)
                 {
-                    foreach (DirectoryInfo directory in Container.GetDirectories())
-                    {
-                        var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                        sphere.transform.parent = this.transform;
-                        sphere.transform.position = new Vector3(this.transform.position.x + directoryPosition, this.transform.position.y, this.transform.position.z + directoryPosition);
-                        var directoryNode = sphere.AddComponent<DirectoryNode>();
-                        directoryNode.Assign(directory, this);
-                        directoryNodes.Add(directoryNode);
-                        directoryPosition += 5;
-                    }
-
-                    foreach (FileInfo file in Container.GetFiles())
-                    {
-                        var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                        cube.transform.parent = this.transform;
-                        cube.transform.position = new Vector3(this.transform.position.x - filePosition, this.transform.position.y, this.transform.position.z - filePosition);
-                        var fileNode = cube.AddComponent<FileNode>();
-                        fileNode.Assign(file, this);
-                        fileNodes.Add(fileNode);
-                        filePosition += 5;
-                    }
-
-                    isShowingInternal = true;
+                    directoryNode.Depopulate().Unassign();
+                    Destroy(directoryNode.gameObject);
                 }
+
+                directoryNodes.Clear();
+
+                foreach (FileNode fileNode in fileNodes)
+                {
+                    fileNode.Unassign();
+                    Destroy(fileNode.gameObject);
+                }
+
+                fileNodes.Clear();
+
+                isShowingInternal = false;
+            }
+            return this;
+        }
+
+        /*private void OnMouseDown()
+        {
+            if (isShowingInternal)
+            {
+                Depopulate();
+            }
+            else
+            {
+                Populate(PrimitiveType.Capsule, PrimitiveType.Cube);
             }
             return;
-        }
+        }*/
 
         private void Start()
         {
@@ -67,6 +92,15 @@ namespace Gui3dFileSystemNavigationUnity.Data
             // create a new instance.
             fileNodes = new List<FileNode>();
             return;
+        }
+
+        public new ISystemNode<DirectoryInfo> Unassign()
+        {
+            base.Unassign();
+            Depopulate();
+            directoryNodes = null;
+            fileNodes = null;
+            return this;
         }
     }
 }

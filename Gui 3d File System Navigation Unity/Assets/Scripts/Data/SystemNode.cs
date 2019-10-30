@@ -9,38 +9,38 @@ namespace Gui3dFileSystemNavigationUnity.Data
         [SerializeField]
         protected DirectoryNode parentDirectory;
 
-        protected T Container { get; set; }
+        public T Container { get; protected set; }
+        public ExtendedInfo ExtendedInfo { get; protected set; }
 
-        protected SystemNode() : base()
-        {
-            return;
-        }
+        protected SystemNode() : base() { return; }
 
-        public void Assign(T container)
+        public ISystemNode<T> Assign(T container)
         {
-            Assign(container, null);
-            return;
+            return Assign(container, null);
         }
-        public void Assign(T container, DirectoryNode parent)
+        public ISystemNode<T> Assign(T container, DirectoryNode parent)
         {
             Container = container;
             parentDirectory = parent;
             if (Container.Exists)
             {
-                Debug.Log("Item found: " + Container.FullName);
+                Debug.Log("SystemNode assigned: " + Container.FullName);
                 gameObject.name = Container.FullName;
             }
             else
             {
-                Debug.LogWarning("Item does not exist: " + Container.FullName);
+                Debug.LogWarning("SystemNode does not exist: " + Container.FullName);
             }
-            return;
+            return this;
         }
 
-        protected void OnMouseDown()
+        public ISystemNode<T> Unassign()
         {
-            Debug.Log("Clicked on item: " + Container.FullName);
-            return;
+            Debug.Log("SystemNode unassigned: " + Container.FullName);
+            Container = null;
+            ExtendedInfo = null;
+            parentDirectory = null;
+            return this;
         }
     }
 }
