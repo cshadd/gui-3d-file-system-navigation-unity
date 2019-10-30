@@ -8,7 +8,9 @@ namespace Gui3dFileSystemNavigationUnity.Data
     public class ExtendedInfo
     {
         [SerializeField]
-        private Sprite fileIcon;
+        public Sprite fileIcon;
+        [SerializeField]
+        public bool isAccessDenied;
 
         private FileSystemInfo Container { get; set; }
 

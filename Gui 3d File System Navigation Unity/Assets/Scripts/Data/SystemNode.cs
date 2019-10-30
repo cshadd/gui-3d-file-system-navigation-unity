@@ -27,7 +27,8 @@ namespace Gui3dFileSystemNavigationUnity.Data
             Container = container;
             extendedInfo = new ExtendedInfo(Container);
             parentDirectory = parent;
-            if (Container.Exists) {
+            if (Container.Exists)
+            {
                 Debug.Log("SystemNode assigned: " + Container.FullName);
                 gameObject.name = Container.FullName;
             }
