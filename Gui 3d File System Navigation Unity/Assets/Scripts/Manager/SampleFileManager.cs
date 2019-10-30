@@ -1,3 +1,4 @@
+#region SAMPLE
 using Gui3dFileSystemNavigationUnity.Data;
 using System.Collections.Generic;
 using System.IO;
@@ -31,3 +32,4 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         }
     }
 }
+#endregion
