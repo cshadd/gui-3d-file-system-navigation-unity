@@ -1,4 +1,5 @@
 using Gui3dFileSystemNavigationUnity.Data;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -9,8 +10,6 @@ namespace Gui3dFileSystemNavigationUnity.Manager
     {
         [SerializeField]
         private List<DriveNode> driveNodes;
-        private List<DirectoryNode> DirectoryNodes;
-        private List<FileNode> FileNodes;
 
         private Sample2() : base()
         {
@@ -23,7 +22,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             foreach (DriveInfo drive in DriveInfo.GetDrives())
             {
                 var platform = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                platform.transform.parent = gameObject.transform;
+                platform.transform.parent = gameObject.transform.parent;
                 platform.transform.position = new Vector3(0 - drivePosition, 0 , 10);
                 platform.transform.localScale = new Vector3(1, 1, 1);
                 var driveNode = platform.AddComponent<DriveNode>();
@@ -43,44 +42,52 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 if (hit)
                 {
                     DirectoryNode dn = hitInfo.transform.GetComponent<DirectoryNode>();
-                    //FileNode fn = hitInfo.transform.GetComponent<FileNode>();
-                    dn.Populate(PrimitiveType.Capsule, PrimitiveType.Cube);
-
-                    int x=-4, y=0, z=4;
-                    Vector3 islandPos = createIsland(dn.transform.localPosition.x, dn.transform.localPosition.y, dn.transform.localPosition.z);
-                    foreach (DirectoryNode directoryNode in dn.directoryNodes)
+                    
+                    if (dn != null)
                     {
-                        dn = directoryNode;
-                        var item = dn.gameObject.transform;
-                        item.transform.position = new Vector3(islandPos.x + x, islandPos.y + y, islandPos.z + z);
+                        dn.Populate(PrimitiveType.Capsule, PrimitiveType.Cube);
 
-                        x += 1;
-                        if(x >= 5)
+                        int x = -4, y = 0, z = 4;
+                        Vector3 islandPos = createIsland(dn.transform.localPosition.x, dn.transform.localPosition.y, dn.transform.localPosition.z, dn);
+                        foreach (DirectoryNode directoryNode in dn.directoryNodes)
                         {
-                            x = -4;
-                            z -= 1;
+                            DirectoryNode nd = directoryNode;
+                            var item = nd.gameObject.transform;
+                            item.transform.position = new Vector3(islandPos.x + x, islandPos.y + y, islandPos.z + z);
+
+                            x += 1;
+                            if (x >= 5)
+                            {
+                                x = -4;
+                                z -= 1;
+                            }
+
+                            var renderer = item.GetComponent<Renderer>();
+                            renderer.material.SetColor("_Color", Color.black);
                         }
-                        Debug.Log(x);
-
-                        var renderer = item.GetComponent<Renderer>();
-                        renderer.material.SetColor("_Color", Color.black);
+                        int count = 0;
+                        foreach (FileNode fileNode in dn.fileNodes)
+                        {
+                            count++;
+                            FileNode fn = fileNode;
+                            var items = fn.gameObject.transform;
+                            items.transform.position = new Vector3(islandPos.x + x, islandPos.y + y, islandPos.z + z);
+                            items.transform.localScale = new Vector3(1, 2, 1);
+                            var renderer = items.GetComponent<Renderer>();
+                            renderer.material.SetColor("_Color", Color.black);
+                            Debug.Log(count);
+                        }
                     }
-
-                    //foreach (FileNode fileNode in fn.fileNodes)
-                    //{
-                    //    fn = fileNode;
-                    //    var items = fn.gameObject.transform;
-                    //    items.transform.position = new Vector3(5, 10, 15 + position);
-                    //    position += 5;
-                    //}
+                    else
+                        Debug.Log("dn = null");
                 }
             }
         }
 
-        Vector3 createIsland(float x, float y, float z)
+        Vector3 createIsland(float x, float y, float z, DirectoryNode d)
         {
             var platform = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            platform.transform.parent = gameObject.transform;
+            platform.transform.parent = d.gameObject.transform;
             Vector3 position = platform.transform.position = new Vector3(x,y+5,z+15);
             platform.transform.localScale = new Vector3(10, 1, 10);
             return position;
