@@ -32,9 +32,11 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             }
         }
 
+        int count = 0;
         RaycastHit hitInfo = new RaycastHit();
         private void Update()
         {
+
             if (Input.GetMouseButtonDown(0))
             {
                 bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
@@ -44,12 +46,14 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                     ExtendedInfo extendedInfo = dn.extendedInfo;
                     if (dn != null)
                     {
-                        Debug.Log(dn.transform.localPosition.x + " " + dn.transform.localPosition.y + " "+ dn.transform.localPosition.z);
+                       
                         dn.Populate(PrimitiveType.Capsule, PrimitiveType.Cube);
 
                         Vector3 islandPos = new Vector3(0, 0, 0);
                         if (!extendedInfo.isAccessDenied)
-                               islandPos = createIsland(dn);
+                            islandPos = createIsland(dn);
+                        else
+                            extendedInfo.isAccessDenied = true;
 
                         int x = -4, y = 0, z = 4;
                         foreach (DirectoryNode directoryNode in dn.directoryNodes)
@@ -88,6 +92,16 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                             var renderer = items.GetComponent<Renderer>();
                             renderer.material.SetColor("_Color", Color.red);
                         }
+
+                        DirectoryNode nd;
+                        if (count >= 1)
+                        {
+                            nd = dn.gameObject.transform.parent.GetComponent<DirectoryNode>();
+                            nd.Depopulate();
+                        }
+                        count++;
+
+
                     }
                     else
                         Debug.Log("dn = null");
@@ -103,19 +117,48 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 
             Debug.Log(dn.transform.localPosition.x + " " + dn.transform.localPosition.y + " " + dn.transform.localPosition.z);
 
-            Vector3 position = platform.transform.position = new Vector3(
-                            dn.gameObject.transform.localPosition.x,
-                            dn.gameObject.transform.localPosition.y,
-                            dn.gameObject.transform.localPosition.z+15);
-
-            //Vector3 position = platform.transform.position = new Vector3(10, 10, 10);
-
+            Vector3 position =
+                platform.transform.position = new Vector3(
+                         dn.gameObject.transform.position.x,
+                         dn.gameObject.transform.position.y,
+                         dn.gameObject.transform.position.z + 15);
             Debug.Log(dn.gameObject.transform.localPosition.x + " " + dn.gameObject.transform.localPosition.y + " " + dn.gameObject.transform.localPosition.z);
 
             platform.transform.localScale = new Vector3(10, 1, 10);
 
+
             return position;
         }
+
+        //Vector3 createIsland(DirectoryNode dn)
+        //{
+        //    var platform = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        //    platform.transform.parent = dn.gameObject.transform;
+        //    platform.transform.name = "Island";
+        //
+        //    //Debug.Log(dn.transform.localPosition.x + " " + dn.transform.localPosition.y + " " + dn.transform.localPosition.z);
+        //
+        //
+        //    Vector3 position;
+        //    if (count >= 1)
+        //        position = platform.transform.position = new Vector3(
+        //                    platform.transform.parent.parent.localPosition.x,
+        //                    platform.transform.parent.parent.localPosition.y,
+        //                    platform.transform.parent.parent.localPosition.z + 15);
+        //    else
+        //        position =
+        //           platform.transform.position = new Vector3(
+        //                       dn.gameObject.transform.localPosition.x,
+        //                       dn.gameObject.transform.localPosition.y,
+        //                       dn.gameObject.transform.localPosition.z + 15);
+        //     
+        //
+        //        //Debug.Log(dn.gameObject.transform.localPosition.z);
+        //
+        //    platform.transform.localScale = new Vector3(10, 1, 10);
+        //
+        //    return position;
+        //}
 
     }
 }

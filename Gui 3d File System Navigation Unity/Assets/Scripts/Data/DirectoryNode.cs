@@ -76,6 +76,8 @@ namespace Gui3dFileSystemNavigationUnity.Data
                 {
                     Debug.LogWarning("SystemNode cannot be expanded, access denied: "
                         + Container.FullName);
+                    extendedInfo.isAccessDenied = true;
+
                 }
 
                 isShowingInternal = true;
