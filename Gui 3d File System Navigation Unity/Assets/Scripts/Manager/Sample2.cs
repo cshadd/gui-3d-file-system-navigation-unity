@@ -44,17 +44,17 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 if (hit)
                 {
                     DirectoryNode dn = hitInfo.transform.GetComponent<DirectoryNode>();
-                    ExtendedInfo extendedInfo = dn.extendedInfo;
-                    if (dn != null)
-                    {
-                       
+             
+                    if (dn != null && !dn.extendedInfo.isShowingInternal)
+                    {                        
                         dn.Populate(PrimitiveType.Capsule, PrimitiveType.Cube);
 
                         Vector3 islandPos = new Vector3(0, 0, 0);
-                        if (!extendedInfo.isAccessDenied)
+                        if (!dn.extendedInfo.isAccessDenied)
                             islandPos = createIsland(dn);
+
                         count++;
-                        
+
                         int x = -4, y = 0, z = 4;
                         foreach (DirectoryNode directoryNode in dn.directoryNodes)
                         {
