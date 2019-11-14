@@ -11,6 +11,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         [SerializeField]
         private List<DriveNode> driveNodes;
 
+        RaycastHit hitInfo = new RaycastHit();
+
         private Sample2() : base()
         {
             return;
@@ -33,7 +35,6 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         }
 
         int count = 0;
-        RaycastHit hitInfo = new RaycastHit();
         private void Update()
         {
 
@@ -52,15 +53,13 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         Vector3 islandPos = new Vector3(0, 0, 0);
                         if (!extendedInfo.isAccessDenied)
                             islandPos = createIsland(dn);
-                        else
-                            extendedInfo.isAccessDenied = true;
-
+                        count++;
+                        
                         int x = -4, y = 0, z = 4;
                         foreach (DirectoryNode directoryNode in dn.directoryNodes)
                         {
                             DirectoryNode folders = directoryNode;
                             var item = folders.gameObject.transform;
-
                             item.transform.position = new Vector3(islandPos.x + x, islandPos.y + y, islandPos.z + z);
                             folders.gameObject.transform.position = new Vector3(islandPos.x + x, islandPos.y + y, islandPos.z + z);
 
@@ -93,13 +92,12 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                             renderer.material.SetColor("_Color", Color.red);
                         }
 
-                        DirectoryNode nd;
-                        if (count >= 1)
-                        {
-                            nd = dn.gameObject.transform.parent.GetComponent<DirectoryNode>();
-                            nd.Depopulate();
-                        }
-                        count++;
+                        //DirectoryNode nd;
+                        //if (count >= 1)
+                        //{
+                        //    nd = dn.gameObject.transform.parent.GetComponent<DirectoryNode>();
+                        //    nd.Depopulate();
+                        //}
 
 
                     }
@@ -109,56 +107,35 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             }
         }
 
-        Vector3 createIsland(DirectoryNode dn)
+        Vector3 createIsland(DirectoryNode directoryNode)
         {
-            var platform = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            platform.transform.parent = dn.gameObject.transform;
-            platform.transform.name = "Island";
+            var island = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            island.transform.parent = directoryNode.gameObject.transform;
+            island.transform.name = "Island";
 
-            Debug.Log(dn.transform.localPosition.x + " " + dn.transform.localPosition.y + " " + dn.transform.localPosition.z);
+            DirectoryNode parent;
+            parent = directoryNode.parentDirectory;
 
-            Vector3 position =
-                platform.transform.position = new Vector3(
-                         dn.gameObject.transform.position.x,
-                         dn.gameObject.transform.position.y,
-                         dn.gameObject.transform.position.z + 15);
-            Debug.Log(dn.gameObject.transform.localPosition.x + " " + dn.gameObject.transform.localPosition.y + " " + dn.gameObject.transform.localPosition.z);
+            Debug.Log(count);
+            Vector3 position;
+            if (count >= 1)
+            {
+                var parentIsland = parent.transform.Find("Island");
+                position = island.transform.position = new Vector3(
+                              parentIsland.gameObject.transform.position.x,
+                              parentIsland.gameObject.transform.position.y,
+                              parentIsland.gameObject.transform.position.z + 15);
+            }
+            else
+                position =
+                   island.transform.position = new Vector3(
+                            directoryNode.gameObject.transform.position.x,
+                            directoryNode.gameObject.transform.position.y,
+                            directoryNode.gameObject.transform.position.z + 15);
 
-            platform.transform.localScale = new Vector3(10, 1, 10);
-
-
+            island.transform.localScale = new Vector3(10, 1, 10);
+        
             return position;
         }
-
-        //Vector3 createIsland(DirectoryNode dn)
-        //{
-        //    var platform = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        //    platform.transform.parent = dn.gameObject.transform;
-        //    platform.transform.name = "Island";
-        //
-        //    //Debug.Log(dn.transform.localPosition.x + " " + dn.transform.localPosition.y + " " + dn.transform.localPosition.z);
-        //
-        //
-        //    Vector3 position;
-        //    if (count >= 1)
-        //        position = platform.transform.position = new Vector3(
-        //                    platform.transform.parent.parent.localPosition.x,
-        //                    platform.transform.parent.parent.localPosition.y,
-        //                    platform.transform.parent.parent.localPosition.z + 15);
-        //    else
-        //        position =
-        //           platform.transform.position = new Vector3(
-        //                       dn.gameObject.transform.localPosition.x,
-        //                       dn.gameObject.transform.localPosition.y,
-        //                       dn.gameObject.transform.localPosition.z + 15);
-        //     
-        //
-        //        //Debug.Log(dn.gameObject.transform.localPosition.z);
-        //
-        //    platform.transform.localScale = new Vector3(10, 1, 10);
-        //
-        //    return position;
-        //}
-
     }
 }

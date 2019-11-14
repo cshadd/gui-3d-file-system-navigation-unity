@@ -12,7 +12,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
         [SerializeField]
         public List<FileNode> fileNodes;
         [SerializeField]
-        private bool isShowingInternal;
+        public bool isShowingInternal;
         [SerializeField]
         public DirectoryNode parentDirectory;
 
