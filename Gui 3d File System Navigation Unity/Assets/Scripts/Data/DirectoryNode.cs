@@ -12,8 +12,6 @@ namespace Gui3dFileSystemNavigationUnity.Data
         [SerializeField]
         public List<FileNode> fileNodes;
         [SerializeField]
-        private bool isShowingInternal;
-        [SerializeField]
         public DirectoryNode parentDirectory;
 
         public DirectoryNode(string path = null) : base(null) { return; }
@@ -62,7 +60,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
         public ISystemNode<DirectoryInfo> Populate(GameObject directoryTemplate,
             GameObject fileTemplate)
         {
-            if (Container.Exists && !isShowingInternal && !extendedInfo.isAccessDenied)
+            if (Container.Exists && !extendedInfo.isAccessDenied && !extendedInfo.isShowingInternal)
             {
                 try
                 {
@@ -85,6 +83,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
                     }
 
                     extendedInfo.isAccessDenied = false;
+                    extendedInfo.isShowingInternal = true;
                 }
                 catch (UnauthorizedAccessException)
                 {
@@ -94,14 +93,12 @@ namespace Gui3dFileSystemNavigationUnity.Data
                     extendedInfo.isAccessDenied = true;
 
                 }
-
-                isShowingInternal = true;
             }
             return this;
         }
         public ISystemNode<DirectoryInfo> Depopulate()
         {
-            if (Container.Exists && isShowingInternal)
+            if (Container.Exists && extendedInfo.isShowingInternal)
             {
                 foreach (DirectoryNode directoryNode in directoryNodes)
                 {
@@ -119,20 +116,13 @@ namespace Gui3dFileSystemNavigationUnity.Data
 
                 fileNodes.Clear();
 
-                isShowingInternal = false;
+                extendedInfo.isShowingInternal = false;
             }
             return this;
         }
         private void Start()
         {
-            // For some reason directoryNodes is null even though
-            // it is being serialized, a fix around this is to
-            // create a new instance.
             directoryNodes = new List<DirectoryNode>();
-
-            // For some reason fileNodes is null even though
-            // it is being serialized, a fix around this is to
-            // create a new instance.
             fileNodes = new List<FileNode>();
             return;
         }

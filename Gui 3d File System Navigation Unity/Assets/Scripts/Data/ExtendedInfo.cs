@@ -11,6 +11,8 @@ namespace Gui3dFileSystemNavigationUnity.Data
         public Sprite fileIcon;
         [SerializeField]
         public bool isAccessDenied;
+        [SerializeField]
+        public bool isShowingInternal;
 
         private FileSystemInfo Container { get; set; }
 
@@ -31,6 +33,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
         {
             fileIcon = null;
             isAccessDenied = false;
+            isShowingInternal = false;
             Container = null;
             return this;
         }
