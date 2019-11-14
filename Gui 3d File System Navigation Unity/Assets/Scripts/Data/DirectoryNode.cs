@@ -90,6 +90,8 @@ namespace Gui3dFileSystemNavigationUnity.Data
                     extendedInfo.isAccessDenied = true;
                     Debug.LogWarning("SystemNode is be expanded, access denied: "
                         + Container.FullName);
+                    extendedInfo.isAccessDenied = true;
+
                 }
             }
             return this;
