@@ -22,7 +22,20 @@ namespace Gui3dFileSystemNavigationUnity.Data
             DirectoryNode parent = null)
         {
             parentDirectory = parent;
-            return base.Assign(container);
+            var directory = base.Assign(container);
+            try
+            {
+                Container.GetDirectories();
+                Container.GetFiles();
+                extendedInfo.isAccessDenied = false;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                extendedInfo.isAccessDenied = true;
+                Debug.LogWarning("SystemNode is access denied: "
+                    + Container.FullName);
+            }
+            return directory;
         }
         public override ISystemNode<DirectoryInfo> Grab(string path)
         {
@@ -35,6 +48,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
             Destroy(sample);
             return this;
         }
+        [Obsolete("This method is obsolete.")]
         public ISystemNode<DirectoryInfo> Populate(PrimitiveType directoryPrimitiveType,
             PrimitiveType filePrimitiveType)
         {
@@ -46,9 +60,9 @@ namespace Gui3dFileSystemNavigationUnity.Data
             return this;
         }
         public ISystemNode<DirectoryInfo> Populate(GameObject directoryTemplate,
-    GameObject fileTemplate)
+            GameObject fileTemplate)
         {
-            if (Container.Exists && !isShowingInternal)
+            if (Container.Exists && !isShowingInternal && !extendedInfo.isAccessDenied)
             {
                 try
                 {
@@ -74,7 +88,8 @@ namespace Gui3dFileSystemNavigationUnity.Data
                 }
                 catch (UnauthorizedAccessException)
                 {
-                    Debug.LogWarning("SystemNode cannot be expanded, access denied: "
+                    extendedInfo.isAccessDenied = true;
+                    Debug.LogWarning("SystemNode is be expanded, access denied: "
                         + Container.FullName);
                     extendedInfo.isAccessDenied = true;
 
