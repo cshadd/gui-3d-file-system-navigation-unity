@@ -91,6 +91,8 @@ namespace Gui3dFileSystemNavigationUnity.Data
                     extendedInfo.isAccessDenied = true;
                     Debug.LogWarning("SystemNode is be expanded, access denied: "
                         + Container.FullName);
+                    extendedInfo.isAccessDenied = true;
+
                 }
 
                 isShowingInternal = true;
@@ -121,20 +123,6 @@ namespace Gui3dFileSystemNavigationUnity.Data
             }
             return this;
         }
-        #region SAMPLE
-        private void OnMouseDown()
-        {
-            if (isShowingInternal)
-            {
-                Depopulate();
-            }
-            else
-            {
-                Populate(PrimitiveType.Capsule, PrimitiveType.Cube);
-            }
-            return;
-        }
-        #endregion
         private void Start()
         {
             // For some reason directoryNodes is null even though
