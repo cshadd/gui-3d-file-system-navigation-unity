@@ -10,6 +10,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         private int count;
         [SerializeField]
         private List<DriveNode> driveNodes;
+        [SerializeField]
+        private FileUIConnectorManager uiConnector;
         private RaycastHit hitInfo;
 
         private FileManager() : base() { return; }
@@ -144,21 +146,21 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                     var directoryNode = hitInfo.transform.GetComponent<DirectoryNode>();
                     var fileNode = hitInfo.transform.GetComponent<FileNode>();
 
-                    var fileSystemInfo = default(FileSystemInfo);
-                    var driveInfo = default(DriveInfo);
                     if (driveNode != null)
                     {
-                        fileSystemInfo = driveNode.Container;
-                        driveInfo = driveNode.BaseContainer;
+                        uiConnector.fileSystemInfo = driveNode.Container;
+                        uiConnector.driveInfo = driveNode.BaseContainer;
                     }
                     else if (directoryNode != null)
                     {
-
+                        uiConnector.fileSystemInfo = directoryNode.Container;
                     }
-                    else if (fileNode = null)
+                    else if (fileNode != null)
                     {
-
+                        uiConnector.fileSystemInfo = fileNode.Container;
                     }
+
+                    uiConnector.UpdateUI();
                 }
             }
             return;
