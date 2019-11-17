@@ -6,7 +6,6 @@ namespace Gui3dFileSystemNavigationUnity.Data
     public abstract class SystemNode<T> : MonoBehaviour, ISystemNode<T>
         where T : FileSystemInfo
     {
-        [SerializeField]
         public ExtendedInfo extendedInfo;
 
         public T Container { get; protected set; }
@@ -34,10 +33,10 @@ namespace Gui3dFileSystemNavigationUnity.Data
             return this;
         }
         public ISystemNode<T> Unassign() {
+            Debug.Log("SystemNode unassigned: " + Container.FullName);
             extendedInfo.Unassign();
             extendedInfo = null;
             Container = null;
-            Debug.Log("SystemNode unassigned: " + Container.FullName);
             return this;
         }
     }
