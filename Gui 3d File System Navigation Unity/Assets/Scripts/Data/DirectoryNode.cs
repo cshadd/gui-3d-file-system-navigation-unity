@@ -7,11 +7,8 @@ namespace Gui3dFileSystemNavigationUnity.Data
 {
     public class DirectoryNode : SystemNode<DirectoryInfo>
     {
-        [SerializeField]
         public List<DirectoryNode> directoryNodes;
-        [SerializeField]
         public List<FileNode> fileNodes;
-        [SerializeField]
         public DirectoryNode parentDirectory;
 
         public DirectoryNode(string path = null) : base(null) { return; }
