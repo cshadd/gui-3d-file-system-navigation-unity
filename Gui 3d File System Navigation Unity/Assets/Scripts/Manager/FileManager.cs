@@ -14,15 +14,15 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 
         private FileManager() : base() { return; }
 
-        private Vector3 createIsland(DirectoryNode dn)
+        private Vector3 createIsland(DirectoryNode directoryNode)
         {
             Debug.Log(count);
 
             var island = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            island.transform.parent = dn.transform;
-            island.transform.name = "Island of " + dn.name;
+            island.transform.parent = directoryNode.transform;
+            island.transform.name = "Island of " + directoryNode.name;
 
-            var parent = dn.parentDirectory;
+            var parent = directoryNode.parentDirectory;
 
             Vector3 position;
             if (count >= 1)
@@ -36,9 +36,9 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             else
             {
                 position = island.transform.position = new Vector3(
-                            dn.transform.position.x,
-                            dn.transform.position.y,
-                            dn.transform.position.z + 15);
+                            directoryNode.transform.position.x,
+                            directoryNode.transform.position.y,
+                            directoryNode.transform.position.z + 15);
             }
 
             island.transform.localScale = new Vector3(10, 1, 10);
@@ -75,15 +75,15 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 var hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
                 if (hit)
                 {
-                    var dn = hitInfo.transform.GetComponent<DirectoryNode>();
-                    if (dn != null && !dn.extendedInfo.isShowingInternal)
+                    var directoryNode = hitInfo.transform.GetComponent<DirectoryNode>();
+                    if (directoryNode != null && !directoryNode.extendedInfo.isShowingInternal)
                     {
-                        dn.Populate(PrimitiveType.Capsule, PrimitiveType.Cube);
+                        directoryNode.Populate(PrimitiveType.Capsule, PrimitiveType.Cube);
 
                         var islandPos = new Vector3(0, 0, 0);
-                        if (!dn.extendedInfo.isAccessDenied)
+                        if (!directoryNode.extendedInfo.isAccessDenied)
                         {
-                            islandPos = createIsland(dn);
+                            islandPos = createIsland(directoryNode);
                         }
 
                         count++;
@@ -91,9 +91,9 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         var x = -4;
                         var y = 0;
                         var z = 4;
-                        foreach (DirectoryNode directoryNode in dn.directoryNodes)
+                        foreach (DirectoryNode childDirectoryNode in directoryNode.directoryNodes)
                         {
-                            directoryNode.transform.position = new Vector3(
+                            childDirectoryNode.transform.position = new Vector3(
                                 islandPos.x + x,
                                 islandPos.y + y,
                                 islandPos.z + z);
@@ -105,14 +105,14 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                                 z -= 1;
                             }
 
-                            var renderer = directoryNode.GetComponent<Renderer>();
+                            var renderer = childDirectoryNode.GetComponent<Renderer>();
                             renderer.material.SetColor("_Color", Color.black);
                         }
 
-                        foreach (FileNode fileNode in dn.fileNodes)
+                        foreach (FileNode childFileNode in directoryNode.fileNodes)
                         {
-                            fileNode.transform.position = new Vector3(islandPos.x + x, islandPos.y + y, islandPos.z + z);
-                            fileNode.transform.localScale = new Vector3(1, 2, 1);
+                            childFileNode.transform.position = new Vector3(islandPos.x + x, islandPos.y + y, islandPos.z + z);
+                            childFileNode.transform.localScale = new Vector3(1, 2, 1);
 
                             x += 1;
                             if (x >= 5)
@@ -121,7 +121,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                                 z -= 1;
                             }
 
-                            var renderer = fileNode.GetComponent<Renderer>();
+                            var renderer = childFileNode.GetComponent<Renderer>();
                             renderer.material.SetColor("_Color", Color.red);
                         }
 
@@ -140,13 +140,22 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 var hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
                 if (hit)
                 {
-                    var dn = hitInfo.transform.GetComponent<DirectoryNode>();
-                    var fn = hitInfo.transform.GetComponent<FileNode>();
-                    if (dn != null)
+                    var driveNode = hitInfo.transform.GetComponent<DriveNode>();
+                    var directoryNode = hitInfo.transform.GetComponent<DirectoryNode>();
+                    var fileNode = hitInfo.transform.GetComponent<FileNode>();
+
+                    var fileSystemInfo = default(FileSystemInfo);
+                    var driveInfo = default(DriveInfo);
+                    if (driveNode != null)
+                    {
+                        fileSystemInfo = driveNode.Container;
+                        driveInfo = driveNode.BaseContainer;
+                    }
+                    else if (directoryNode != null)
                     {
 
                     }
-                    else if (fn)
+                    else if (fileNode = null)
                     {
 
                     }
