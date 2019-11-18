@@ -32,6 +32,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         {
             var container = node.Container;
             var extendedInfo = node.extendedInfo;
+
+            textTest.text = container.Name;
             return;
         }
     }
