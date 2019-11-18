@@ -21,7 +21,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 
         private class Root : DirectoryNode
         {
-            public List<DriveNode> driveNodes = new List<DriveNode>();
+            public List<DriveNode> driveNodes;
 
             public new ISystemNode<DirectoryInfo> Assign(DirectoryInfo container,
                 DirectoryNode parent = null)
@@ -39,6 +39,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 Destroy(sample);
                 return this;
             }
+            [Obsolete("This method is obsolete.")]
             public ISystemNode<DirectoryInfo> Populate(PrimitiveType drivePrimitiveType)
             {
                 var sample = GameObject.CreatePrimitive(drivePrimitiveType);
@@ -55,6 +56,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             public new ISystemNode<DirectoryInfo> Populate(GameObject driveTemplate,
                 GameObject notUsed = null)
             {
+                driveNodes = new List<DriveNode>();
                 foreach (DriveInfo drive in DriveInfo.GetDrives())
                 {
                     var driveGameObject = Instantiate(driveTemplate);
