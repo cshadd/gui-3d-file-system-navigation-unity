@@ -1,11 +1,9 @@
 using System.IO;
-using UnityEngine;
 
 namespace Gui3dFileSystemNavigationUnity.Data
 {
     public class FileNode : SystemNode<FileInfo>
     {
-        [SerializeField]
         public DirectoryNode parentDirectory;
 
         public FileNode(string path = null) : base(path) { return; }
