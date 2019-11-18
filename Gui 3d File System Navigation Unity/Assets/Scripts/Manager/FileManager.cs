@@ -80,25 +80,24 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             island.transform.name = "Island of " + directoryNode.name;
 
             var parent = directoryNode.parentDirectory;
-
             Vector3 position;
+
             if (count >= 1)
             {
                 var parentIsland = parent.transform.Find("Island of " + parent.name);
-                position = island.transform.position = new Vector3(
-                              parentIsland.transform.position.x,
-                              parentIsland.transform.position.y,
-                              parentIsland.transform.position.z + 15);
+                position = island.transform.position =
+                              parentIsland.transform.position + new Vector3(0, 0, 15);
             }
             else
             {
-                position = island.transform.position = new Vector3(
-                            directoryNode.transform.position.x,
-                            directoryNode.transform.position.y,
-                            directoryNode.transform.position.z + 15);
+                position = island.transform.position =
+                    directoryNode.transform.position + new Vector3(0, 0, 15);
             }
 
             island.transform.localScale = new Vector3(10, 1, 10);
+
+            tempCam.transform.position =
+                island.transform.position + new Vector3(0, 10, -10);
 
             var renderer = island.GetComponent<Renderer>();
             renderer.material.SetColor("_Color", Color.white);
@@ -147,10 +146,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             var z = 4;
             foreach (DriveNode childDriveNode in root.driveNodes)
             {
-                childDriveNode.transform.position = new Vector3(
-                    islandPosition.x + x,
-                    islandPosition.y + y,
-                    islandPosition.z + z);
+                childDriveNode.transform.position =
+                    islandPosition + new Vector3(x, y, z);
 
                 x += 1;
                 if (x >= 5)
@@ -169,6 +166,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                     renderer.material.SetColor("_Color", Color.gray);
                 }
             }
+
+            tempCam.transform.Rotate(new Vector3(45, 0, 0));
 
             return;
         }
@@ -199,10 +198,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         var z = 4;
                         foreach (DirectoryNode childDirectoryNode in directoryNode.directoryNodes)
                         {
-                            childDirectoryNode.transform.position = new Vector3(
-                                islandPosition.x + x,
-                                islandPosition.y + y,
-                                islandPosition.z + z);
+                            childDirectoryNode.transform.position =
+                                islandPosition + new Vector3(x, y, z);
 
                             x += 1;
                             if (x >= 5)
@@ -225,10 +222,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 
                         foreach (FileNode childFileNode in directoryNode.fileNodes)
                         {
-                            childFileNode.transform.position = new Vector3(
-                                islandPosition.x + x,
-                                islandPosition.y + y,
-                                islandPosition.z + z);
+                            childFileNode.transform.position =
+                                islandPosition + new Vector3(x, y, z);
                             childFileNode.transform.localScale = new Vector3(1, 2, 1);
 
                             x += 1;
@@ -249,12 +244,12 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                             }
                         }
 
-                        //DirectoryNode nd;
-                        //if (count >= 1)
-                        //{
-                        //    nd = dn.gameObject.transform.parent.GetComponent<DirectoryNode>();
-                        //    nd.Depopulate();
-                        //}
+                        /*DirectoryNode nd;
+                        if (count >= 1)
+                        {
+                            nd = dn.gameObject.transform.parent.GetComponent<DirectoryNode>();
+                            nd.Depopulate();
+                        }*/
                     }
                 }
             }
