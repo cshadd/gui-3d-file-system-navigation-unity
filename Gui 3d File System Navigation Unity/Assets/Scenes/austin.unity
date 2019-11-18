@@ -411,9 +411,8 @@ GameObject:
   m_Component:
   - component: {fileID: 834955842}
   - component: {fileID: 834955843}
-  - component: {fileID: 834955844}
   m_Layer: 0
-  m_Name: _FileManager
+  m_Name: FileManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -427,7 +426,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 834955841}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.24287, y: 20.161442, z: 15.846339}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -445,27 +444,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d21b6e6cbcadfcb4bad0be6e3fef4a4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  driveNodes: []
   uiConnector: {fileID: 668768255}
---- !u!114 &834955844
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 834955841}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f58ea9c6d3eeb1c45a5e2d94dd985c32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  extendedInfo:
-    fileIcon: {fileID: 0}
-    isAccessDenied: 0
-    isShowingInternal: 0
-  directoryNodes: []
-  fileNodes: []
-  parentDirectory: {fileID: 0}
+  root: {fileID: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
