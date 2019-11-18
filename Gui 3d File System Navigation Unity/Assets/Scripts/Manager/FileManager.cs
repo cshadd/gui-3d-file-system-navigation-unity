@@ -1,4 +1,5 @@
 using Gui3dFileSystemNavigationUnity.Data;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -13,8 +14,19 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         [SerializeField]
         private FileUIConnectorManager uiConnector;
         private RaycastHit hitInfo;
+        [SerializeField]
+        private Root root;
 
         private FileManager() : base() { return; }
+
+        private class Root : DirectoryNode
+        {
+            [SerializeField]
+            private List<DriveNode> driveNodes;
+
+            public Root() : base("") { return; }
+
+        }
 
         private Vector3 createIsland(DirectoryNode directoryNode)
         {
@@ -53,6 +65,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 
         private void Start()
         {
+            root = gameObject.AddComponent<Root>();
             Debug.Log(Application.productName + " started.");
             count = 0;
             var drivePosition = 0;
