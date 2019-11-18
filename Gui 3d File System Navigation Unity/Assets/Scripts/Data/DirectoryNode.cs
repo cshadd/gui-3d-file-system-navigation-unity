@@ -7,8 +7,8 @@ namespace Gui3dFileSystemNavigationUnity.Data
 {
     public class DirectoryNode : SystemNode<DirectoryInfo>
     {
-        public List<DirectoryNode> directoryNodes = new List<DirectoryNode>();
-        public List<FileNode> fileNodes = new List<FileNode>();
+        public List<DirectoryNode> directoryNodes;
+        public List<FileNode> fileNodes;
         public DirectoryNode parentDirectory;
 
         public DirectoryNode(string path = null) : base(path) { return; }
@@ -59,6 +59,8 @@ namespace Gui3dFileSystemNavigationUnity.Data
         {
             if (Container.Exists && !extendedInfo.isAccessDenied && !extendedInfo.isShowingInternal)
             {
+                directoryNodes = new List<DirectoryNode>();
+                fileNodes = new List<FileNode>();
                 try
                 {
                     foreach (DirectoryInfo directory in Container.GetDirectories())
