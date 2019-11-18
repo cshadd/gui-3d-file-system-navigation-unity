@@ -16,6 +16,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         private RaycastHit hitInfo;
         [SerializeField]
         private Root root;
+        [SerializeField]
+        private Camera tempCam;
 
         private FileManager() : base() { return; }
 
@@ -268,19 +270,16 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 
                     if (driveNode != null)
                     {
-                        uiConnector.fileSystemInfo = driveNode.Container;
-                        uiConnector.driveInfo = driveNode.BaseContainer;
+                        uiConnector.ExecuteUI(driveNode);
                     }
                     else if (directoryNode != null)
                     {
-                        uiConnector.fileSystemInfo = directoryNode.Container;
+                        uiConnector.ExecuteUI(directoryNode);
                     }
                     else if (fileNode != null)
                     {
-                        uiConnector.fileSystemInfo = fileNode.Container;
+                        uiConnector.ExecuteUI(fileNode);
                     }
-
-                    uiConnector.UpdateUI();
                 }
             }
             return;
