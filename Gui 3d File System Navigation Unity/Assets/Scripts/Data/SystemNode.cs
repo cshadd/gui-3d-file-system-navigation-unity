@@ -11,7 +11,10 @@ namespace Gui3dFileSystemNavigationUnity.Data
         public T Container { get; protected set; }
 
         protected SystemNode(string path = null) : base() {
-            Grab(path);
+            if (path != null)
+            {
+                Grab(path);
+            }
             return;
         }
 
