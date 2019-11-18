@@ -11,13 +11,14 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         private int count;
         //[SerializeField]
         //private List<DriveNode> driveNodes;
-        [SerializeField]
-        private FileUIConnectorManager uiConnector;
-        private RaycastHit hitInfo;
+        private Ray ray;
+        private RaycastHit raycastHit;
         [SerializeField]
         private Root root;
         [SerializeField]
-        private Camera tempCam;
+        private GameObject selector;
+        [SerializeField]
+        private FileUIConnectorManager uiConnector;
 
         private FileManager() : base() { return; }
 
@@ -96,7 +97,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 
             island.transform.localScale = new Vector3(10, 1, 10);
 
-            tempCam.transform.position =
+            // May be changed.
+            Camera.main.transform.position =
                 island.transform.position + new Vector3(0, 10, -10);
 
             var renderer = island.GetComponent<Renderer>();
@@ -156,31 +158,38 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                     z -= 1;
                 }
 
-                var renderer = childDriveNode.GetComponent<Renderer>();
+                var childDriveNodeRenderer = childDriveNode.GetComponent<Renderer>();
                 if (childDriveNode.extendedInfo.isAccessDenied)
                 {
-                    renderer.material.SetColor("_Color", Color.red);
+                    childDriveNodeRenderer.material.SetColor("_Color", Color.red);
                 }
                 else
                 {
-                    renderer.material.SetColor("_Color", Color.gray);
+                    childDriveNodeRenderer.material.SetColor("_Color", Color.gray);
                 }
             }
 
-            tempCam.transform.Rotate(new Vector3(45, 0, 0));
+            // May be changed.
+            Camera.main.transform.Rotate(new Vector3(45, 0, 0));
+
+            var selectorRenderer = selector.GetComponent<Renderer>();
+            selectorRenderer.material.SetColor("_Color", Color.yellow);
 
             return;
         }
 
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0))
+            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            var hit = Physics.Raycast(ray, out raycastHit);
+            if (hit)
             {
-                Debug.Log("Mouse click left.");
-                var hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
-                if (hit)
+                var fileNode = raycastHit.transform.GetComponent<FileNode>();
+                var directoryNode = raycastHit.transform.GetComponent<DirectoryNode>();
+                var driveNode = raycastHit.transform.GetComponent<DriveNode>();
+
+                if (Input.GetMouseButtonDown(0))
                 {
-                    var directoryNode = hitInfo.transform.GetComponent<DirectoryNode>();
                     if (directoryNode != null && !directoryNode.extendedInfo.isShowingInternal)
                     {
                         directoryNode.Populate(PrimitiveType.Capsule, PrimitiveType.Cube);
@@ -251,31 +260,45 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                             nd.Depopulate();
                         }*/
                     }
-                }
-            }
-            else if (Input.GetMouseButtonDown(1))
-            {
-                Debug.Log("Mouse click right.");
-                var hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
-                if (hit)
-                {
-                    var driveNode = hitInfo.transform.GetComponent<DriveNode>();
-                    var directoryNode = hitInfo.transform.GetComponent<DirectoryNode>();
-                    var fileNode = hitInfo.transform.GetComponent<FileNode>();
 
+                }
+                else if (Input.GetMouseButtonDown(1))
+                {
                     if (driveNode != null)
                     {
+                        Debug.Log("Sending " + driveNode.name + " to UI.");
                         uiConnector.ExecuteUI(driveNode);
                     }
                     else if (directoryNode != null)
                     {
+                        Debug.Log("Sending " + directoryNode.name + " to UI.");
                         uiConnector.ExecuteUI(directoryNode);
                     }
                     else if (fileNode != null)
                     {
+                        Debug.Log("Sending " + fileNode.name + " to UI.");
                         uiConnector.ExecuteUI(fileNode);
                     }
                 }
+                else
+                {
+                    if (driveNode != null
+                        || directoryNode != null
+                        || fileNode != null)
+                    {
+                        selector.SetActive(true);
+                        selector.transform.position =
+                            raycastHit.transform.position + new Vector3(0, 0, -0.5f);
+                    }
+                    else
+                    {
+                        selector.SetActive(false);
+                    }
+                }
+            }
+            else
+            {
+                selector.SetActive(false);
             }
             return;
         }
