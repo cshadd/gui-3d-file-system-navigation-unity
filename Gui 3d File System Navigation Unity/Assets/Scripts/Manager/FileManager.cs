@@ -107,6 +107,32 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             return position;
         }
 
+        private void createConnectingRod(DirectoryNode directoryNode)
+        {
+            var rod = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            rod.transform.parent = directoryNode.transform;
+            rod.transform.name = "Rod of " + directoryNode.name;
+            var parent = directoryNode.parentDirectory;
+
+            if (count >= 1)
+            {
+                var parentIsland = parent.transform.Find("Island of " + parent.name);
+                rod.transform.position =
+                              parentIsland.transform.position + new Vector3(0, 0, 8);
+            }
+            else
+            {
+               rod.transform.position =
+                             directoryNode.transform.position + new Vector3(0, 0, 8);
+            }
+
+            rod.transform.localScale = new Vector3(1, 3, 1);
+            rod.transform.rotation =  Quaternion.Euler(0,90,90);
+
+            var renderer = rod.GetComponent<Renderer>();
+            renderer.material.SetColor("_Color", Color.gray);
+        }
+
         private void Start()
         {
             Debug.Log(Application.productName + " started.");
@@ -198,6 +224,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         if (!directoryNode.extendedInfo.isAccessDenied)
                         {
                             islandPosition = createIsland(directoryNode);
+                            createConnectingRod(directoryNode);
                         }
 
                         count++;
