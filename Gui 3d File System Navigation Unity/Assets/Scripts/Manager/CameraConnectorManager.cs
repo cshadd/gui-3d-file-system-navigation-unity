@@ -11,7 +11,6 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         {
             return Transition(o.transform);
         }
-
         public Camera Transition(Transform t)
         {
             // TODO
@@ -19,7 +18,6 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 t.position + new Vector3(0, 10, -10);
             return camera;
         }
-
         private void Start()
         {
             // TODO
