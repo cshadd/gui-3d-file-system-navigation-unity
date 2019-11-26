@@ -8,9 +8,9 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 {
     public class FileManager : MonoBehaviour
     {
+        [SerializeField]
+        private CameraConnectorManager cameraConnector;
         private int count;
-        //[SerializeField]
-        //private List<DriveNode> driveNodes;
         private Ray ray;
         private RaycastHit raycastHit;
         [SerializeField]
@@ -72,46 +72,12 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             }
         }
 
-        private Vector3 createIsland(DirectoryNode directoryNode)
-        {
-            Debug.Log(count);
-
-            var island = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            island.transform.parent = directoryNode.transform;
-            island.transform.name = "Island of " + directoryNode.name;
-
-            var parent = directoryNode.parentDirectory;
-            Vector3 position;
-
-            if (count >= 1)
-            {
-                var parentIsland = parent.transform.Find("Island of " + parent.name);
-                position = island.transform.position =
-                              parentIsland.transform.position + new Vector3(0, 0, 15);
-            }
-            else
-            {
-                position = island.transform.position =
-                    directoryNode.transform.position + new Vector3(0, 0, 15);
-            }
-
-            island.transform.localScale = new Vector3(10, 1, 10);
-
-            // May be changed.
-            Camera.main.transform.position =
-                island.transform.position + new Vector3(0, 10, -10);
-
-            var renderer = island.GetComponent<Renderer>();
-            renderer.material.SetColor("_Color", Color.white);
-
-            return position;
-        }
-
-        private void createConnectingRod(DirectoryNode directoryNode)
+        private GameObject createConnectingRod(DirectoryNode directoryNode)
         {
             var rod = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             rod.transform.parent = directoryNode.parentDirectory.transform;
             rod.transform.name = "Rod of " + directoryNode.parentDirectory.name;
+
             var parent = directoryNode.parentDirectory;
 
             if (count >= 1)
@@ -122,24 +88,51 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             }
             else
             {
-               rod.transform.position =
-                             directoryNode.transform.position + new Vector3(0, 0, 8);
+                rod.transform.position =
+                              directoryNode.transform.position + new Vector3(0, 0, 8);
             }
 
             rod.transform.localScale = new Vector3(1, 3, 1);
-            rod.transform.rotation =  Quaternion.Euler(0,90,90);
+            rod.transform.rotation = Quaternion.Euler(0, 90, 90);
+
+            var rodData = rod.AddComponent<Rod>();
+            rodData.currentDirectory = directoryNode.parentDirectory;
+            rodData.nextDirectory = directoryNode;
 
             var renderer = rod.GetComponent<Renderer>();
             renderer.material.SetColor("_Color", Color.gray);
-        }
 
-        private void returnToPreviousIsland(Transform gameObject, DirectoryNode directoryNode)
+            return rod;
+        }
+        private GameObject createIsland(DirectoryNode directoryNode)
         {
-            var parentIsland = gameObject.parent.transform.Find("Island of " + gameObject.parent.name);
-            Camera.main.transform.position =
-               parentIsland.transform.position + new Vector3(0, 10, -10);
-        }
+            Debug.Log(count);
 
+            var island = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            island.transform.parent = directoryNode.transform;
+            island.transform.name = "Island of " + directoryNode.name;
+
+            var parent = directoryNode.parentDirectory;
+
+            if (count >= 1)
+            {
+                var parentIsland = parent.transform.Find("Island of " + parent.name);
+                island.transform.position =
+                              parentIsland.transform.position + new Vector3(0, 0, 15);
+            }
+            else
+            {
+                island.transform.position =
+                    directoryNode.transform.position + new Vector3(0, 0, 15);
+            }
+
+            island.transform.localScale = new Vector3(10, 1, 10);
+
+            var renderer = island.GetComponent<Renderer>();
+            renderer.material.SetColor("_Color", Color.white);
+
+            return island;
+        }
         private void Start()
         {
             Debug.Log(Application.productName + " started.");
@@ -147,32 +140,10 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             root.Populate(PrimitiveType.Cylinder);
             count = 0;
 
-            /*var drivePosition = 0;
-            foreach (DriveInfo drive in DriveInfo.GetDrives())
-            {
-                var driveGameObject = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-                driveGameObject.transform.parent = transform.parent;
-                driveGameObject.transform.position = new Vector3(0 - drivePosition, 0 , 10);
-                driveGameObject.transform.localScale = new Vector3(1, 1, 1);
-                var driveNode = driveGameObject.AddComponent<DriveNode>();
-                driveNode.Assign(drive);
-                driveNodes.Add(driveNode);
+            var island = createIsland(root);
+            var islandPosition = island.transform.position;
 
-                var renderer = driveGameObject.GetComponent<Renderer>();
-                if (driveNode.extendedInfo.isAccessDenied)
-                {
-                    renderer.material.SetColor("_Color", Color.red);
-                }
-                else
-                {
-                    renderer.material.SetColor("_Color", Color.gray);
-                }
-
-                drivePosition += 15;
-            }*/
-
-            var islandPosition = new Vector3(0, 0, 0);
-            islandPosition = createIsland(root);
+            cameraConnector.Transition(island);
 
             count++;
 
@@ -202,9 +173,6 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 }
             }
 
-            // May be changed.
-            Camera.main.transform.Rotate(new Vector3(45, 0, 0));
-
             var selectorRenderer = selector.GetComponent<Renderer>();
             selectorRenderer.material.SetColor("_Color", Color.yellow);
 
@@ -220,88 +188,82 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 var fileNode = raycastHit.transform.GetComponent<FileNode>();
                 var directoryNode = raycastHit.transform.GetComponent<DirectoryNode>();
                 var driveNode = raycastHit.transform.GetComponent<DriveNode>();
-                var gameObject = raycastHit.transform.GetComponent<Transform>();
+                var rodData = raycastHit.transform.GetComponent<Rod>();
 
                 if (Input.GetMouseButtonDown(0))
                 {
-                    
                     if (directoryNode != null && !directoryNode.extendedInfo.isShowingInternal)
                     {
                         directoryNode.Populate(PrimitiveType.Capsule, PrimitiveType.Cube);
 
-                        var islandPosition = new Vector3(0, 0, 0);
                         if (!directoryNode.extendedInfo.isAccessDenied)
                         {
-                            islandPosition = createIsland(directoryNode);
+                            var island = createIsland(directoryNode);
+                            var islandPosition = island.transform.position;
                             createConnectingRod(directoryNode);
+
+                            cameraConnector.Transition(island);
+
+                            count++;
+
+                            var x = -4;
+                            var y = 0;
+                            var z = 4;
+                            foreach (DirectoryNode childDirectoryNode in directoryNode.directoryNodes)
+                            {
+                                childDirectoryNode.transform.position =
+                                    islandPosition + new Vector3(x, y, z);
+
+                                x += 1;
+                                if (x >= 5)
+                                {
+                                    x = -4;
+                                    z -= 1;
+                                }
+
+                                var renderer = childDirectoryNode.GetComponent<Renderer>();
+                                if (childDirectoryNode.extendedInfo.isAccessDenied)
+                                {
+                                    renderer.material.SetColor("_Color", Color.red);
+                                }
+                                else
+                                {
+                                    var vanillaFolderColor = new Color32(95, 90, 67, 255);
+                                    renderer.material.SetColor("_Color", vanillaFolderColor);
+                                }
+                            }
+
+                            foreach (FileNode childFileNode in directoryNode.fileNodes)
+                            {
+                                childFileNode.transform.position =
+                                    islandPosition + new Vector3(x, y, z);
+                                childFileNode.transform.localScale = new Vector3(1, 2, 1);
+
+                                x += 1;
+                                if (x >= 5)
+                                {
+                                    x = -4;
+                                    z -= 1;
+                                }
+
+                                var renderer = childFileNode.GetComponent<Renderer>();
+                                if (childFileNode.extendedInfo.isAccessDenied)
+                                {
+                                    renderer.material.SetColor("_Color", Color.red);
+                                }
+                                else
+                                {
+                                    renderer.material.SetColor("_Color", Color.blue);
+                                }
+                            }
                         }
-
-
-
-                        count++;
-
-                        var x = -4;
-                        var y = 0;
-                        var z = 4;
-                        foreach (DirectoryNode childDirectoryNode in directoryNode.directoryNodes)
-                        {
-                            childDirectoryNode.transform.position =
-                                islandPosition + new Vector3(x, y, z);
-
-                            x += 1;
-                            if (x >= 5)
-                            {
-                                x = -4;
-                                z -= 1;
-                            }
-
-                            var renderer = childDirectoryNode.GetComponent<Renderer>();
-                            if (childDirectoryNode.extendedInfo.isAccessDenied)
-                            {
-                                renderer.material.SetColor("_Color", Color.red);
-                            }
-                            else
-                            {
-                                var vanillaFolderColor = new Color32(95, 90, 67, 255);
-                                renderer.material.SetColor("_Color", vanillaFolderColor);
-                            }
-                        }
-
-                        foreach (FileNode childFileNode in directoryNode.fileNodes)
-                        {
-                            childFileNode.transform.position =
-                                islandPosition + new Vector3(x, y, z);
-                            childFileNode.transform.localScale = new Vector3(1, 2, 1);
-
-                            x += 1;
-                            if (x >= 5)
-                            {
-                                x = -4;
-                                z -= 1;
-                            }
-
-                            var renderer = childFileNode.GetComponent<Renderer>();
-                            if (childFileNode.extendedInfo.isAccessDenied)
-                            {
-                                renderer.material.SetColor("_Color", Color.red);
-                            }
-                            else
-                            {
-                                renderer.material.SetColor("_Color", Color.blue);
-                            }
-                        }
-                        
-
-                        /*DirectoryNode nd;
-                        if (count >= 1)
-                        {
-                            nd = dn.gameObject.transform.parent.GetComponent<DirectoryNode>();
-                            nd.Depopulate();
-                        }*/
                     }
-                    if (gameObject.name.Contains("Rod of "))
+                    else if (rodData != null)
                     {
-                        returnToPreviousIsland(gameObject, directoryNode);
+                        var parent = rodData.currentDirectory;
+                        var parentIsland = parent.transform.Find("Island of "
+                            + parent.name);
+                        cameraConnector.Transition(parentIsland);
                     }
                 }
 
