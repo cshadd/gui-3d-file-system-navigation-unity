@@ -107,11 +107,11 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             return position;
         }
 
-        private void createConnectingRod(DirectoryNode directoryNode)
+        private void ConnectingRod(DirectoryNode directoryNode)
         {
             var rod = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            rod.transform.parent = directoryNode.transform;
-            rod.transform.name = "Rod of " + directoryNode.name;
+            rod.transform.parent = directoryNode.parentDirectory.transform;
+            rod.transform.name = "Rod of " + directoryNode.parentDirectory.name;
             var parent = directoryNode.parentDirectory;
 
             if (count >= 1)
@@ -131,6 +131,18 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 
             var renderer = rod.GetComponent<Renderer>();
             renderer.material.SetColor("_Color", Color.gray);
+
+           // return rod;
+        }
+
+        //var parentIsland = parent.transform.Find("Island of " + parent.name);
+        //position = island.transform.position =
+        //                      parentIsland.transform.position + new Vector3(0, 0, 15);
+        private void returnToPreviousIsland(Transform gameObject, DirectoryNode directoryNode)
+        {
+            var parentIsland = gameObject.parent.transform.Find("Island of " + gameObject.parent.name);
+            Camera.main.transform.position =
+               parentIsland.transform.position + new Vector3(0, 10, -10);
         }
 
         private void Start()
@@ -213,9 +225,11 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 var fileNode = raycastHit.transform.GetComponent<FileNode>();
                 var directoryNode = raycastHit.transform.GetComponent<DirectoryNode>();
                 var driveNode = raycastHit.transform.GetComponent<DriveNode>();
+                var gameObject = raycastHit.transform.GetComponent<Transform>();
 
                 if (Input.GetMouseButtonDown(0))
                 {
+                    
                     if (directoryNode != null && !directoryNode.extendedInfo.isShowingInternal)
                     {
                         directoryNode.Populate(PrimitiveType.Capsule, PrimitiveType.Cube);
@@ -224,8 +238,10 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         if (!directoryNode.extendedInfo.isAccessDenied)
                         {
                             islandPosition = createIsland(directoryNode);
-                            createConnectingRod(directoryNode);
+                            ConnectingRod(directoryNode);
                         }
+
+
 
                         count++;
 
@@ -279,6 +295,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                                 renderer.material.SetColor("_Color", Color.blue);
                             }
                         }
+                        
 
                         /*DirectoryNode nd;
                         if (count >= 1)
@@ -287,8 +304,12 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                             nd.Depopulate();
                         }*/
                     }
-
+                    if (gameObject.name.Contains("Rod of "))
+                    {
+                        returnToPreviousIsland(gameObject, directoryNode);
+                    }
                 }
+
                 else if (Input.GetMouseButtonDown(1))
                 {
                     if (driveNode != null)
@@ -327,6 +348,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             {
                 selector.SetActive(false);
             }
+
             return;
         }
     }
