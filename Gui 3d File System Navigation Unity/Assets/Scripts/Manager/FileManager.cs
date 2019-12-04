@@ -13,6 +13,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         private int count;
         [SerializeField]
         private FileIconDatabase fileIconDatabase;
+        [SerializeField]
+        private FilePropertyUIConnectorManager filePropertiesUIConnector;
         private Ray ray;
         private RaycastHit raycastHit;
         [SerializeField]
@@ -21,8 +23,6 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         private RootNode root;
         [SerializeField]
         private GameObject selector;
-        [SerializeField]
-        private FileUIConnectorManager uiConnector;
 
         private FileManager() : base() { return; }
 
@@ -232,17 +232,17 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                     if (driveNode != null)
                     {
                         Debug.Log("Sending " + driveNode.name + " to UI.");
-                        uiConnector.ExecuteUI(driveNode);
+                        filePropertiesUIConnector.ExecuteUI(driveNode);
                     }
                     else if (directoryNode != null)
                     {
                         Debug.Log("Sending " + directoryNode.name + " to UI.");
-                        uiConnector.ExecuteUI(directoryNode);
+                        filePropertiesUIConnector.ExecuteUI(directoryNode);
                     }
                     else if (fileNode != null)
                     {
                         Debug.Log("Sending " + fileNode.name + " to UI.");
-                        uiConnector.ExecuteUI(fileNode);
+                        filePropertiesUIConnector.ExecuteUI(fileNode);
                     }
                 }
                 else

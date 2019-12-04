@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Gui3dFileSystemNavigationUnity.Data
 {
-    public abstract class SystemNode<T> : MonoBehaviour, ISystemNode<T>
+    public abstract class AbstractSystemNode<T> : MonoBehaviour, ISystemNode<T>
         where T : FileSystemInfo
     {
         public ExtendedInfo extendedInfo;
@@ -11,7 +11,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
 
         public T Container { get; protected set; }
 
-        protected SystemNode(string path = null) : base() {
+        protected AbstractSystemNode(string path = null) : base() {
             if (path != null)
             {
                 Grab(path);

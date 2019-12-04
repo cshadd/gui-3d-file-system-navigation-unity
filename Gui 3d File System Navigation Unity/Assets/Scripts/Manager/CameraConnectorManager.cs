@@ -5,7 +5,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
     public class CameraConnectorManager : MonoBehaviour
     {
         [SerializeField]
-        private Camera camera;
+        private new Camera camera;
 
         public Camera Transition(GameObject o)
         {

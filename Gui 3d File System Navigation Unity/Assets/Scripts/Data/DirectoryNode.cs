@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Gui3dFileSystemNavigationUnity.Data
 {
-    public class DirectoryNode : SystemNode<DirectoryInfo>
+    public class DirectoryNode : AbstractSystemNode<DirectoryInfo>
     {
         public List<DirectoryNode> directoryNodes;
         public List<FileNode> fileNodes;
