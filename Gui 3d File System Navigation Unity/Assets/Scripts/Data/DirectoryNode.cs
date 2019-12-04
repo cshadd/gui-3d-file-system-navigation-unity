@@ -96,6 +96,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
                         var directoryGameObject = Instantiate(directoryTemplate);
                         directoryGameObject.transform.parent = transform;
                         var directoryNode = directoryGameObject.AddComponent<DirectoryNode>();
+                        directoryNode.fileIconDatabase = fileIconDatabase;
                         directoryNode.Assign(directory, this);
                         directoryNodes.Add(directoryNode);
                     }
@@ -105,6 +106,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
                         var fileGameObject = Instantiate(fileTemplate);
                         fileGameObject.transform.parent = transform;
                         var fileNode = fileGameObject.AddComponent<FileNode>();
+                        fileNode.fileIconDatabase = fileIconDatabase;
                         fileNode.Assign(file, this);
                         fileNodes.Add(fileNode);
                     }

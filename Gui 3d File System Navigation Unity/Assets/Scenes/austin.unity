@@ -400,6 +400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textTest: {fileID: 97335013}
+  spriteTest: {fileID: 1688528649}
 --- !u!114 &668768256
 MonoBehaviour:
   m_ObjectHideFlags: 0

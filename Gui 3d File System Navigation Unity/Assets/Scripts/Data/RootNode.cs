@@ -52,6 +52,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
                 var driveGameObject = Instantiate(driveTemplate);
                 driveGameObject.transform.parent = transform;
                 var driveNode = driveGameObject.AddComponent<DriveNode>();
+                driveNode.fileIconDatabase = fileIconDatabase;
                 driveNode.Assign(drive, this);
                 directoryNodes.Add(driveNode);
                 driveNodes.Add(driveNode);

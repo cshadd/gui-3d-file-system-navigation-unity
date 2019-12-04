@@ -19,7 +19,7 @@ MonoBehaviour:
   - iconName: Default Drive
     iconSprite: {fileID: -1834206767603290442, guid: 32c6de71e5b55ea43a4293097b2deb09,
       type: 3}
-  - iconName: Default Folder
+  - iconName: Default Directory
     iconSprite: {fileID: 2465591167015449211, guid: 32c6de71e5b55ea43a4293097b2deb09,
       type: 3}
   - iconName: Default File
