@@ -261,21 +261,21 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                     {
                         selector.SetActive(true);
                         selector.transform.position =
-                            raycastHit.transform.position + new Vector3(0, 0, -0.5f);
+                            raycastHit.transform.position;
                         nodeHoverUIConnector.ExecuteUI(driveNode);
                     }
                     else if (directoryNode != null)
                     {
                         selector.SetActive(true);
                         selector.transform.position =
-                            raycastHit.transform.position + new Vector3(0, 0, -0.5f);
+                            raycastHit.transform.position;
                         nodeHoverUIConnector.ExecuteUI(directoryNode);
                     }
                     else if(fileNode != null)
                     {
                         selector.SetActive(true);
                         selector.transform.position =
-                            raycastHit.transform.position + new Vector3(0, 0, -0.5f);
+                            raycastHit.transform.position;
                         nodeHoverUIConnector.ExecuteUI(fileNode);
                     }
                     else if (rod != null)
