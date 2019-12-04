@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89498353141f66a4e9ecf4fd7ab9a658, type: 3}
+  m_Name: Default Icon Pack
+  m_EditorClassIdentifier: 
+  entries:
+  - iconName: Unknown
+    iconSprite: {fileID: 1001060486229664142, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: Default Drive
+    iconSprite: {fileID: -1834206767603290442, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: Default Directory
+    iconSprite: {fileID: 2465591167015449211, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: Default File
+    iconSprite: {fileID: 4082195086109162603, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}

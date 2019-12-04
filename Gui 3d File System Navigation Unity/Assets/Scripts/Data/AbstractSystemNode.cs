@@ -3,14 +3,15 @@ using UnityEngine;
 
 namespace Gui3dFileSystemNavigationUnity.Data
 {
-    public abstract class SystemNode<T> : MonoBehaviour, ISystemNode<T>
+    public abstract class AbstractSystemNode<T> : MonoBehaviour, ISystemNode<T>
         where T : FileSystemInfo
     {
         public ExtendedInfo extendedInfo;
+        public FileIconDatabase fileIconDatabase;
 
         public T Container { get; protected set; }
 
-        protected SystemNode(string path = null) : base() {
+        protected AbstractSystemNode(string path = null) : base() {
             if (path != null)
             {
                 Grab(path);
@@ -23,10 +24,15 @@ namespace Gui3dFileSystemNavigationUnity.Data
         public ISystemNode<T> Assign(T container)
         {
             Container = container;
-            extendedInfo = new ExtendedInfo(Container);
+            extendedInfo = new ExtendedInfo();
             if (Container.Exists)
             {
                 gameObject.name = Container.FullName;
+                extendedInfo.Unassign();
+                if (fileIconDatabase != null)
+                {
+                    extendedInfo.fileIcon = fileIconDatabase.GrabIcon("Unknown");
+                }
                 Debug.Log("SystemNode assigned: " + Container.FullName);
             }
             else
@@ -39,6 +45,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
             Debug.Log("SystemNode unassigned: " + Container.FullName);
             extendedInfo.Unassign();
             extendedInfo = null;
+            fileIconDatabase = null;
             Container = null;
             return this;
         }
