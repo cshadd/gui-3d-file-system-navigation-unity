@@ -17,7 +17,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
             DirectoryNode parent = null)
         {
             parentDirectory = parent;
-            var directory = base.Assign(container);
+            var assignment = base.Assign(container);
             try
             {
                 Container.GetDirectories();
@@ -30,7 +30,35 @@ namespace Gui3dFileSystemNavigationUnity.Data
                 Debug.LogWarning("SystemNode is access denied: "
                     + Container.FullName);
             }
-            return directory;
+            if (fileIconDatabase != null)
+            {
+                extendedInfo.fileIcon = fileIconDatabase.GrabIcon("Default Directory");
+            }
+            return assignment;
+        }
+        public ISystemNode<DirectoryInfo> Depopulate()
+        {
+            if (Container.Exists && extendedInfo.isShowingInternal)
+            {
+                foreach (DirectoryNode directoryNode in directoryNodes)
+                {
+                    directoryNode.Depopulate().Unassign();
+                    Destroy(directoryNode.gameObject);
+                }
+
+                directoryNodes.Clear();
+
+                foreach (FileNode fileNode in fileNodes)
+                {
+                    fileNode.Unassign();
+                    Destroy(fileNode.gameObject);
+                }
+
+                fileNodes.Clear();
+
+                extendedInfo.isShowingInternal = false;
+            }
+            return this;
         }
         public override ISystemNode<DirectoryInfo> Grab(string path)
         {
@@ -68,6 +96,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
                         var directoryGameObject = Instantiate(directoryTemplate);
                         directoryGameObject.transform.parent = transform;
                         var directoryNode = directoryGameObject.AddComponent<DirectoryNode>();
+                        directoryNode.fileIconDatabase = fileIconDatabase;
                         directoryNode.Assign(directory, this);
                         directoryNodes.Add(directoryNode);
                     }
@@ -77,6 +106,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
                         var fileGameObject = Instantiate(fileTemplate);
                         fileGameObject.transform.parent = transform;
                         var fileNode = fileGameObject.AddComponent<FileNode>();
+                        fileNode.fileIconDatabase = fileIconDatabase;
                         fileNode.Assign(file, this);
                         fileNodes.Add(fileNode);
                     }
@@ -90,30 +120,6 @@ namespace Gui3dFileSystemNavigationUnity.Data
                     Debug.LogWarning("SystemNode is be expanded, access denied: "
                         + Container.FullName);
                 }
-            }
-            return this;
-        }
-        public ISystemNode<DirectoryInfo> Depopulate()
-        {
-            if (Container.Exists && extendedInfo.isShowingInternal)
-            {
-                foreach (DirectoryNode directoryNode in directoryNodes)
-                {
-                    directoryNode.Depopulate().Unassign();
-                    Destroy(directoryNode.gameObject);
-                }
-
-                directoryNodes.Clear();
-
-                foreach (FileNode fileNode in fileNodes)
-                {
-                    fileNode.Unassign();
-                    Destroy(fileNode.gameObject);
-                }
-
-                fileNodes.Clear();
-
-                extendedInfo.isShowingInternal = false;
             }
             return this;
         }
