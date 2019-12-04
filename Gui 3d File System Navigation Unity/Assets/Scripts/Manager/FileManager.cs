@@ -296,6 +296,12 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                     {
                         nodeHoverUIConnector.Clear();
                         selector.SetActive(false);
+                        if (rodHover)
+                        {
+                            var rodHoverRenderer = rodHover.GetComponent<Renderer>();
+                            rodHoverRenderer.material.SetColor("_Color", Color.grey);
+                            rodHover = null;
+                        }
                     }
                 }
             }
