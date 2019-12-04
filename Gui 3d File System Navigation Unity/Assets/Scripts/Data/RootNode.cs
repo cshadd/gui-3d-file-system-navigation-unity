@@ -9,6 +9,8 @@ namespace Gui3dFileSystemNavigationUnity.Data
     {
         public List<DriveNode> driveNodes;
 
+        private RootNode() : base() { return; }
+
         public new ISystemNode<DirectoryInfo> Assign(DirectoryInfo container,
             DirectoryNode parent = null)
         {

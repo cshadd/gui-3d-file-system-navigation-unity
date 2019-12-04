@@ -7,6 +7,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         [SerializeField]
         private new Camera camera;
 
+        private CameraConnectorManager() : base() { return; }
+
         public Camera Transition(GameObject o)
         {
             return Transition(o.transform);
