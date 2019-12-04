@@ -7,7 +7,9 @@ namespace Gui3dFileSystemNavigationUnity.Data
     [CreateAssetMenu(fileName = "File Icons", menuName = "ScriptableObjects/File Icons")]
     public class FileIconDatabase : ScriptableObject
     {
-        public List<FileIconEntry> entries;
+        [SerializeField]
+        private List<FileIconEntry> entries;
+        // private List<FileIconEntry> entries = new List<FileIconEntry>();
 
         [Serializable]
         public class FileIconEntry
@@ -18,7 +20,6 @@ namespace Gui3dFileSystemNavigationUnity.Data
 
         public Sprite GrabIcon(string name)
         {
-            Debug.Log("Searching for icon: " + name);
             Sprite icon = null;
             foreach (FileIconEntry entry in entries)
             {
@@ -29,10 +30,6 @@ namespace Gui3dFileSystemNavigationUnity.Data
                 }
             }
             return icon;
-        }
-        private void Start()
-        {
-            entries = new List<FileIconEntry>();
         }
     }
 }

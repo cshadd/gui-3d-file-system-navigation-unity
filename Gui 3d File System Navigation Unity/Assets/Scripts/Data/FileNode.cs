@@ -2,7 +2,7 @@ using System.IO;
 
 namespace Gui3dFileSystemNavigationUnity.Data
 {
-    public class FileNode : SystemNode<FileInfo>
+    public class FileNode : AbstractSystemNode<FileInfo>
     {
         public DirectoryNode parentDirectory;
 
@@ -15,7 +15,12 @@ namespace Gui3dFileSystemNavigationUnity.Data
             parentDirectory = parent;
             if (fileIconDatabase != null)
             {
-                extendedInfo.fileIcon = fileIconDatabase.GrabIcon("Default File");
+                var icon = fileIconDatabase.GrabIcon(container.Extension.ToLower());
+                if (icon == null)
+                {
+                    icon = fileIconDatabase.GrabIcon("Default File");
+                }
+                extendedInfo.fileIcon = icon;
             }
             return assignment;
         }
