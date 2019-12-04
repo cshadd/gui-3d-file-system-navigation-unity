@@ -72,7 +72,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             }
         }
 
-        private GameObject createConnectingRod(DirectoryNode directoryNode)
+        private GameObject CreateConnectingRod(DirectoryNode directoryNode)
         {
             var rod = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             rod.transform.parent = directoryNode.parentDirectory.transform;
@@ -104,7 +104,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 
             return rod;
         }
-        private GameObject createIsland(DirectoryNode directoryNode)
+        private GameObject CreateIsland(DirectoryNode directoryNode)
         {
             Debug.Log(count);
 
@@ -140,7 +140,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             root.Populate(PrimitiveType.Cylinder);
             count = 0;
 
-            var island = createIsland(root);
+            var island = CreateIsland(root);
             var islandPosition = island.transform.position;
 
             cameraConnector.Transition(island);
@@ -198,9 +198,9 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 
                         if (!directoryNode.extendedInfo.isAccessDenied)
                         {
-                            var island = createIsland(directoryNode);
+                            var island = CreateIsland(directoryNode);
                             var islandPosition = island.transform.position;
-                            createConnectingRod(directoryNode);
+                            CreateConnectingRod(directoryNode);
 
                             cameraConnector.Transition(island);
 
