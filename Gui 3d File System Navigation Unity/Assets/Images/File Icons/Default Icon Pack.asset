@@ -25,3 +25,126 @@ MonoBehaviour:
   - iconName: Default File
     iconSprite: {fileID: 4082195086109162603, guid: 32c6de71e5b55ea43a4293097b2deb09,
       type: 3}
+  - iconName: .sys
+    iconSprite: {fileID: 2635891795385042640, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .exe
+    iconSprite: {fileID: -8496216100426853066, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .txt
+    iconSprite: {fileID: 3684194140664676873, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .png
+    iconSprite: {fileID: -2058883515793257218, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .jpg
+    iconSprite: {fileID: -2058883515793257218, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .jpeg
+    iconSprite: {fileID: -2058883515793257218, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .gif
+    iconSprite: {fileID: -2058883515793257218, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .bmp
+    iconSprite: {fileID: -2058883515793257218, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .tga
+    iconSprite: {fileID: -2058883515793257218, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .tiff
+    iconSprite: {fileID: -2058883515793257218, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .bat
+    iconSprite: {fileID: -8496216100426853066, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .dll
+    iconSprite: {fileID: 2635891795385042640, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .font
+    iconSprite: {fileID: -3016983110804470603, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .mov
+    iconSprite: {fileID: 6368681513702845990, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .avi
+    iconSprite: {fileID: 6368681513702845990, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .mp3
+    iconSprite: {fileID: 6368681513702845990, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .mp4
+    iconSprite: {fileID: 6368681513702845990, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .wav
+    iconSprite: {fileID: 6368681513702845990, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .ogg
+    iconSprite: {fileID: 6368681513702845990, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .wmv
+    iconSprite: {fileID: 6368681513702845990, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .flv
+    iconSprite: {fileID: 6368681513702845990, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .doc
+    iconSprite: {fileID: -2309345871597441861, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .docx
+    iconSprite: {fileID: -2309345871597441861, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .dot
+    iconSprite: {fileID: -2309345871597441861, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .dotx
+    iconSprite: {fileID: -2309345871597441861, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .rtf
+    iconSprite: {fileID: -2309345871597441861, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .ppt
+    iconSprite: {fileID: -2309345871597441861, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .pptx
+    iconSprite: {fileID: -2309345871597441861, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .xls
+    iconSprite: {fileID: -2309345871597441861, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .xlsx
+    iconSprite: {fileID: -2309345871597441861, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .htm
+    iconSprite: {fileID: -267219966208289570, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .html
+    iconSprite: {fileID: -267219966208289570, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .php
+    iconSprite: {fileID: -267219966208289570, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .asp
+    iconSprite: {fileID: -267219966208289570, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .aspx
+    iconSprite: {fileID: -267219966208289570, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .css
+    iconSprite: {fileID: -267219966208289570, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .js
+    iconSprite: {fileID: -267219966208289570, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .css
+    iconSprite: {fileID: -267219966208289570, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .iso
+    iconSprite: {fileID: 3402100599460793105, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .vhd
+    iconSprite: {fileID: 3402100599460793105, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .com
+    iconSprite: {fileID: -8496216100426853066, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
