@@ -21,7 +21,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
         public new ISystemNode<DirectoryInfo> Populate()
         {
             var sample = new GameObject();
-            Populate(sample, sample);
+            Populate(sample);
             Destroy(sample);
             return this;
         }
@@ -34,13 +34,12 @@ namespace Gui3dFileSystemNavigationUnity.Data
             return this;
         }
         [Obsolete("This method is obsolete.")]
-        public new ISystemNode<DirectoryInfo> Populate(PrimitiveType drivePrimitiveType,
-            PrimitiveType notUsed)
+        public new ISystemNode<DirectoryInfo> Populate(PrimitiveType directoryPrimitiveType,
+            PrimitiveType filePrimitiveType)
         {
-            return Populate(drivePrimitiveType);
+            throw new NotSupportedException("This method is not supported for a RootNode.");
         }
-        public new ISystemNode<DirectoryInfo> Populate(GameObject driveTemplate,
-            GameObject notUsed = null)
+        public ISystemNode<DirectoryInfo> Populate(GameObject driveTemplate)
         {
             driveNodes = new List<DriveNode>();
             foreach (DriveInfo drive in DriveInfo.GetDrives())
@@ -51,7 +50,16 @@ namespace Gui3dFileSystemNavigationUnity.Data
                 driveNode.Assign(drive, this);
                 driveNodes.Add(driveNode);
             }
+
+            extendedInfo.isAccessDenied = false;
+            extendedInfo.isShowingInternal = true;
             return this;
+
+        }
+        public new ISystemNode<DirectoryInfo> Populate(GameObject directoryTemplate,
+            GameObject fileTemplate)
+        {
+            throw new NotSupportedException("This method is not supported for a RootNode.");
         }
     }
 }
