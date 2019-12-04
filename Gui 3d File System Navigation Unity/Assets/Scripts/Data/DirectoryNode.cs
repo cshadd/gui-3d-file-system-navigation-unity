@@ -17,7 +17,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
             DirectoryNode parent = null)
         {
             parentDirectory = parent;
-            var directory = base.Assign(container);
+            var assignment = base.Assign(container);
             try
             {
                 Container.GetDirectories();
@@ -30,7 +30,11 @@ namespace Gui3dFileSystemNavigationUnity.Data
                 Debug.LogWarning("SystemNode is access denied: "
                     + Container.FullName);
             }
-            return directory;
+            if (fileIconDatabase != null)
+            {
+                extendedInfo.fileIcon = fileIconDatabase.GrabIcon("Default Directory");
+            }
+            return assignment;
         }
         public ISystemNode<DirectoryInfo> Depopulate()
         {

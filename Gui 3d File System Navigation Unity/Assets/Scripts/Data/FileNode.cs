@@ -11,8 +11,13 @@ namespace Gui3dFileSystemNavigationUnity.Data
         public ISystemNode<FileInfo> Assign(FileInfo container,
             DirectoryNode parent = null)
         {
+            var assignment = base.Assign(container);
             parentDirectory = parent;
-            return base.Assign(container);
+            if (fileIconDatabase != null)
+            {
+                extendedInfo.fileIcon = fileIconDatabase.GrabIcon("Default File");
+            }
+            return assignment;
         }
         public override ISystemNode<FileInfo> Grab(string path)
         {
