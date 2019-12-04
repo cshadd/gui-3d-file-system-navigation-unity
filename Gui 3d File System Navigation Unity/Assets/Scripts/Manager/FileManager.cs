@@ -1,7 +1,4 @@
 using Gui3dFileSystemNavigationUnity.Data;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 namespace Gui3dFileSystemNavigationUnity.Manager
@@ -10,11 +7,15 @@ namespace Gui3dFileSystemNavigationUnity.Manager
     {
         [SerializeField]
         private CameraConnectorManager cameraConnector;
+        [SerializeField]
+        private CurrentDirectoryUIConnectorManager currentDirectoryUIConnector;
         private int count;
         [SerializeField]
         private FileIconDatabase fileIconDatabase;
         [SerializeField]
-        private FilePropertyUIConnectorManager filePropertiesUIConnector;
+        private NodeHoverUIConnectorManager nodeHoverUIConnector;
+        [SerializeField]
+        private NodePropertiesUIConnectorManager nodePropertiesUIConnector;
         private Ray ray;
         private RaycastHit raycastHit;
         [SerializeField]
@@ -154,6 +155,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                             CreateConnectingRod(directoryNode);
 
                             cameraConnector.Transition(island);
+                            currentDirectoryUIConnector.ExecuteUI(directoryNode);
 
                             count++;
 
@@ -215,6 +217,14 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         var parentIsland = parent.transform.Find("Island of "
                             + parent.name);
                         cameraConnector.Transition(parentIsland);
+                        if (parent.Container != null)
+                        {
+                            currentDirectoryUIConnector.ExecuteUI(parent);
+                        }
+                        else
+                        {
+                            currentDirectoryUIConnector.Clear();
+                        }
 
                         var next = rod.nextDirectory;
                         var nextIsland = next.transform.Find("Island of "
@@ -232,43 +242,62 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                     if (driveNode != null)
                     {
                         Debug.Log("Sending " + driveNode.name + " to UI.");
-                        filePropertiesUIConnector.ExecuteUI(driveNode);
+                        nodePropertiesUIConnector.ExecuteUI(driveNode);
                     }
                     else if (directoryNode != null)
                     {
                         Debug.Log("Sending " + directoryNode.name + " to UI.");
-                        filePropertiesUIConnector.ExecuteUI(directoryNode);
+                        nodePropertiesUIConnector.ExecuteUI(directoryNode);
                     }
                     else if (fileNode != null)
                     {
                         Debug.Log("Sending " + fileNode.name + " to UI.");
-                        filePropertiesUIConnector.ExecuteUI(fileNode);
+                        nodePropertiesUIConnector.ExecuteUI(fileNode);
                     }
                 }
                 else
                 {
-                    if (driveNode != null
-                        || directoryNode != null
-                        || fileNode != null)
+                    if (driveNode != null)
                     {
                         selector.SetActive(true);
                         selector.transform.position =
                             raycastHit.transform.position + new Vector3(0, 0, -0.5f);
+                        nodeHoverUIConnector.ExecuteUI(driveNode);
+                    }
+                    else if (directoryNode != null)
+                    {
+                        selector.SetActive(true);
+                        selector.transform.position =
+                            raycastHit.transform.position + new Vector3(0, 0, -0.5f);
+                        nodeHoverUIConnector.ExecuteUI(directoryNode);
+                    }
+                    else if(fileNode != null)
+                    {
+                        selector.SetActive(true);
+                        selector.transform.position =
+                            raycastHit.transform.position + new Vector3(0, 0, -0.5f);
+                        nodeHoverUIConnector.ExecuteUI(fileNode);
                     }
                     else if (rod != null)
                     {
                         var rodRenderer = rod.GetComponent<Renderer>();
                         rodRenderer.material.SetColor("_Color", Color.yellow);
                         rodHover = rod;
+                        if (rod.currentDirectory.Container != null)
+                        {
+                            nodeHoverUIConnector.ExecuteUI(rod.currentDirectory);
+                        }
                     }
                     else
                     {
+                        nodeHoverUIConnector.Clear();
                         selector.SetActive(false);
                     }
                 }
             }
             else
             {
+                nodeHoverUIConnector.Clear();
                 selector.SetActive(false);
                 if (rodHover)
                 {
