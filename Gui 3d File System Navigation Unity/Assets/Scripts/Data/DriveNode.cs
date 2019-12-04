@@ -6,7 +6,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
     {
         public DriveInfo BaseContainer { get; protected set; }
 
-        public DriveNode(string path = null) : base(path) { return; }
+        private DriveNode(string path = null) : base(path) { return; }
 
         public new ISystemNode<DirectoryInfo> Assign(DirectoryInfo container,
             DirectoryNode parent = null)

@@ -10,6 +10,8 @@ namespace Gui3dFileSystemNavigationUnity.Data
         public bool isAccessDenied;
         public bool isShowingInternal;
 
+        public ExtendedInfo() : base() { return; }
+
         public ExtendedInfo Unassign()
         {
             fileIcon = null;

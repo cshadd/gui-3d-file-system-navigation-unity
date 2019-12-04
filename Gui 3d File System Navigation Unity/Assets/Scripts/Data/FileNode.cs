@@ -6,7 +6,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
     {
         public DirectoryNode parentDirectory;
 
-        public FileNode(string path = null) : base(path) { return; }
+        private FileNode(string path = null) : base(path) { return; }
 
         public ISystemNode<FileInfo> Assign(FileInfo container,
             DirectoryNode parent = null)

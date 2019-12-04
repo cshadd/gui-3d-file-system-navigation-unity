@@ -11,11 +11,15 @@ namespace Gui3dFileSystemNavigationUnity.Data
         private List<FileIconEntry> entries;
         // private List<FileIconEntry> entries = new List<FileIconEntry>();
 
+        private FileIconDatabase() : base() { return; }
+
         [Serializable]
         public class FileIconEntry
         {
             public string iconName;
             public Sprite iconSprite;
+
+            private FileIconEntry() : base() { return; }
         }
 
         public Sprite GrabIcon(string name)
