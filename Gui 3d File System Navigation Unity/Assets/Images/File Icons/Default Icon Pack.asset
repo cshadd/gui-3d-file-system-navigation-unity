@@ -148,3 +148,33 @@ MonoBehaviour:
   - iconName: .com
     iconSprite: {fileID: -8496216100426853066, guid: 32c6de71e5b55ea43a4293097b2deb09,
       type: 3}
+  - iconName: .dat
+    iconSprite: {fileID: 2635891795385042640, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .log
+    iconSprite: {fileID: -2309345871597441861, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .xml
+    iconSprite: {fileID: -267219966208289570, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .xls
+    iconSprite: {fileID: -267219966208289570, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .zip
+    iconSprite: {fileID: 3772636291795348334, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .bzip
+    iconSprite: {fileID: 3772636291795348334, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .rar
+    iconSprite: {fileID: 3772636291795348334, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .cab
+    iconSprite: {fileID: 3772636291795348334, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .7z
+    iconSprite: {fileID: 3772636291795348334, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .tar
+    iconSprite: {fileID: 3772636291795348334, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
