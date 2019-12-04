@@ -287,6 +287,10 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         {
                             nodeHoverUIConnector.ExecuteUI(rod.currentDirectory);
                         }
+                        else
+                        {
+                            nodeHoverUIConnector.Clear();
+                        }
                     }
                     else
                     {
