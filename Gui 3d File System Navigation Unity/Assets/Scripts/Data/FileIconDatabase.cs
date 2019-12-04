@@ -18,7 +18,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
 
         public Sprite GrabIcon(string name)
         {
-            Debug.Log("Searching for icon " + name);
+            Debug.Log("Searching for icon: " + name);
             Sprite icon = null;
             foreach (FileIconEntry entry in entries)
             {
