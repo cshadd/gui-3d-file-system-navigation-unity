@@ -32,6 +32,30 @@ namespace Gui3dFileSystemNavigationUnity.Data
             }
             return directory;
         }
+        public ISystemNode<DirectoryInfo> Depopulate()
+        {
+            if (Container.Exists && extendedInfo.isShowingInternal)
+            {
+                foreach (DirectoryNode directoryNode in directoryNodes)
+                {
+                    directoryNode.Depopulate().Unassign();
+                    Destroy(directoryNode.gameObject);
+                }
+
+                directoryNodes.Clear();
+
+                foreach (FileNode fileNode in fileNodes)
+                {
+                    fileNode.Unassign();
+                    Destroy(fileNode.gameObject);
+                }
+
+                fileNodes.Clear();
+
+                extendedInfo.isShowingInternal = false;
+            }
+            return this;
+        }
         public override ISystemNode<DirectoryInfo> Grab(string path)
         {
             return Assign(new DirectoryInfo(path));
@@ -90,30 +114,6 @@ namespace Gui3dFileSystemNavigationUnity.Data
                     Debug.LogWarning("SystemNode is be expanded, access denied: "
                         + Container.FullName);
                 }
-            }
-            return this;
-        }
-        public ISystemNode<DirectoryInfo> Depopulate()
-        {
-            if (Container.Exists && extendedInfo.isShowingInternal)
-            {
-                foreach (DirectoryNode directoryNode in directoryNodes)
-                {
-                    directoryNode.Depopulate().Unassign();
-                    Destroy(directoryNode.gameObject);
-                }
-
-                directoryNodes.Clear();
-
-                foreach (FileNode fileNode in fileNodes)
-                {
-                    fileNode.Unassign();
-                    Destroy(fileNode.gameObject);
-                }
-
-                fileNodes.Clear();
-
-                extendedInfo.isShowingInternal = false;
             }
             return this;
         }
