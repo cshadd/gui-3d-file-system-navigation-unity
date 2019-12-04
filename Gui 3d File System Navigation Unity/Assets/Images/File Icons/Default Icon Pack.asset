@@ -178,3 +178,6 @@ MonoBehaviour:
   - iconName: .tar
     iconSprite: {fileID: 3772636291795348334, guid: 32c6de71e5b55ea43a4293097b2deb09,
       type: 3}
+  - iconName: .ini
+    iconSprite: {fileID: 2635891795385042640, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
