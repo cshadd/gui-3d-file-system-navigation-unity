@@ -15,7 +15,12 @@ namespace Gui3dFileSystemNavigationUnity.Data
             parentDirectory = parent;
             if (fileIconDatabase != null)
             {
-                extendedInfo.fileIcon = fileIconDatabase.GrabIcon("Default File");
+                var icon = fileIconDatabase.GrabIcon(container.Extension.ToLower());
+                if (icon == null)
+                {
+                    icon = fileIconDatabase.GrabIcon("Default File");
+                }
+                extendedInfo.fileIcon = icon;
             }
             return assignment;
         }
