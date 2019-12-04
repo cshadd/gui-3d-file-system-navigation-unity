@@ -211,3 +211,18 @@ MonoBehaviour:
   - iconName: .etl
     iconSprite: {fileID: -2309345871597441861, guid: 32c6de71e5b55ea43a4293097b2deb09,
       type: 3}
+  - iconName: .cmd
+    iconSprite: {fileID: -8496216100426853066, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .sh
+    iconSprite: {fileID: -8496216100426853066, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .bash
+    iconSprite: {fileID: -8496216100426853066, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .dmg
+    iconSprite: {fileID: -8496216100426853066, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
+  - iconName: .command
+    iconSprite: {fileID: -8496216100426853066, guid: 32c6de71e5b55ea43a4293097b2deb09,
+      type: 3}
