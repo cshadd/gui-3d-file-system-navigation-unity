@@ -29,9 +29,5 @@ namespace Gui3dFileSystemNavigationUnity.Data
             }
             return icon;
         }
-        private void Start()
-        {
-            entries = new List<FileIconEntry>();
-        }
     }
 }
