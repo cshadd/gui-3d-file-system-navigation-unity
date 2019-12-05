@@ -30,8 +30,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         private GameObject CreateConnectingRod(DirectoryNode directoryNode)
         {
             var rod = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            rod.transform.parent = directoryNode.parentDirectory.transform;
-            rod.transform.name = "Rod of " + directoryNode.parentDirectory.name;
+            rod.transform.parent = directoryNode.transform;
+            rod.transform.name = "Rod of " + directoryNode.name;
 
             var parent = directoryNode.parentDirectory;
 
@@ -51,8 +51,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             rod.transform.rotation = Quaternion.Euler(0, 90, 90);
 
             var rodData = rod.AddComponent<Rod>();
-            rodData.currentDirectory = directoryNode.parentDirectory;
-            rodData.nextDirectory = directoryNode;
+            rodData.currentDirectory = directoryNode;
+            rodData.parentDirectory = directoryNode.parentDirectory;
 
             var rodRenderer = rod.GetComponent<Renderer>();
             rodRenderer.material.SetColor("_Color", Color.gray);
@@ -145,8 +145,26 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 
                 if (Input.GetMouseButtonDown(0))
                 {
-                    if (directoryNode != null && !directoryNode.extendedInfo.isShowingInternal)
+                    if (directoryNode != null
+                        && !directoryNode.extendedInfo.isShowingInternal)
                     {
+                        foreach (DirectoryNode childDirectoryNode
+                            in directoryNode.parentDirectory.directoryNodes)
+                        {
+                            childDirectoryNode.Depopulate();
+                            var childDirectoryNodeIsland = childDirectoryNode.transform.Find("Island of "
+                                + childDirectoryNode.name);
+                            var childDirectoryNodeRod = childDirectoryNode.transform.Find("Rod of "
+                                + childDirectoryNode.name);
+                            if (childDirectoryNodeIsland != null)
+                            {
+                                Destroy(childDirectoryNodeIsland.gameObject);
+                            }
+                            if (childDirectoryNodeRod != null)
+                            {
+                                Destroy(childDirectoryNodeRod.gameObject);
+                            }
+                        }
                         directoryNode.Populate(PrimitiveType.Capsule, PrimitiveType.Cube);
                         if (!directoryNode.extendedInfo.isAccessDenied)
                         {
@@ -213,7 +231,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                     }
                     else if (rod != null)
                     {
-                        var parent = rod.currentDirectory;
+                        var parent = rod.parentDirectory;
                         var parentIsland = parent.transform.Find("Island of "
                             + parent.name);
                         cameraConnector.Transition(parentIsland);
@@ -226,7 +244,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                             currentDirectoryUIConnector.Clear();
                         }
 
-                        var next = rod.nextDirectory;
+                        var next = rod.currentDirectory;
                         var nextIsland = next.transform.Find("Island of "
                             + next.name);
                         if (nextIsland != null)
@@ -283,9 +301,9 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         var rodRenderer = rod.GetComponent<Renderer>();
                         rodRenderer.material.SetColor("_Color", Color.yellow);
                         rodHover = rod;
-                        if (rod.currentDirectory.Container != null)
+                        if (rod.parentDirectory.Container != null)
                         {
-                            nodeHoverUIConnector.ExecuteUI(rod.currentDirectory);
+                            nodeHoverUIConnector.ExecuteUI(rod.parentDirectory);
                         }
                         else
                         {

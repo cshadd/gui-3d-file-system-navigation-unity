@@ -4,13 +4,16 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 {
     public class CameraConnectorManager : MonoBehaviour
     {
-        private const float Sensitivity = 0.5f;
-        private const float Speed = 16f;
-
         [SerializeField]
         private new Camera camera;
         [SerializeField]
         private Vector3 locationToLerp;
+        [SerializeField]
+        private Vector3 max;
+        [SerializeField]
+        private Vector3 min;
+        [SerializeField]
+        private bool minSet;
 
         private CameraConnectorManager() : base() { return; }
 
@@ -21,12 +24,19 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         public Camera Transition(Transform t)
         {
             locationToLerp = t.position + new Vector3(0, 10, -10);
+            max = locationToLerp;
+            if (!minSet)
+            {
+                min = locationToLerp;
+                minSet = true;
+            }
             return camera;
         }
         private void FixedUpdate()
         {
-            camera.transform.position = Vector3.Lerp(camera.transform.position,
-                locationToLerp, 0.1f); ;
+            var location = Vector3.Lerp(camera.transform.position,
+                locationToLerp, 0.1f);
+            camera.transform.position = location;
             return;
         }
         private void Start()
@@ -38,19 +48,22 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         {
             if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
             {
-                locationToLerp += Vector3.forward * 1f / 2f;
-            }
-            else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-            {
-                locationToLerp += Vector3.left * 1f / 2f;
-            }
-            else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-            {
-                locationToLerp += Vector3.right * 1f / 2f;
+                var location = Vector3.forward * 0.5f;
+                var futureLocation = locationToLerp + location;
+                if (futureLocation.magnitude <= max.magnitude)
+                {
+                    locationToLerp += location;
+                }
+
             }
             else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
             {
-                locationToLerp += Vector3.back * 1f / 2f;
+                var location = Vector3.back * 0.5f;
+                var futureLocation = locationToLerp + location;
+                if (futureLocation.magnitude >= min.magnitude)
+                {
+                    locationToLerp += location;
+                }
             }
         }
     }
