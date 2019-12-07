@@ -11,6 +11,10 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         private CurrentDirectoryUIConnectorManager currentDirectoryUIConnector;
         private int count;
         [SerializeField]
+        private Island currentIsland;
+        [SerializeField]
+        private Rod currentRod;
+        [SerializeField]
         private FileIconDatabase fileIconDatabase;
         [SerializeField]
         private NodeHoverUIConnectorManager nodeHoverUIConnector;
@@ -53,6 +57,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             var rodData = rod.AddComponent<Rod>();
             rodData.currentDirectory = directoryNode;
             rodData.parentDirectory = directoryNode.parentDirectory;
+            currentRod = rodData;
 
             var rodRenderer = rod.GetComponent<Renderer>();
             rodRenderer.material.SetColor("_Color", Color.gray);
@@ -61,7 +66,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         }
         private GameObject CreateIsland(DirectoryNode directoryNode)
         {
-            Debug.Log(count);
+            // Debug.Log(count);
 
             var island = GameObject.CreatePrimitive(PrimitiveType.Cube);
             island.transform.parent = directoryNode.transform;
@@ -83,15 +88,27 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 
             island.transform.localScale = new Vector3(10, 1, 10);
 
+            var islandData = island.AddComponent<Island>();
+            islandData.currentDirectory = directoryNode;
+            currentIsland = islandData;
+
             var islandRenderer = island.GetComponent<Renderer>();
             islandRenderer.material.SetColor("_Color", Color.white);
 
             return island;
         }
+        public void ResetCamera()
+        {
+            cameraConnector.Transition(currentIsland.gameObject);
+            return;
+        }
         private void Start()
         {
             Debug.Log(Application.productName + " started.");
-            root = gameObject.AddComponent<RootNode>();
+            var rootGameObject = new GameObject();
+            rootGameObject.name = "ROOT";
+            rootGameObject.transform.parent = transform;
+            root = rootGameObject.AddComponent<RootNode>();
             root.fileIconDatabase = fileIconDatabase;
             root.Populate(PrimitiveType.Cylinder);
             count = 0;
@@ -131,7 +148,6 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 
             return;
         }
-
         private void Update()
         {
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -234,6 +250,29 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         var parent = rod.parentDirectory;
                         var parentIsland = parent.transform.Find("Island of "
                             + parent.name);
+                        var parentIslandData = parentIsland.GetComponent<Island>();
+                        currentIsland = parentIslandData;
+                        if (parentIslandData != null)
+                        {
+                            var parentRodData = parentIsland.GetComponent<Rod>();
+                            currentRod = parentRodData;
+                        }
+                        else
+                        {
+                            currentRod = null;
+                        }
+                        var parentRod = parent.transform.Find("Rod of "
+                            + parent.name);
+                        if (parentRod != null)
+                        {
+                            var parentRodData = parentRod.GetComponent<Rod>();
+                            currentRod = parentRodData;
+                        }
+                        else
+                        {
+                            currentRod = null;
+                        }
+                        rodHover = null;
                         cameraConnector.Transition(parentIsland);
                         if (parent.Container != null)
                         {
@@ -252,6 +291,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                             Destroy(nextIsland.gameObject);
                         }
                         next.Depopulate();
+
                         Destroy(rod.gameObject);
                     }
                 }
