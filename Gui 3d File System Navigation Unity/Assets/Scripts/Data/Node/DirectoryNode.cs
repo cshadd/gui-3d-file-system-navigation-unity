@@ -22,7 +22,6 @@ namespace Gui3dFileSystemNavigationUnity.Data
             {
                 Container.GetDirectories();
                 Container.GetFiles();
-                extendedInfo.isAccessDenied = false;
             }
             catch (IOException ex)
             {
@@ -33,6 +32,10 @@ namespace Gui3dFileSystemNavigationUnity.Data
             {
                 extendedInfo.isAccessDenied = true;
                 Debug.LogWarning("SystemNode had UnauthorizedAccessException (caught): " + ex);
+            }
+            if (parentDirectory != null && parentDirectory.Container != null)
+            {
+                extendedInfo.location = parentDirectory.Container.FullName;
             }
             if (fileIconDatabase != null)
             {

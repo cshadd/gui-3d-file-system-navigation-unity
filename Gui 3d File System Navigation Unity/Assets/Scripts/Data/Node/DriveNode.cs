@@ -24,6 +24,10 @@ namespace Gui3dFileSystemNavigationUnity.Data
         {
             var assignment = base.Assign(new DirectoryInfo(container.Name), parent);
             BaseContainer = container;
+            if (parentDirectory != null && parentDirectory.Container != null)
+            {
+                extendedInfo.location = parentDirectory.Container.FullName;
+            }
             if (fileIconDatabase != null)
             {
                 extendedInfo.fileIcon = fileIconDatabase.GrabIcon("Default Drive");

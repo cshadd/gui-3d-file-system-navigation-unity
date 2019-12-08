@@ -31,6 +31,11 @@ namespace Gui3dFileSystemNavigationUnity.Data
                 extendedInfo.isAccessDenied = true;
                 Debug.LogWarning("SystemNode had UnauthorizedAccessException (caught): " + ex);
             }
+            if (parentDirectory != null && parentDirectory.Container != null)
+            {
+                extendedInfo.location = parentDirectory.Container.FullName;
+            }
+            extendedInfo.size = container.Length + " bytes";
             if (fileIconDatabase != null)
             {
                 var icon = fileIconDatabase.GrabIcon(container.Extension.ToLower());
