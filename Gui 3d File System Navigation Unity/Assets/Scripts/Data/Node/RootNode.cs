@@ -60,7 +60,6 @@ namespace Gui3dFileSystemNavigationUnity.Data
                 driveNodes.Add(driveNode);
             }
             return this;
-
         }
         public override ISystemNode<DirectoryInfo> Populate(GameObject directoryTemplate,
             GameObject fileTemplate)

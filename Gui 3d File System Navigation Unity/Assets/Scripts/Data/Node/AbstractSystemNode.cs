@@ -29,6 +29,8 @@ namespace Gui3dFileSystemNavigationUnity.Data
             {
                 gameObject.name = Container.FullName;
                 extendedInfo.Unassign();
+                extendedInfo.computer = System.Environment.MachineName;
+                Debug.LogWarning(System.Environment.SystemDirectory);
                 if (fileIconDatabase != null)
                 {
                     extendedInfo.fileIcon = fileIconDatabase.GrabIcon("Unknown");
