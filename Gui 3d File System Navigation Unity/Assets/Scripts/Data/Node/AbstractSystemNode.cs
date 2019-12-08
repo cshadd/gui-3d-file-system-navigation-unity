@@ -21,7 +21,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
 
         public abstract ISystemNode<T> Grab(string path);
 
-        public ISystemNode<T> Assign(T container)
+        public virtual ISystemNode<T> Assign(T container)
         {
             Container = container;
             extendedInfo = new ExtendedInfo();
@@ -41,7 +41,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
             }
             return this;
         }
-        public ISystemNode<T> Unassign() {
+        public virtual ISystemNode<T> Unassign() {
             Debug.Log("SystemNode unassigned: " + Container.FullName);
             extendedInfo.Unassign();
             extendedInfo = null;

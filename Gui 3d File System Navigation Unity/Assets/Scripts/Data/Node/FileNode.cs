@@ -1,4 +1,6 @@
+using System;
 using System.IO;
+using UnityEngine;
 
 namespace Gui3dFileSystemNavigationUnity.Data
 {
@@ -13,6 +15,22 @@ namespace Gui3dFileSystemNavigationUnity.Data
         {
             var assignment = base.Assign(container);
             parentDirectory = parent;
+            try
+            {
+                var fileStream = container.OpenRead();
+                fileStream.Close();
+                extendedInfo.isAccessDenied = false;
+            }
+            catch (IOException ex)
+            {
+                extendedInfo.isAccessDenied = true;
+                Debug.LogWarning("SystemNode had IOException (caught): " + ex);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                extendedInfo.isAccessDenied = true;
+                Debug.LogWarning("SystemNode had UnauthorizedAccessException (caught): " + ex);
+            }
             if (fileIconDatabase != null)
             {
                 var icon = fileIconDatabase.GrabIcon(container.Extension.ToLower());
@@ -28,7 +46,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
         {
             return Assign(new FileInfo(path));
         }
-        public new ISystemNode<FileInfo> Unassign()
+        public override ISystemNode<FileInfo> Unassign()
         {
             parentDirectory = null;
             return base.Unassign();

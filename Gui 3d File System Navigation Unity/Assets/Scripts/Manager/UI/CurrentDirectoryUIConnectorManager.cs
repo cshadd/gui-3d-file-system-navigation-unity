@@ -1,5 +1,4 @@
 using Gui3dFileSystemNavigationUnity.Data;
-using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,8 +16,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             textCurrentDirectoryPath.text = "";
             return;
         }
-        public new void ExecuteUI<T>(AbstractSystemNode<T> node)
-             where T : FileSystemInfo
+        public override void ExecuteUI<T>(AbstractSystemNode<T> node)
         {
             base.ExecuteUI<T>(node);
             var container = node.Container;

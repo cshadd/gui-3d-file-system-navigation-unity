@@ -34,7 +34,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
         {
             return Assign(new DirectoryInfo(path));
         }
-        public new ISystemNode<DirectoryInfo> Unassign()
+        public override ISystemNode<DirectoryInfo> Unassign()
         {
             BaseContainer = null;
             return base.Unassign();

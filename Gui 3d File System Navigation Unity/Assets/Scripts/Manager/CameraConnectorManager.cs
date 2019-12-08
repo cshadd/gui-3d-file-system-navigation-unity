@@ -14,6 +14,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         private Vector3 min;
         [SerializeField]
         private bool minSet;
+        [SerializeField]
+        private NodePropertiesUIConnectorManager nodePropertiesUIConnector;
 
         private CameraConnectorManager() : base() { return; }
 
@@ -46,23 +48,26 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         }
         private void Update()
         {
-            if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+            if (!nodePropertiesUIConnector.gameObject.activeInHierarchy)
             {
-                var location = Vector3.forward * 0.5f;
-                var futureLocation = locationToLerp + location;
-                if (futureLocation.magnitude <= max.magnitude)
+                if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
                 {
-                    locationToLerp += location;
-                }
+                    var location = Vector3.forward * 0.5f;
+                    var futureLocation = locationToLerp + location;
+                    if (futureLocation.magnitude <= max.magnitude)
+                    {
+                        locationToLerp += location;
+                    }
 
-            }
-            else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
-            {
-                var location = Vector3.back * 0.5f;
-                var futureLocation = locationToLerp + location;
-                if (futureLocation.magnitude >= min.magnitude)
+                }
+                else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
                 {
-                    locationToLerp += location;
+                    var location = Vector3.back * 0.5f;
+                    var futureLocation = locationToLerp + location;
+                    if (futureLocation.magnitude >= min.magnitude)
+                    {
+                        locationToLerp += location;
+                    }
                 }
             }
         }

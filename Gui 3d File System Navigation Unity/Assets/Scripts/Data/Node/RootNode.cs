@@ -11,12 +11,12 @@ namespace Gui3dFileSystemNavigationUnity.Data
 
         private RootNode() : base() { return; }
 
-        public new ISystemNode<DirectoryInfo> Assign(DirectoryInfo container,
+        public override ISystemNode<DirectoryInfo> Assign(DirectoryInfo container,
             DirectoryNode parent = null)
         {
             throw new NotSupportedException("This method is not supported for a RootNode.");
         }
-        public new ISystemNode<DirectoryInfo> Depopulate()
+        public override ISystemNode<DirectoryInfo> Depopulate()
         {
             throw new NotSupportedException("This method is not supported for a RootNode.");
         }
@@ -24,7 +24,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
         {
             throw new NotSupportedException("This method is not supported for a RootNode.");
         }
-        public new ISystemNode<DirectoryInfo> Populate()
+        public override ISystemNode<DirectoryInfo> Populate()
         {
             var sample = new GameObject();
             Populate(sample);
@@ -40,7 +40,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
             return this;
         }
         [Obsolete("This method is obsolete.")]
-        public new ISystemNode<DirectoryInfo> Populate(PrimitiveType directoryPrimitiveType,
+        public override ISystemNode<DirectoryInfo> Populate(PrimitiveType directoryPrimitiveType,
             PrimitiveType filePrimitiveType)
         {
             throw new NotSupportedException("This method is not supported for a RootNode.");
@@ -62,12 +62,12 @@ namespace Gui3dFileSystemNavigationUnity.Data
             return this;
 
         }
-        public new ISystemNode<DirectoryInfo> Populate(GameObject directoryTemplate,
+        public override ISystemNode<DirectoryInfo> Populate(GameObject directoryTemplate,
             GameObject fileTemplate)
         {
             throw new NotSupportedException("This method is not supported for a RootNode.");
         }
-        public new ISystemNode<DirectoryInfo> Unassign()
+        public override ISystemNode<DirectoryInfo> Unassign()
         {
             throw new NotSupportedException("This method is not supported for a RootNode.");
         }
