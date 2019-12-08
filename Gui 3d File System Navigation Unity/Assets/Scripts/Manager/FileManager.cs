@@ -186,8 +186,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 
                 foreach (DirectoryNode childDirectoryNode in directoryNode.directoryNodes)
                 {
-                    //if (currentIslandItemNumber < MaxIslandItemNumber)
-                    //{
+                    if (currentIslandItemNumber < MaxIslandItemNumber)
+                    {
                         itemCounter++;
                         currentIslandItemNumber++;
                         childDirectoryNode.transform.position =
@@ -210,17 +210,17 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                             var vanillaFolderColor = new Color32(95, 90, 67, 255);
                             childDirectoryNodeRenderer.material.SetColor("_Color", vanillaFolderColor);
                         }
-                    //}
-                    //else
-                    //{
-                        //childDirectoryNode.transform.gameObject.SetActive(false);
-                    //}
+                    }
+                    else
+                    {
+                        childDirectoryNode.transform.gameObject.SetActive(false);
+                    }
                 }
 
                 foreach (FileNode childFileNode in directoryNode.fileNodes)
                 {
-                    //if (currentIslandItemNumber < MaxIslandItemNumber)
-                    //{
+                    if (currentIslandItemNumber < MaxIslandItemNumber)
+                    {
                         itemCounter++;
                         currentIslandItemNumber++;
                         childFileNode.transform.position =
@@ -243,11 +243,11 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         {
                             childFileNodeRenderer.material.SetColor("_Color", Color.blue);
                         }
-                    //}
-                    //else
-                    //{
-                        //childFileNode.transform.gameObject.SetActive(false);
-                    //}
+                    }
+                    else
+                    {
+                        childFileNode.transform.gameObject.SetActive(false);
+                    }
                 }
 
                 if (currentIslandItemNumber >= MaxIslandItemNumber)
