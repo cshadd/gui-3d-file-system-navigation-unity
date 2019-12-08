@@ -5,8 +5,10 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 {
     public class FileManager : MonoBehaviour
     {
-        private const int MaxIslandItemNumber = 81;
+        private const int MaxIslandItemNumber = 8;
 
+        [SerializeField]
+        private Arrow arrowHover;
         [SerializeField]
         private CameraConnectorManager cameraConnector;
         [SerializeField]
@@ -150,9 +152,9 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                     + childDirectoryNode.name);
                 var childDirectoryNodeRod = childDirectoryNode.transform.Find("Rod of "
                     + childDirectoryNode.name);
-                var childDirectoryNodeLeftArrow = childDirectoryNode.transform.Find(ArrowDirection.Left.ToString("D") + " of "
+                var childDirectoryNodeLeftArrow = childDirectoryNode.transform.Find(ArrowDirection.Left + " Arrow of "
                     + childDirectoryNode.name);
-                var childDirectoryNodeRightArrow = childDirectoryNode.transform.Find(ArrowDirection.Right.ToString("D") + " of "
+                var childDirectoryNodeRightArrow = childDirectoryNode.transform.Find(ArrowDirection.Right + " Arrow of "
                     + childDirectoryNode.name);
                 if (childDirectoryNodeIsland != null)
                 {
@@ -162,11 +164,11 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 {
                     Destroy(childDirectoryNodeRod.gameObject);
                 }
-                if (childDirectoryNodeLeftArrow)
+                if (childDirectoryNodeLeftArrow != null)
                 {
                     Destroy(childDirectoryNodeLeftArrow.gameObject);
                 }
-                if (childDirectoryNodeRightArrow)
+                if (childDirectoryNodeRightArrow != null)
                 {
                     Destroy(childDirectoryNodeRightArrow.gameObject);
                 }
@@ -343,15 +345,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                             + parent.name);
                         var parentIslandData = parentIsland.GetComponent<Island>();
                         currentIsland = parentIslandData;
-                        if (parentIslandData != null)
-                        {
-                            var parentRodData = parentIsland.GetComponent<Rod>();
-                            currentRod = parentRodData;
-                        }
-                        else
-                        {
-                            currentRod = null;
-                        }
+
                         var parentRod = parent.transform.Find("Rod of "
                             + parent.name);
                         if (parentRod != null)
@@ -377,9 +371,21 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         var next = rodData.currentDirectory;
                         var nextIsland = next.transform.Find("Island of "
                             + next.name);
+                        var nextLeftArrow = next.transform.Find(ArrowDirection.Left + " Arrow of "
+                            + next.name);
+                        var nextRightArrow = next.transform.Find(ArrowDirection.Right + " Arrow of "
+                            + next.name);
                         if (nextIsland != null)
                         {
                             Destroy(nextIsland.gameObject);
+                        }
+                        if (nextLeftArrow != null)
+                        {
+                            Destroy(nextLeftArrow.gameObject);
+                        }
+                        if (nextRightArrow != null)
+                        {
+                            Destroy(nextRightArrow.gameObject);
                         }
                         next.Depopulate();
 
@@ -434,6 +440,12 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                             raycastHit.transform.position;
                         nodeHoverUIConnector.ExecuteUI(fileNode);
                     }
+                    else if (arrowData != null)
+                    {
+                        var arrowRenderer = arrowData.GetComponent<Renderer>();
+                        arrowRenderer.material.SetColor("_Color", Color.yellow);
+                        arrowHover = arrowData;
+                    }
                     else if (rodData != null)
                     {
                         var rodRenderer = rodData.GetComponent<Renderer>();
@@ -465,7 +477,13 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             {
                 nodeHoverUIConnector.Clear();
                 selector.SetActive(false);
-                if (rodHover)
+                if (arrowHover != null)
+                {
+                    var arrowRenderer = arrowHover.GetComponent<Renderer>();
+                    arrowRenderer.material.SetColor("_Color", Color.grey);
+                    arrowHover = null;
+                }
+                if (rodHover != null)
                 {
                     var rodHoverRenderer = rodHover.GetComponent<Renderer>();
                     rodHoverRenderer.material.SetColor("_Color", Color.grey);
