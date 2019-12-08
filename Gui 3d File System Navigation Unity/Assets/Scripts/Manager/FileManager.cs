@@ -5,10 +5,15 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 {
     public class FileManager : MonoBehaviour
     {
+        private const int MaxIslandItemNumber = 8;
+
+        [SerializeField]
+        private Arrow arrowHover;
         [SerializeField]
         private CameraConnectorManager cameraConnector;
         [SerializeField]
         private CurrentDirectoryUIConnectorManager currentDirectoryUIConnector;
+        [SerializeField]
         private int count;
         [SerializeField]
         private Island currentIsland;
@@ -17,9 +22,13 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         [SerializeField]
         private FileIconDatabase fileIconDatabase;
         [SerializeField]
+        private int itemCounter;
+        [SerializeField]
         private NodeHoverUIConnectorManager nodeHoverUIConnector;
         [SerializeField]
         private NodePropertiesUIConnectorManager nodePropertiesUIConnector;
+        [SerializeField]
+        private int pageNumber;
         private Ray ray;
         private RaycastHit raycastHit;
         [SerializeField]
@@ -31,6 +40,34 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 
         private FileManager() : base() { return; }
 
+        private GameObject CreateArrow(DirectoryNode directoryNode, ArrowDirection direction)
+        {
+            var arrow = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+            arrow.transform.parent = directoryNode.transform;
+            arrow.transform.name = direction + " Arrow of " + directoryNode.name;
+
+            var island = directoryNode.transform.Find("Island of " + directoryNode.name);
+            if (direction == ArrowDirection.Left)
+            {
+                arrow.transform.position =
+                  island.transform.position + new Vector3(-4, 2, 5);
+            }
+            else if (direction == ArrowDirection.Right)
+            {
+                arrow.transform.position =
+                    island.transform.position + new Vector3(4, 2, 5);
+            }
+
+
+            var arrowData = arrow.AddComponent<Arrow>();
+            arrowData.currentDirectory = directoryNode;
+            arrowData.direction = direction;
+
+            var arrowRenderer = arrow.GetComponent<Renderer>();
+            arrowRenderer.material.SetColor("_Color", Color.gray);
+
+            return arrow;
+        }
         private GameObject CreateConnectingRod(DirectoryNode directoryNode)
         {
             var rod = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
@@ -66,7 +103,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         }
         private GameObject CreateIsland(DirectoryNode directoryNode)
         {
-            // Debug.Log(count);
+            Debug.Log(count);
 
             var island = GameObject.CreatePrimitive(PrimitiveType.Cube);
             island.transform.parent = directoryNode.transform;
@@ -103,12 +140,21 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         }
         public void OpenDirectory(DirectoryNode directoryNode)
         {
+            var currentIslandItemNumber = 0;
+            var x = -4;
+            var y = 0;
+            var z = 4;
+
             foreach (DirectoryNode childDirectoryNode in directoryNode.parentDirectory.directoryNodes)
             {
                 childDirectoryNode.Depopulate();
                 var childDirectoryNodeIsland = childDirectoryNode.transform.Find("Island of "
                     + childDirectoryNode.name);
                 var childDirectoryNodeRod = childDirectoryNode.transform.Find("Rod of "
+                    + childDirectoryNode.name);
+                var childDirectoryNodeLeftArrow = childDirectoryNode.transform.Find(ArrowDirection.Left + " Arrow of "
+                    + childDirectoryNode.name);
+                var childDirectoryNodeRightArrow = childDirectoryNode.transform.Find(ArrowDirection.Right + " Arrow of "
                     + childDirectoryNode.name);
                 if (childDirectoryNodeIsland != null)
                 {
@@ -118,68 +164,97 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 {
                     Destroy(childDirectoryNodeRod.gameObject);
                 }
+                if (childDirectoryNodeLeftArrow != null)
+                {
+                    Destroy(childDirectoryNodeLeftArrow.gameObject);
+                }
+                if (childDirectoryNodeRightArrow != null)
+                {
+                    Destroy(childDirectoryNodeRightArrow.gameObject);
+                }
             }
             directoryNode.Populate(PrimitiveType.Capsule, PrimitiveType.Cube);
             if (!directoryNode.extendedInfo.isAccessDenied)
             {
                 var island = CreateIsland(directoryNode);
-                var islandPosition = island.transform.position;
+                var currentIslandPosition = island.transform.position;
                 CreateConnectingRod(directoryNode);
 
                 cameraConnector.Transition(island);
                 currentDirectoryUIConnector.ExecuteUI(directoryNode);
 
-                count++;
 
-                var x = -4;
-                var y = 0;
-                var z = 4;
                 foreach (DirectoryNode childDirectoryNode in directoryNode.directoryNodes)
                 {
-                    childDirectoryNode.transform.position =
-                        islandPosition + new Vector3(x, y, z);
+                    //if (currentIslandItemNumber < MaxIslandItemNumber)
+                    //{
+                        itemCounter++;
+                        currentIslandItemNumber++;
+                        childDirectoryNode.transform.position =
+                            currentIslandPosition + new Vector3(x, y, z);
 
-                    x += 1;
-                    if (x >= 5)
-                    {
-                        x = -4;
-                        z -= 1;
-                    }
+                        x += 1;
+                        if (x >= 5)
+                        {
+                            x = -4;
+                            z -= 1;
+                        }
 
-                    var childDirectoryNodeRenderer = childDirectoryNode.GetComponent<Renderer>();
-                    if (childDirectoryNode.extendedInfo.isAccessDenied)
-                    {
-                        childDirectoryNodeRenderer.material.SetColor("_Color", Color.red);
-                    }
-                    else
-                    {
-                        var vanillaFolderColor = new Color32(95, 90, 67, 255);
-                        childDirectoryNodeRenderer.material.SetColor("_Color", vanillaFolderColor);
-                    }
+                        var childDirectoryNodeRenderer = childDirectoryNode.GetComponent<Renderer>();
+                        if (childDirectoryNode.extendedInfo.isAccessDenied)
+                        {
+                            childDirectoryNodeRenderer.material.SetColor("_Color", Color.red);
+                        }
+                        else
+                        {
+                            var vanillaFolderColor = new Color32(95, 90, 67, 255);
+                            childDirectoryNodeRenderer.material.SetColor("_Color", vanillaFolderColor);
+                        }
+                    //}
+                    //else
+                    //{
+                        //childDirectoryNode.transform.gameObject.SetActive(false);
+                    //}
                 }
 
                 foreach (FileNode childFileNode in directoryNode.fileNodes)
                 {
-                    childFileNode.transform.position =
-                        islandPosition + new Vector3(x, y, z);
-                    childFileNode.transform.localScale = new Vector3(1, 2, 1);
+                    //if (currentIslandItemNumber < MaxIslandItemNumber)
+                    //{
+                        itemCounter++;
+                        currentIslandItemNumber++;
+                        childFileNode.transform.position =
+                        currentIslandPosition + new Vector3(x, y, z);
+                        childFileNode.transform.localScale = new Vector3(1, 2, 1);
 
-                    x += 1;
-                    if (x >= 5)
-                    {
-                        x = -4;
-                        z -= 1;
-                    }
+                        x += 1;
+                        if (x >= 5)
+                        {
+                            x = -4;
+                            z -= 1;
+                        }
 
-                    var childFileNodeRenderer = childFileNode.GetComponent<Renderer>();
-                    if (childFileNode.extendedInfo.isAccessDenied)
-                    {
-                        childFileNodeRenderer.material.SetColor("_Color", Color.red);
-                    }
-                    else
-                    {
-                        childFileNodeRenderer.material.SetColor("_Color", Color.blue);
-                    }
+                        var childFileNodeRenderer = childFileNode.GetComponent<Renderer>();
+                        if (childFileNode.extendedInfo.isAccessDenied)
+                        {
+                            childFileNodeRenderer.material.SetColor("_Color", Color.red);
+                        }
+                        else
+                        {
+                            childFileNodeRenderer.material.SetColor("_Color", Color.blue);
+                        }
+                    //}
+                    //else
+                    //{
+                        //childFileNode.transform.gameObject.SetActive(false);
+                    //}
+                }
+
+                if (currentIslandItemNumber >= MaxIslandItemNumber)
+                {
+                    CreateArrow(directoryNode, ArrowDirection.Left);
+                    CreateArrow(directoryNode, ArrowDirection.Right);
+                    pageNumber++;
                 }
             }
             return;
@@ -192,7 +267,13 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         private void Start()
         {
             Debug.Log(Application.productName + " started.");
+
+            count = 0;
+            itemCounter = 0;
+            pageNumber = 0;
+
             nodePropertiesUIConnector.gameObject.SetActive(false);
+
             var rootGameObject = new GameObject
             {
                 name = "ROOT"
@@ -201,7 +282,6 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             root = rootGameObject.AddComponent<RootNode>();
             root.fileIconDatabase = fileIconDatabase;
             root.Populate(PrimitiveType.Cylinder);
-            count = 0;
 
             var island = CreateIsland(root);
             var islandPosition = island.transform.position;
@@ -235,7 +315,6 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                     childDriveNodeRenderer.material.SetColor("_Color", Color.gray);
                 }
             }
-
             return;
         }
         private void Update()
@@ -244,11 +323,13 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             var hit = Physics.Raycast(ray, out raycastHit);
             if (hit)
             {
-                var fileNode = raycastHit.transform.GetComponent<FileNode>();
-                var directoryNode = raycastHit.transform.GetComponent<DirectoryNode>();
-                var driveNode = raycastHit.transform.GetComponent<DriveNode>();
-                var islandData = raycastHit.transform.GetComponent<Island>();
-                var rodData = raycastHit.transform.GetComponent<Rod>();
+                var raycastHitTransform = raycastHit.transform;
+                var arrowData = raycastHitTransform.GetComponent<Arrow>();
+                var fileNode = raycastHitTransform.GetComponent<FileNode>();
+                var directoryNode = raycastHitTransform.GetComponent<DirectoryNode>();
+                var driveNode = raycastHitTransform.GetComponent<DriveNode>();
+                var islandData = raycastHitTransform.GetComponent<Island>();
+                var rodData = raycastHitTransform.GetComponent<Rod>();
 
                 if (Input.GetMouseButtonDown(0) && !nodePropertiesUIConnector.gameObject.activeInHierarchy)
                 {
@@ -264,15 +345,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                             + parent.name);
                         var parentIslandData = parentIsland.GetComponent<Island>();
                         currentIsland = parentIslandData;
-                        if (parentIslandData != null)
-                        {
-                            var parentRodData = parentIsland.GetComponent<Rod>();
-                            currentRod = parentRodData;
-                        }
-                        else
-                        {
-                            currentRod = null;
-                        }
+
                         var parentRod = parent.transform.Find("Rod of "
                             + parent.name);
                         if (parentRod != null)
@@ -298,9 +371,21 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         var next = rodData.currentDirectory;
                         var nextIsland = next.transform.Find("Island of "
                             + next.name);
+                        var nextLeftArrow = next.transform.Find(ArrowDirection.Left + " Arrow of "
+                            + next.name);
+                        var nextRightArrow = next.transform.Find(ArrowDirection.Right + " Arrow of "
+                            + next.name);
                         if (nextIsland != null)
                         {
                             Destroy(nextIsland.gameObject);
+                        }
+                        if (nextLeftArrow != null)
+                        {
+                            Destroy(nextLeftArrow.gameObject);
+                        }
+                        if (nextRightArrow != null)
+                        {
+                            Destroy(nextRightArrow.gameObject);
                         }
                         next.Depopulate();
 
@@ -355,6 +440,12 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                             raycastHit.transform.position;
                         nodeHoverUIConnector.ExecuteUI(fileNode);
                     }
+                    else if (arrowData != null)
+                    {
+                        var arrowRenderer = arrowData.GetComponent<Renderer>();
+                        arrowRenderer.material.SetColor("_Color", Color.yellow);
+                        arrowHover = arrowData;
+                    }
                     else if (rodData != null)
                     {
                         var rodRenderer = rodData.GetComponent<Renderer>();
@@ -386,7 +477,13 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             {
                 nodeHoverUIConnector.Clear();
                 selector.SetActive(false);
-                if (rodHover)
+                if (arrowHover != null)
+                {
+                    var arrowRenderer = arrowHover.GetComponent<Renderer>();
+                    arrowRenderer.material.SetColor("_Color", Color.grey);
+                    arrowHover = null;
+                }
+                if (rodHover != null)
                 {
                     var rodHoverRenderer = rodHover.GetComponent<Renderer>();
                     rodHoverRenderer.material.SetColor("_Color", Color.grey);
