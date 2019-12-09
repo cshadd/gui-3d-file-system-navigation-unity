@@ -18,6 +18,10 @@ namespace Gui3dFileSystemNavigationUnity.Data
         {
             var assignment = base.Assign(container);
             parentDirectory = parent;
+            if (iconDatabase != null)
+            {
+                extendedInfo.icon = iconDatabase.GrabIcon("Default Directory");
+            }
             try
             {
                 Container.GetDirectories();
@@ -36,10 +40,6 @@ namespace Gui3dFileSystemNavigationUnity.Data
             if (parentDirectory != null && parentDirectory.Container != null)
             {
                 extendedInfo.location = parentDirectory.Container.FullName;
-            }
-            if (fileIconDatabase != null)
-            {
-                extendedInfo.fileIcon = fileIconDatabase.GrabIcon("Default Directory");
             }
             return assignment;
         }
@@ -103,7 +103,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
                         var directoryGameObject = Instantiate(directoryTemplate);
                         directoryGameObject.transform.parent = transform;
                         var directoryNode = directoryGameObject.AddComponent<DirectoryNode>();
-                        directoryNode.fileIconDatabase = fileIconDatabase;
+                        directoryNode.iconDatabase = iconDatabase;
                         directoryNode.Assign(directory, this);
                         directoryNodes.Add(directoryNode);
                     }
@@ -113,7 +113,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
                         var fileGameObject = Instantiate(fileTemplate);
                         fileGameObject.transform.parent = transform;
                         var fileNode = fileGameObject.AddComponent<FileNode>();
-                        fileNode.fileIconDatabase = fileIconDatabase;
+                        fileNode.iconDatabase = iconDatabase;
                         fileNode.Assign(file, this);
                         fileNodes.Add(fileNode);
                     }

@@ -7,7 +7,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
         where T : FileSystemInfo
     {
         public ExtendedInfo extendedInfo;
-        public FileIconDatabase fileIconDatabase;
+        public IconDatabase iconDatabase;
 
         public T Container { get; protected set; }
 
@@ -30,10 +30,9 @@ namespace Gui3dFileSystemNavigationUnity.Data
                 gameObject.name = Container.FullName;
                 extendedInfo.Unassign();
                 extendedInfo.computer = System.Environment.MachineName;
-                Debug.LogWarning(System.Environment.SystemDirectory);
-                if (fileIconDatabase != null)
+                if (iconDatabase != null)
                 {
-                    extendedInfo.fileIcon = fileIconDatabase.GrabIcon("Unknown");
+                    extendedInfo.icon = iconDatabase.GrabIcon("Unknown");
                 }
                 Debug.Log("SystemNode assigned: " + Container.FullName);
             }
@@ -47,7 +46,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
             Debug.Log("SystemNode unassigned: " + Container.FullName);
             extendedInfo.Unassign();
             extendedInfo = null;
-            fileIconDatabase = null;
+            iconDatabase = null;
             Container = null;
             return this;
         }

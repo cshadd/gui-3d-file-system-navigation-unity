@@ -15,6 +15,15 @@ namespace Gui3dFileSystemNavigationUnity.Data
         {
             var assignment = base.Assign(container);
             parentDirectory = parent;
+            if (iconDatabase != null)
+            {
+                var icon = iconDatabase.GrabIcon(container.Extension.ToLower());
+                if (icon == null)
+                {
+                    icon = iconDatabase.GrabIcon("Default File");
+                }
+                extendedInfo.icon = icon;
+            }
             try
             {
                 var fileStream = container.OpenRead();
@@ -35,16 +44,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
             {
                 extendedInfo.location = parentDirectory.Container.FullName;
             }
-            extendedInfo.size = container.Length + " bytes";
-            if (fileIconDatabase != null)
-            {
-                var icon = fileIconDatabase.GrabIcon(container.Extension.ToLower());
-                if (icon == null)
-                {
-                    icon = fileIconDatabase.GrabIcon("Default File");
-                }
-                extendedInfo.fileIcon = icon;
-            }
+            extendedInfo.size = container.Length;
             return assignment;
         }
         public override ISystemNode<FileInfo> Grab(string path)
