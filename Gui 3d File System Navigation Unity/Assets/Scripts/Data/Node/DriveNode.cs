@@ -13,9 +13,9 @@ namespace Gui3dFileSystemNavigationUnity.Data
         {
             var assignment = base.Assign(container, parent);
             BaseContainer = new DriveInfo(container.FullName);
-            if (fileIconDatabase != null)
+            if (iconDatabase != null)
             {
-                extendedInfo.fileIcon = fileIconDatabase.GrabIcon("Default Drive");
+                extendedInfo.icon = iconDatabase.GrabIcon("Default Drive");
             }
             return assignment;
         }
@@ -24,9 +24,9 @@ namespace Gui3dFileSystemNavigationUnity.Data
         {
             var assignment = base.Assign(new DirectoryInfo(container.Name), parent);
             BaseContainer = container;
-            if (fileIconDatabase != null)
+            if (iconDatabase != null)
             {
-                extendedInfo.fileIcon = fileIconDatabase.GrabIcon("Default Drive");
+                extendedInfo.icon = iconDatabase.GrabIcon("Default Drive");
             }
             return assignment;
         }

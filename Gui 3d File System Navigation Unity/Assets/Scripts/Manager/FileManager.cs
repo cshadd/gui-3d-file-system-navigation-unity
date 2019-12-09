@@ -5,7 +5,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 {
     public class FileManager : MonoBehaviour
     {
-        private const int MaxIslandItemNumber = 8;
+        private const int MaxIslandItemNumber = 3;
 
         [SerializeField]
         private Arrow arrowHover;
@@ -20,7 +20,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         [SerializeField]
         private Rod currentRod;
         [SerializeField]
-        private FileIconDatabase fileIconDatabase;
+        private IconDatabase iconDatabase;
         [SerializeField]
         private int itemCounter;
         [SerializeField]
@@ -28,7 +28,6 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         [SerializeField]
         private NodePropertiesUIConnectorManager nodePropertiesUIConnector;
         [SerializeField]
-        private int pageNumber;
         private Ray ray;
         private RaycastHit raycastHit;
         [SerializeField]
@@ -145,6 +144,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             var y = 0;
             var z = 4;
 
+            
+
             foreach (DirectoryNode childDirectoryNode in directoryNode.parentDirectory.directoryNodes)
             {
                 childDirectoryNode.Depopulate();
@@ -178,17 +179,16 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             {
                 var island = CreateIsland(directoryNode);
                 var currentIslandPosition = island.transform.position;
+                var pageData = island.GetComponent<Island>();
                 CreateConnectingRod(directoryNode);
-
+                
                 cameraConnector.Transition(island);
                 currentDirectoryUIConnector.ExecuteUI(directoryNode);
-
-
                 foreach (DirectoryNode childDirectoryNode in directoryNode.directoryNodes)
                 {
-                    //if (currentIslandItemNumber < MaxIslandItemNumber)
-                    //{
-                        itemCounter++;
+                    if (currentIslandItemNumber < MaxIslandItemNumber)
+                    {
+                        pageData.pageItemCounter++;
                         currentIslandItemNumber++;
                         childDirectoryNode.transform.position =
                             currentIslandPosition + new Vector3(x, y, z);
@@ -210,18 +210,17 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                             var vanillaFolderColor = new Color32(95, 90, 67, 255);
                             childDirectoryNodeRenderer.material.SetColor("_Color", vanillaFolderColor);
                         }
-                    //}
-                    //else
-                    //{
-                        //childDirectoryNode.transform.gameObject.SetActive(false);
-                    //}
+                    }
+                    else
+                    {
+                        childDirectoryNode.transform.gameObject.SetActive(false);
+                    }
                 }
-
                 foreach (FileNode childFileNode in directoryNode.fileNodes)
                 {
-                    //if (currentIslandItemNumber < MaxIslandItemNumber)
-                    //{
-                        itemCounter++;
+                    if (currentIslandItemNumber < MaxIslandItemNumber)
+                    {
+                        pageData.pageItemCounter++;
                         currentIslandItemNumber++;
                         childFileNode.transform.position =
                         currentIslandPosition + new Vector3(x, y, z);
@@ -243,18 +242,18 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         {
                             childFileNodeRenderer.material.SetColor("_Color", Color.blue);
                         }
-                    //}
-                    //else
-                    //{
-                        //childFileNode.transform.gameObject.SetActive(false);
-                    //}
+                    }
+                    else
+                    {
+                        childFileNode.transform.gameObject.SetActive(false);
+                    }
                 }
 
                 if (currentIslandItemNumber >= MaxIslandItemNumber)
                 {
                     CreateArrow(directoryNode, ArrowDirection.Left);
                     CreateArrow(directoryNode, ArrowDirection.Right);
-                    pageNumber++;
+                    pageData.pageNumber++;
                 }
             }
             return;
@@ -269,8 +268,6 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             Debug.Log(Application.productName + " started.");
 
             count = 0;
-            itemCounter = 0;
-            pageNumber = 0;
 
             nodePropertiesUIConnector.gameObject.SetActive(false);
 
@@ -280,7 +277,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             };
             rootGameObject.transform.parent = transform;
             root = rootGameObject.AddComponent<RootNode>();
-            root.fileIconDatabase = fileIconDatabase;
+            root.iconDatabase = iconDatabase;
             root.Populate(PrimitiveType.Cylinder);
 
             var island = CreateIsland(root);
@@ -390,6 +387,195 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         next.Depopulate();
 
                         Destroy(rodData.gameObject);
+                    }
+                    else if (arrowData != null)
+                    {
+                        var island = arrowData.currentDirectory.transform.Find("Island of " + arrowData.currentDirectory.name);
+                        var currentIslandPosition = island.position;
+                        var pageData = island.GetComponent<Island>();
+                        var x = -4;
+                        var y = 0;
+                        var z = 4;
+                        int activeCounter = 0;
+
+                        if (arrowData.direction == ArrowDirection.Right)
+                        {
+                            // if (pageData.pageItemCounter <= arrowData.currentDirectory.directoryNodes.Count+arrowData.currentDirectory.fileNodes.Count)
+                            Debug.LogWarning(arrowData.currentDirectory.directoryNodes.Count+arrowData.currentDirectory.fileNodes.Count);
+
+                                pageData.pageNumber++;
+                            foreach (DirectoryNode childDirectoryNode in arrowData.currentDirectory.directoryNodes)
+                            {
+                                activeCounter++;
+                                if (pageData.pageItemCounter <= arrowData.currentDirectory.directoryNodes.Count + arrowData.currentDirectory.fileNodes.Count)
+                                {
+
+                                    if ((activeCounter <= pageData.pageItemCounter))
+                                    {
+                                        childDirectoryNode.transform.gameObject.SetActive(false);
+                                    }
+                                    else if ((activeCounter >= pageData.pageItemCounter) && (pageData.pageItemCounter < (pageData.pageNumber) * MaxIslandItemNumber))
+                                    {
+                                        childDirectoryNode.transform.gameObject.SetActive(true);
+                                        pageData.pageItemCounter++;
+                                        childDirectoryNode.transform.position =
+                                             currentIslandPosition + new Vector3(x, y, z);
+
+                                        x += 1;
+                                        if (x >= 5)
+                                        {
+                                            x = -4;
+                                            z -= 1;
+                                        }
+
+                                        var childDirectoryNodeRenderer = childDirectoryNode.GetComponent<Renderer>();
+                                        if (childDirectoryNode.extendedInfo.isAccessDenied)
+                                        {
+                                            childDirectoryNodeRenderer.material.SetColor("_Color", Color.red);
+                                        }
+                                        else
+                                        {
+                                            var vanillaFolderColor = new Color32(95, 90, 67, 255);
+                                            childDirectoryNodeRenderer.material.SetColor("_Color", vanillaFolderColor);
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        childDirectoryNode.transform.gameObject.SetActive(false);
+                                    }
+                                }
+                            }
+                            foreach (FileNode childFileNode in arrowData.currentDirectory.fileNodes)
+                            {
+
+                                activeCounter++;
+                                if (pageData.pageItemCounter <= arrowData.currentDirectory.directoryNodes.Count + arrowData.currentDirectory.fileNodes.Count)
+                                {
+
+                                    if ((activeCounter <= pageData.pageItemCounter))
+                                    {
+                                        childFileNode.transform.gameObject.SetActive(false);
+                                    }
+                                    else if ((activeCounter >= pageData.pageItemCounter) && (pageData.pageItemCounter < (pageData.pageNumber) * MaxIslandItemNumber))
+                                    {
+                                        childFileNode.transform.gameObject.SetActive(true);
+                                        pageData.pageItemCounter++;
+                                        childFileNode.transform.position =
+                                             currentIslandPosition + new Vector3(x, y, z);
+                                        childFileNode.transform.localScale = new Vector3(1, 2, 1);
+
+                                        x += 1;
+                                        if (x >= 5)
+                                        {
+                                            x = -4;
+                                            z -= 1;
+                                        }
+
+                                        var childDirectoryNodeRenderer = childFileNode.GetComponent<Renderer>();
+                                        if (childFileNode.extendedInfo.isAccessDenied)
+                                        {
+                                            childDirectoryNodeRenderer.material.SetColor("_Color", Color.red);
+                                        }
+                                        else
+                                        {
+                                            var vanillaFolderColor = new Color32(95, 90, 67, 255);
+                                            childDirectoryNodeRenderer.material.SetColor("_Color", vanillaFolderColor);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        childFileNode.transform.gameObject.SetActive(false);
+                                    }
+
+                                }
+                            }
+                        }
+                        else if (arrowData.direction == ArrowDirection.Left)
+                        {
+                            if (pageData.pageItemCounter > MaxIslandItemNumber)
+                            {
+                                pageData.pageNumber--;
+                                foreach (DirectoryNode childDirectoryNode in arrowData.currentDirectory.directoryNodes)
+                                {
+                                    activeCounter++;
+                                    if ((activeCounter < (pageData.pageItemCounter - (pageData.pageNumber * MaxIslandItemNumber)) - MaxIslandItemNumber))
+                                    {
+                                        childDirectoryNode.transform.gameObject.SetActive(false);
+                                    }
+                                    else if (((activeCounter > (pageData.pageNumber * MaxIslandItemNumber) - MaxIslandItemNumber)) && (activeCounter <= pageData.pageItemCounter))
+                                    {
+                                        childDirectoryNode.transform.gameObject.SetActive(true);
+                                        pageData.pageItemCounter--;
+                                        childDirectoryNode.transform.position =
+                                             currentIslandPosition + new Vector3(x, y, z);
+
+                                        x += 1;
+                                        if (x >= 5)
+                                        {
+                                            x = -4;
+                                            z -= 1;
+                                        }
+
+                                        var childDirectoryNodeRenderer = childDirectoryNode.GetComponent<Renderer>();
+                                        if (childDirectoryNode.extendedInfo.isAccessDenied)
+                                        {
+                                            childDirectoryNodeRenderer.material.SetColor("_Color", Color.red);
+                                        }
+                                        else
+                                        {
+                                            var vanillaFolderColor = new Color32(95, 90, 67, 255);
+                                            childDirectoryNodeRenderer.material.SetColor("_Color", vanillaFolderColor);
+                                        }
+
+
+                                    }
+                                    else
+                                    {
+                                        childDirectoryNode.transform.gameObject.SetActive(false);
+                                    }
+                                }
+
+                                foreach (FileNode childFileNode in arrowData.currentDirectory.fileNodes)
+                                {
+                                    activeCounter++;
+                                    if ((activeCounter < (pageData.pageItemCounter - (pageData.pageNumber * MaxIslandItemNumber)) - MaxIslandItemNumber))
+                                    {
+                                        childFileNode.transform.gameObject.SetActive(false);
+                                    }
+                                    else if (((activeCounter > (pageData.pageNumber * MaxIslandItemNumber) - MaxIslandItemNumber)) && (activeCounter <= pageData.pageItemCounter))
+                                    {
+                                        childFileNode.transform.gameObject.SetActive(true);
+                                        pageData.pageItemCounter--;
+                                        childFileNode.transform.position =
+                                        currentIslandPosition + new Vector3(x, y, z);
+                                        childFileNode.transform.localScale = new Vector3(1, 2, 1);
+
+                                        x += 1;
+                                        if (x >= 5)
+                                        {
+                                            x = -4;
+                                            z -= 1;
+                                        }
+
+                                        var childDirectoryNodeRenderer = childFileNode.GetComponent<Renderer>();
+                                        if (childFileNode.extendedInfo.isAccessDenied)
+                                        {
+                                            childDirectoryNodeRenderer.material.SetColor("_Color", Color.red);
+                                        }
+                                        else
+                                        {
+                                            var vanillaFolderColor = new Color32(95, 90, 67, 255);
+                                            childDirectoryNodeRenderer.material.SetColor("_Color", vanillaFolderColor);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        childFileNode.transform.gameObject.SetActive(false);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 else if (Input.GetMouseButtonDown(1) && !nodePropertiesUIConnector.gameObject.activeInHierarchy)
