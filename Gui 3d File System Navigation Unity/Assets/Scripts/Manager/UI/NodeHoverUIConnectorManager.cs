@@ -1,5 +1,4 @@
 using Gui3dFileSystemNavigationUnity.Data;
-using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,19 +15,19 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 
         public void Clear()
         {
-            imageNodeHoverIcon.sprite = null;
+            imageNodeHoverIcon.gameObject.SetActive(false);
             textNodeHoverName.text = "";
             return;
         }
-        public new void ExecuteUI<T>(AbstractSystemNode<T> node)
-             where T : FileSystemInfo
+        public override void ExecuteUI<T>(AbstractSystemNode<T> node)
         {
             base.ExecuteUI<T>(node);
             var container = node.Container;
             var extendedInfo = node.extendedInfo;
 
             textNodeHoverName.text = container.Name;
-            imageNodeHoverIcon.sprite = extendedInfo.fileIcon;
+            imageNodeHoverIcon.sprite = extendedInfo.icon;
+            imageNodeHoverIcon.gameObject.SetActive(true);
             return;
         }
     }

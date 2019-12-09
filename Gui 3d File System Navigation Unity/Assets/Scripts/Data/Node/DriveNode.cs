@@ -6,16 +6,16 @@ namespace Gui3dFileSystemNavigationUnity.Data
     {
         public DriveInfo BaseContainer { get; protected set; }
 
-        public DriveNode(string path = null) : base(path) { return; }
+        private DriveNode(string path = null) : base(path) { return; }
 
         public new ISystemNode<DirectoryInfo> Assign(DirectoryInfo container,
             DirectoryNode parent = null)
         {
             var assignment = base.Assign(container, parent);
             BaseContainer = new DriveInfo(container.FullName);
-            if (fileIconDatabase != null)
+            if (iconDatabase != null)
             {
-                extendedInfo.fileIcon = fileIconDatabase.GrabIcon("Default Drive");
+                extendedInfo.icon = iconDatabase.GrabIcon("Default Drive");
             }
             return assignment;
         }
@@ -24,9 +24,9 @@ namespace Gui3dFileSystemNavigationUnity.Data
         {
             var assignment = base.Assign(new DirectoryInfo(container.Name), parent);
             BaseContainer = container;
-            if (fileIconDatabase != null)
+            if (iconDatabase != null)
             {
-                extendedInfo.fileIcon = fileIconDatabase.GrabIcon("Default Drive");
+                extendedInfo.icon = iconDatabase.GrabIcon("Default Drive");
             }
             return assignment;
         }
@@ -34,7 +34,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
         {
             return Assign(new DirectoryInfo(path));
         }
-        public new ISystemNode<DirectoryInfo> Unassign()
+        public override ISystemNode<DirectoryInfo> Unassign()
         {
             BaseContainer = null;
             return base.Unassign();

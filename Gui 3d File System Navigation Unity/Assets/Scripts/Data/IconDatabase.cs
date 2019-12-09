@@ -4,24 +4,28 @@ using UnityEngine;
 
 namespace Gui3dFileSystemNavigationUnity.Data
 {
-    [CreateAssetMenu(fileName = "File Icons", menuName = "ScriptableObjects/File Icons")]
-    public class FileIconDatabase : ScriptableObject
+    [CreateAssetMenu(fileName = "Icons", menuName = "ScriptableObjects/File Icons")]
+    public class IconDatabase : ScriptableObject
     {
         [SerializeField]
-        private List<FileIconEntry> entries;
-        // private List<FileIconEntry> entries = new List<FileIconEntry>();
+        private List<IconEntry> entries;
+        // private List<IconEntry> entries = new List<IconEntry>();
+
+        private IconDatabase() : base() { return; }
 
         [Serializable]
-        public class FileIconEntry
+        public class IconEntry
         {
             public string iconName;
             public Sprite iconSprite;
+
+            private IconEntry() : base() { return; }
         }
 
         public Sprite GrabIcon(string name)
         {
             Sprite icon = null;
-            foreach (FileIconEntry entry in entries)
+            foreach (IconEntry entry in entries)
             {
                 if (entry.iconName.Equals(name))
                 {

@@ -11,32 +11,39 @@ namespace Gui3dFileSystemNavigationUnity.Data
         public List<FileNode> fileNodes;
         public DirectoryNode parentDirectory;
 
-        public DirectoryNode(string path = null) : base(path) { return; }
+        protected DirectoryNode(string path = null) : base(path) { return; }
 
-        public ISystemNode<DirectoryInfo> Assign(DirectoryInfo container,
+        public virtual ISystemNode<DirectoryInfo> Assign(DirectoryInfo container,
             DirectoryNode parent = null)
         {
-            parentDirectory = parent;
             var assignment = base.Assign(container);
+            parentDirectory = parent;
+            if (iconDatabase != null)
+            {
+                extendedInfo.icon = iconDatabase.GrabIcon("Default Directory");
+            }
             try
             {
                 Container.GetDirectories();
                 Container.GetFiles();
-                extendedInfo.isAccessDenied = false;
             }
-            catch (UnauthorizedAccessException)
+            catch (IOException ex)
             {
                 extendedInfo.isAccessDenied = true;
-                Debug.LogWarning("SystemNode is access denied: "
-                    + Container.FullName);
+                Debug.LogWarning("SystemNode had IOException (caught): " + ex);
             }
-            if (fileIconDatabase != null)
+            catch (UnauthorizedAccessException ex)
             {
-                extendedInfo.fileIcon = fileIconDatabase.GrabIcon("Default Directory");
+                extendedInfo.isAccessDenied = true;
+                Debug.LogWarning("SystemNode had UnauthorizedAccessException (caught): " + ex);
+            }
+            if (parentDirectory != null && parentDirectory.Container != null)
+            {
+                extendedInfo.location = parentDirectory.Container.FullName;
             }
             return assignment;
         }
-        public ISystemNode<DirectoryInfo> Depopulate()
+        public virtual ISystemNode<DirectoryInfo> Depopulate()
         {
             if (Container.Exists && extendedInfo.isShowingInternal)
             {
@@ -64,7 +71,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
         {
             return Assign(new DirectoryInfo(path));
         }
-        public ISystemNode<DirectoryInfo> Populate()
+        public virtual ISystemNode<DirectoryInfo> Populate()
         {
             var sample = new GameObject();
             Populate(sample, sample);
@@ -72,7 +79,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
             return this;
         }
         [Obsolete("This method is obsolete.")]
-        public ISystemNode<DirectoryInfo> Populate(PrimitiveType directoryPrimitiveType,
+        public virtual ISystemNode<DirectoryInfo> Populate(PrimitiveType directoryPrimitiveType,
             PrimitiveType filePrimitiveType)
         {
             var sample1 = GameObject.CreatePrimitive(directoryPrimitiveType);
@@ -82,7 +89,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
             Destroy(sample2);
             return this;
         }
-        public ISystemNode<DirectoryInfo> Populate(GameObject directoryTemplate,
+        public virtual ISystemNode<DirectoryInfo> Populate(GameObject directoryTemplate,
             GameObject fileTemplate)
         {
             if (Container.Exists && !extendedInfo.isAccessDenied && !extendedInfo.isShowingInternal)
@@ -96,7 +103,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
                         var directoryGameObject = Instantiate(directoryTemplate);
                         directoryGameObject.transform.parent = transform;
                         var directoryNode = directoryGameObject.AddComponent<DirectoryNode>();
-                        directoryNode.fileIconDatabase = fileIconDatabase;
+                        directoryNode.iconDatabase = iconDatabase;
                         directoryNode.Assign(directory, this);
                         directoryNodes.Add(directoryNode);
                     }
@@ -106,7 +113,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
                         var fileGameObject = Instantiate(fileTemplate);
                         fileGameObject.transform.parent = transform;
                         var fileNode = fileGameObject.AddComponent<FileNode>();
-                        fileNode.fileIconDatabase = fileIconDatabase;
+                        fileNode.iconDatabase = iconDatabase;
                         fileNode.Assign(file, this);
                         fileNodes.Add(fileNode);
                     }
@@ -114,16 +121,20 @@ namespace Gui3dFileSystemNavigationUnity.Data
                     extendedInfo.isAccessDenied = false;
                     extendedInfo.isShowingInternal = true;
                 }
-                catch (UnauthorizedAccessException)
+                catch (IOException ex)
                 {
                     extendedInfo.isAccessDenied = true;
-                    Debug.LogWarning("SystemNode is be expanded, access denied: "
-                        + Container.FullName);
+                    Debug.LogWarning("SystemNode had IOException (caught): " + ex);
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    extendedInfo.isAccessDenied = true;
+                    Debug.LogWarning("SystemNode had UnauthorizedAccessException (caught): " + ex);
                 }
             }
             return this;
         }
-        public new ISystemNode<DirectoryInfo> Unassign()
+        public override ISystemNode<DirectoryInfo> Unassign()
         {
             Depopulate();
             directoryNodes = null;
