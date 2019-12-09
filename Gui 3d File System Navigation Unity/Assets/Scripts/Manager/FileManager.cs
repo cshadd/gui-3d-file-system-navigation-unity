@@ -20,8 +20,9 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         [SerializeField]
         private Rod currentRod;
         [SerializeField]
-        private FileIconDatabase fileIconDatabase;
-
+        private IconDatabase iconDatabase;
+        [SerializeField]
+        private int itemCounter;
         [SerializeField]
         private NodeHoverUIConnectorManager nodeHoverUIConnector;
         [SerializeField]
@@ -276,7 +277,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             };
             rootGameObject.transform.parent = transform;
             root = rootGameObject.AddComponent<RootNode>();
-            root.fileIconDatabase = fileIconDatabase;
+            root.iconDatabase = iconDatabase;
             root.Populate(PrimitiveType.Cylinder);
 
             var island = CreateIsland(root);

@@ -26,7 +26,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             var extendedInfo = node.extendedInfo;
 
             textNodeHoverName.text = container.Name;
-            imageNodeHoverIcon.sprite = extendedInfo.fileIcon;
+            imageNodeHoverIcon.sprite = extendedInfo.icon;
             imageNodeHoverIcon.gameObject.SetActive(true);
             return;
         }
