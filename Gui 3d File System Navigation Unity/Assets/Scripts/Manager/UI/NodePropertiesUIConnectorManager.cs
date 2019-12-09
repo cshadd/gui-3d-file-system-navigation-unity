@@ -263,41 +263,41 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             {
                 var baseContainer = selectedDriveNode.BaseContainer;
                 var container = selectedDriveNode.Container;
+                var extendedInfo = selectedDriveNode.extendedInfo;
                 textContent.text = "<b>Name: </b>" + container.Name + "\n" +
                                "<b>Type of File: </b>" + container.Extension + "\n" +
-                               "<b>Folder Path: </b>" + container.GetType() + "\n" + //I need this
-                               "<b>Size: </b>" + container.Attributes + "\n" + //I need this
+                               "<b>Folder Path: </b>" + extendedInfo.location + "\n" + 
+                               "<b>Size: </b>" + extendedInfo.size + "\n" +
                                "<b>Date Created: </b>" + container.CreationTime + "\n" +
                                "<b>Date Modified: </b>" + container.LastWriteTime + "\n" +
                                "<b>Attributes: </b>" + container.Attributes + "\n" +
-                               "<b>Owner: </b>" + container.LastWriteTime + "\n" + //I need this
-                               "<b>Computer: </b>" + container.Attributes; //I need this
+                               "<b>Computer: </b>" + extendedInfo.computer;
             }
             else if (selectedDirectoryNode != null)
             {
                 var container = selectedDirectoryNode.Container;
+                var extendedInfo = selectedDirectoryNode.extendedInfo;
                 textContent.text = "<b>Name: </b>" + container.Name + "\n" +
                                "<b>Type of File: </b>" + container.Extension + "\n" +
-                               "<b>Folder Path: </b>" + container.GetType() + "\n" + //I need this
-                               "<b>Size: </b>" + container.Attributes + "\n" + //I need this
+                               "<b>Folder Path: </b>" + extendedInfo.location + "\n" +
+                               "<b>Size: </b>" + extendedInfo.size + "\n" + 
                                "<b>Date Created: </b>" + container.CreationTime + "\n" +
                                "<b>Date Modified: </b>" + container.LastWriteTime + "\n" +
                                "<b>Attributes: </b>" + container.Attributes + "\n" +
-                               "<b>Owner: </b>" + container.LastWriteTime + "\n" + //I need this
-                               "<b>Computer: </b>" + container.Attributes; //I need this
+                               "<b>Computer: </b>" + extendedInfo.computer; 
             }
             else if (selectedFileNode != null)
             {
                 var container = selectedFileNode.Container;
+                var extendedInfo = selectedFileNode.extendedInfo;
                 textContent.text = "<b>Name: </b>" + container.Name + "\n" +
                                "<b>Type of File: </b>" + container.Extension + "\n" +
-                               "<b>Folder Path: </b>" + container.GetType() + "\n" + //I need this
-                               "<b>Size: </b>" + container.Attributes + "\n" + //I need this
+                               "<b>Folder Path: </b>" + extendedInfo.location + "\n" +
+                               "<b>Size: </b>" + extendedInfo.size + "\n" +
                                "<b>Date Created: </b>" + container.CreationTime + "\n" +
                                "<b>Date Modified: </b>" + container.LastWriteTime + "\n" +
                                "<b>Attributes: </b>" + container.Attributes + "\n" +
-                               "<b>Owner: </b>" + container.LastWriteTime + "\n" + //I need this
-                               "<b>Computer: </b>" + container.Attributes; //I need this
+                               "<b>Computer: </b>" + extendedInfo.computer;
             }
             return;
         }
@@ -317,50 +317,56 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             {
                 var baseContainer = selectedDriveNode.BaseContainer;
                 var container = selectedDriveNode.Container;
+                var extendedInfo = selectedDriveNode.extendedInfo;
                 textContent.text = "<b>Name: </b>" + container.Name + "\n" +
                                "<b>---------------------</b>" + "\n" +
                                "<b>Type of File: </b>" + container.Extension + "\n" +
                                "<b>Description: </b>" + container.GetType() + "\n" +
                                "<b>---------------------</b>" + "\n" +
-                               "<b>Location: </b>" + container.Attributes + "\n" + //I need this
-                               "<b>Size: </b>" + container.Attributes + "\n" + //I need this
-                               "<b>Size on Disk: </b>" + container.Attributes + "\n" + //I need this
+                               "<b>Location: </b>" + extendedInfo.location + "\n" + 
+                               "<b>Size: </b>" + extendedInfo.size + "\n" + 
                                "<b>---------------------</b>" + "\n" +
                                "<b>Date Created: </b>" + container.CreationTime + "\n" +
                                "<b>Date Modified: </b>" + container.LastWriteTime + "\n" +
-                               "<b>Date Accessed: </b>" + container.LastAccessTime;
+                               "<b>Date Accessed: </b>" + container.LastAccessTime +"\n" +
+                               "<b>---------------------</b>" + "\n" +
+                               "<b>Attributes: </b>" + container.Attributes;
             }
             if (selectedDirectoryNode != null)
             {
                 var container = selectedDirectoryNode.Container;
+                var extendedInfo = selectedDirectoryNode.extendedInfo;
                 textContent.text = "<b>Name: </b>" + container.Name + "\n" +
                                "<b>---------------------</b>" + "\n" +
                                "<b>Type of File: </b>" + container.Extension + "\n" +
                                "<b>Description: </b>" + container.GetType() + "\n" +
                                "<b>---------------------</b>" + "\n" +
-                               "<b>Location: </b>" + container.Attributes + "\n" + //I need this
-                               "<b>Size: </b>" + container.Attributes + "\n" + //I need this
-                               "<b>Size on Disk: </b>" + container.Attributes + "\n" + //I need this
+                               "<b>Location: </b>" + extendedInfo.location + "\n" + 
+                               "<b>Size: </b>" + extendedInfo.size + "\n" + 
                                "<b>---------------------</b>" + "\n" +
                                "<b>Date Created: </b>" + container.CreationTime + "\n" +
                                "<b>Date Modified: </b>" + container.LastWriteTime + "\n" +
-                               "<b>Date Accessed: </b>" + container.LastAccessTime;
+                               "<b>Date Accessed: </b>" + container.LastAccessTime + "\n" +
+                               "<b>---------------------</b>" + "\n" +
+                               "<b>Attributes: </b>" + container.Attributes;
             }
             else if (selectedFileNode != null)
             {
                 var container = selectedFileNode.Container;
+                var extendedInfo = selectedFileNode.extendedInfo;
                 textContent.text = "<b>Name: </b>" + container.Name + "\n" +
                                "<b>---------------------</b>" + "\n" +
                                "<b>Type of File: </b>" + container.Extension + "\n" +
                                "<b>Description: </b>" + container.GetType() + "\n" +
                                "<b>---------------------</b>" + "\n" +
-                               "<b>Location: </b>" + container.Attributes + "\n" + //I need this
-                               "<b>Size: </b>" + container.Attributes + "\n" + //I need this
-                               "<b>Size on Disk: </b>" + container.Attributes + "\n" + //I need this
+                               "<b>Location: </b>" + extendedInfo.location + "\n" + 
+                               "<b>Size: </b>" + extendedInfo.size + "\n" + 
                                "<b>---------------------</b>" + "\n" +
                                "<b>Date Created: </b>" + container.CreationTime + "\n" +
                                "<b>Date Modified: </b>" + container.LastWriteTime + "\n" +
-                               "<b>Date Accessed: </b>" + container.LastAccessTime;
+                               "<b>Date Accessed: </b>" + container.LastAccessTime + "\n" +
+                               "<b>---------------------</b>" + "\n" +
+                               "<b>Attributes: </b>" + container.Attributes; ;
             }
             return;
         }
@@ -492,17 +498,41 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             {
                 var baseContainer = selectedDriveNode.BaseContainer;
                 var container = selectedDriveNode.Container;
-                textContent.text = "";
+                var extendedInfo = selectedDriveNode.extendedInfo;
+                textContent.text = "<b>Name: </b>" + container.Name + "\n" +
+                               "<b>-----------Permissions-----------</b>" + "\n" +
+                               "<b>Full Control: </b>" + container.Extension + "\n" +
+                               "<b>Modify: </b>" + extendedInfo.location + "\n" +
+                               "<b>Read & Execute: </b>" + extendedInfo.size + "\n" +
+                               "<b>Read: </b>" + container.CreationTime + "\n" +
+                               "<b>Write: </b>" + container.LastWriteTime + "\n" +
+                               "<b>Special Permissions: </b>" + extendedInfo.computer;
             }
             if (selectedDirectoryNode != null)
             {
                 var container = selectedDirectoryNode.Container;
-                textContent.text = "";
+                var extendedInfo = selectedDirectoryNode.extendedInfo;
+                textContent.text = "<b>Name: </b>" + container.Name + "\n" +
+                               "<b>-----------Permissions-----------</b>" + "\n" +
+                               "<b>Full Control: </b>" + container.Extension + "\n" +
+                               "<b>Modify: </b>" + extendedInfo.location + "\n" +
+                               "<b>Read & Execute: </b>" + extendedInfo.size + "\n" +
+                               "<b>Read: </b>" + container.CreationTime + "\n" +
+                               "<b>Write: </b>" + container.LastWriteTime + "\n" +
+                               "<b>Special Permissions: </b>" + extendedInfo.computer;
             }
             else if (selectedFileNode != null)
             {
                 var container = selectedFileNode.Container;
-                textContent.text = "";
+                var extendedInfo = selectedFileNode.extendedInfo;
+                textContent.text = "<b>Name: </b>" + container.Name + "\n" +
+                               "<b>-----------Permissions-----------</b>" + "\n" +
+                               "<b>Full Control: </b>" + container.Extension + "\n" +
+                               "<b>Modify: </b>" + extendedInfo.location + "\n" +
+                               "<b>Read & Execute: </b>" + extendedInfo.size + "\n" +
+                               "<b>Read: </b>" + container.CreationTime + "\n" +
+                               "<b>Write: </b>" + container.LastWriteTime + "\n" +
+                               "<b>Special Permissions: </b>" + extendedInfo.computer;
             }
             return;
         }
