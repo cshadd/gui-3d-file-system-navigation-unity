@@ -5,7 +5,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 {
     public class FileManager : MonoBehaviour
     {
-        private const int MaxIslandItemNumber = 7;
+        private const int MaxIslandItemNumber = 81;
 
         [SerializeField]
         private Arrow arrowHover;
