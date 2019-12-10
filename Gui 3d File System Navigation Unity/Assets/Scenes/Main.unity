@@ -2728,10 +2728,8 @@ MonoBehaviour:
   currentIsland: {fileID: 0}
   currentRod: {fileID: 0}
   iconDatabase: {fileID: 11400000, guid: 46d83f2f898451d47a9394d6f79b202c, type: 2}
-  itemCounter: 0
   nodeHoverUIConnector: {fileID: 1400135718}
   nodePropertiesUIConnector: {fileID: 863860520}
-  pageNumber: 0
   rodHover: {fileID: 0}
   root: {fileID: 0}
   selector: {fileID: 154267766}
@@ -5024,7 +5022,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 834955843}
-        m_MethodName: ResetCamera
+        m_MethodName: Exit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
