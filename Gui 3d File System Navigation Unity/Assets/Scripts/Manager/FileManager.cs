@@ -22,8 +22,6 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         [SerializeField]
         private IconDatabase iconDatabase;
         [SerializeField]
-        private int itemCounter;
-        [SerializeField]
         private NodeHoverUIConnectorManager nodeHoverUIConnector;
         [SerializeField]
         private NodePropertiesUIConnectorManager nodePropertiesUIConnector;
@@ -143,8 +141,6 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             var x = -4;
             var y = 0;
             var z = 4;
-
-
 
             foreach (DirectoryNode childDirectoryNode in directoryNode.parentDirectory.directoryNodes)
             {
@@ -328,8 +324,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                             }
                             else
                             {
-                                var vanillaFolderColor = new Color32(95, 90, 67, 255);
-                                childDirectoryNodeRenderer.material.SetColor("_Color", vanillaFolderColor);
+                                childDirectoryNodeRenderer.material.SetColor("_Color", Color.blue);
                             }
                         }
                         else
@@ -349,7 +344,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         activeCounter++;
                         if (Mathf.Ceil(((float)activeCounter / (float)MaxIslandItemNumber)) == pageData.pageNumber)
                         {
-                            childDirectoryNode.transform.gameObject.SetActive(true);
+                            childDirectoryNode.gameObject.SetActive(true);
                             childDirectoryNode.transform.position =
                                  currentIslandPosition + new Vector3(x, y, z);
                             x += 1;
@@ -370,14 +365,14 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                             }
                         }
                         else
-                            childDirectoryNode.transform.gameObject.SetActive(false);
+                            childDirectoryNode.gameObject.SetActive(false);
                     }
                     foreach (FileNode childFileNode in arrowData.currentDirectory.fileNodes)
                     {
                         activeCounter++;
                         if (Mathf.Ceil((float)activeCounter / (float)MaxIslandItemNumber) == pageData.pageNumber)
                         {
-                            childFileNode.transform.gameObject.SetActive(true);
+                            childFileNode.gameObject.SetActive(true);
                             childFileNode.transform.position =
                                 currentIslandPosition + new Vector3(x, y, z);
                             childFileNode.transform.localScale = new Vector3(1, 2, 1);
@@ -394,12 +389,11 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                             }
                             else
                             {
-                                var vanillaFolderColor = new Color32(95, 90, 67, 255);
-                                childDirectoryNodeRenderer.material.SetColor("_Color", vanillaFolderColor);
+                                childDirectoryNodeRenderer.material.SetColor("_Color", Color.blue);
                             }
                         }
                         else
-                            childFileNode.transform.gameObject.SetActive(false);
+                            childFileNode.gameObject.SetActive(false);
                     }
                 }
             }
