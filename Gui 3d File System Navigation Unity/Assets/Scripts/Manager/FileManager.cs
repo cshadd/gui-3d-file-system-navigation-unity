@@ -175,7 +175,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             {
                 var island = CreateIsland(directoryNode);
                 var currentIslandPosition = island.transform.position;
-                var pageData = island.GetComponent<Island>();
+                var islandData = island.GetComponent<Island>();
                 CreateConnectingRod(directoryNode);
 
                 cameraConnector.Transition(island);
@@ -247,7 +247,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 {
                     CreateArrow(directoryNode, ArrowDirection.Left);
                     CreateArrow(directoryNode, ArrowDirection.Right);
-                    pageData.pageNumber++;
+                    islandData.pageNumber++;
                 }
             }
             return;
@@ -261,7 +261,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         {
             var island = arrowData.currentDirectory.transform.Find("Island of " + arrowData.currentDirectory.name);
             var currentIslandPosition = island.position;
-            var pageData = island.GetComponent<Island>();
+            var islandData = island.GetComponent<Island>();
             var x = -4;
             var y = 0;
             var z = 4;
@@ -269,13 +269,13 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 
             if (arrowData.direction == ArrowDirection.Right)
             {
-                if (pageData.pageNumber < (Mathf.Ceil((float)arrowData.currentDirectory.directoryNodes.Count + (float)arrowData.currentDirectory.fileNodes.Count) / MaxIslandItemNumber))
+                if (islandData.pageNumber < (Mathf.Ceil(arrowData.currentDirectory.directoryNodes.Count + arrowData.currentDirectory.fileNodes.Count) / MaxIslandItemNumber))
                 {
-                    pageData.pageNumber++;
+                    islandData.pageNumber++;
                     foreach (DirectoryNode childDirectoryNode in arrowData.currentDirectory.directoryNodes)
                     {
                         activeCounter++;
-                        if (Mathf.Ceil(((float)activeCounter / (float)MaxIslandItemNumber)) == pageData.pageNumber)
+                        if (Mathf.Ceil((activeCounter / MaxIslandItemNumber)) == islandData.pageNumber)
                         {
                             childDirectoryNode.transform.gameObject.SetActive(true);
                             childDirectoryNode.transform.position =
@@ -305,7 +305,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                     foreach (FileNode childFileNode in arrowData.currentDirectory.fileNodes)
                     {
                         activeCounter++;
-                        if (Mathf.Ceil(((float)activeCounter / (float)MaxIslandItemNumber)) == pageData.pageNumber)
+                        if (Mathf.Ceil((activeCounter / MaxIslandItemNumber)) == islandData.pageNumber)
                         {
                             childFileNode.transform.gameObject.SetActive(true);
                             childFileNode.transform.position =
@@ -336,13 +336,13 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             }
             else if (arrowData.direction == ArrowDirection.Left)
             {
-                if (pageData.pageNumber > 1)
+                if (islandData.pageNumber > 1)
                 {
-                    pageData.pageNumber--;
+                    islandData.pageNumber--;
                     foreach (DirectoryNode childDirectoryNode in arrowData.currentDirectory.directoryNodes)
                     {
                         activeCounter++;
-                        if (Mathf.Ceil(((float)activeCounter / (float)MaxIslandItemNumber)) == pageData.pageNumber)
+                        if (Mathf.Ceil((activeCounter / MaxIslandItemNumber)) == islandData.pageNumber)
                         {
                             childDirectoryNode.gameObject.SetActive(true);
                             childDirectoryNode.transform.position =
@@ -370,7 +370,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                     foreach (FileNode childFileNode in arrowData.currentDirectory.fileNodes)
                     {
                         activeCounter++;
-                        if (Mathf.Ceil((float)activeCounter / (float)MaxIslandItemNumber) == pageData.pageNumber)
+                        if (Mathf.Ceil(activeCounter / MaxIslandItemNumber) == islandData.pageNumber)
                         {
                             childFileNode.gameObject.SetActive(true);
                             childFileNode.transform.position =
