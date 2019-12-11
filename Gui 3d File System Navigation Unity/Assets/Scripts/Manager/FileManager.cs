@@ -254,24 +254,24 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             cameraConnector.Transition(currentIsland.gameObject);
             return;
         }
-        public void TurnPage(Arrow arrowData)
+        private void TurnPage(Arrow arrow)
         {
             var activeCounter = 0;
-            var island = arrowData.currentDirectory.transform.Find("Island of "
-                + arrowData.currentDirectory.name);
+            var island = arrow.currentDirectory.transform.Find("Island of "
+                + arrow.currentDirectory.name);
             var currentIslandPosition = island.position;
             var islandData = island.GetComponent<Island>();
             var x = -4;
             var y = 0.3f;
             var z = 4;
 
-            if (arrowData.direction == Arrow.ArrowDirection.Right)
+            if (arrow.direction == Arrow.ArrowDirection.Right)
             {
-                if (islandData.pageNumber < (Mathf.Ceil(arrowData.currentDirectory.directoryNodes.Count
-                    + arrowData.currentDirectory.fileNodes.Count) / MaxIslandItemNumber))
+                if (islandData.pageNumber < (Mathf.Ceil(arrow.currentDirectory.directoryNodes.Count
+                    + arrow.currentDirectory.fileNodes.Count) / MaxIslandItemNumber))
                 {
                     islandData.pageNumber++;
-                    foreach (DirectoryNode childDirectoryNode in arrowData.currentDirectory.directoryNodes)
+                    foreach (DirectoryNode childDirectoryNode in arrow.currentDirectory.directoryNodes)
                     {
                         activeCounter++;
                         if (Mathf.Ceil(((float)activeCounter / (float)MaxIslandItemNumber)) == islandData.pageNumber)
@@ -301,7 +301,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                             childDirectoryNode.transform.gameObject.SetActive(false);
                         }
                     }
-                    foreach (FileNode childFileNode in arrowData.currentDirectory.fileNodes)
+                    foreach (FileNode childFileNode in arrow.currentDirectory.fileNodes)
                     {
                         activeCounter++;
                         if (Mathf.Ceil(((float)activeCounter / (float)MaxIslandItemNumber)) == islandData.pageNumber)
@@ -334,12 +334,12 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                     }
                 }
             }
-            else if (arrowData.direction == Arrow.ArrowDirection.Left)
+            else if (arrow.direction == Arrow.ArrowDirection.Left)
             {
                 if (islandData.pageNumber > 1)
                 {
                     islandData.pageNumber--;
-                    foreach (DirectoryNode childDirectoryNode in arrowData.currentDirectory.directoryNodes)
+                    foreach (DirectoryNode childDirectoryNode in arrow.currentDirectory.directoryNodes)
                     {
                         activeCounter++;
                         if (Mathf.Ceil(((float)activeCounter / (float)MaxIslandItemNumber)) == islandData.pageNumber)
@@ -367,7 +367,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         else
                             childDirectoryNode.gameObject.SetActive(false);
                     }
-                    foreach (FileNode childFileNode in arrowData.currentDirectory.fileNodes)
+                    foreach (FileNode childFileNode in arrow.currentDirectory.fileNodes)
                     {
                         activeCounter++;
                         if (Mathf.Ceil(((float)activeCounter / (float)MaxIslandItemNumber)) == islandData.pageNumber)

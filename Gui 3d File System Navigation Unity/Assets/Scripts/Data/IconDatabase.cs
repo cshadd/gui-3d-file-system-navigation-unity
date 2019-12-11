@@ -14,7 +14,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
         private IconDatabase() : base() { return; }
 
         [Serializable]
-        public class IconEntry
+        private class IconEntry
         {
             public string iconName;
             public Sprite iconSprite;
