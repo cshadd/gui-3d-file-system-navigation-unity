@@ -560,22 +560,28 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                     if (driveNode != null)
                     {
                         selector.SetActive(true);
-                        selector.transform.position =
-                            raycastHit.transform.position;
+                        var selectorPosition = new Vector3(raycastHit.transform.position.x,
+                            raycastHit.transform.position.y + selector.transform.localScale.y,
+                            raycastHit.transform.position.z);
+                        selector.transform.position = selectorPosition;
                         nodeHoverUIConnector.ExecuteUI(driveNode);
                     }
                     else if (directoryNode != null)
                     {
                         selector.SetActive(true);
-                        selector.transform.position =
-                            raycastHit.transform.position;
+                        var selectorPosition = new Vector3(raycastHit.transform.position.x,
+                            raycastHit.transform.position.y + selector.transform.localScale.y,
+                            raycastHit.transform.position.z);
+                        selector.transform.position = selectorPosition;
                         nodeHoverUIConnector.ExecuteUI(directoryNode);
                     }
                     else if (fileNode != null)
                     {
                         selector.SetActive(true);
-                        selector.transform.position =
-                            raycastHit.transform.position;
+                        var selectorPosition = new Vector3(raycastHit.transform.position.x,
+                            raycastHit.transform.position.y + selector.transform.localScale.y,
+                            raycastHit.transform.position.z);
+                        selector.transform.position = selectorPosition;
                         nodeHoverUIConnector.ExecuteUI(fileNode);
                     }
                     else if (arrowData != null)
