@@ -463,7 +463,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 var islandData = raycastHitTransform.GetComponent<Island>();
                 var rodData = raycastHitTransform.GetComponent<Rod>();
 
-                if (Input.GetMouseButtonDown(0) && !nodePropertiesUIConnector.gameObject.activeInHierarchy)
+                if (Input.GetMouseButtonDown(0)
+                    && !nodePropertiesUIConnector.gameObject.activeInHierarchy)
                 {
                     if (directoryNode != null
                         && !directoryNode.extendedInfo.isShowingInternal)
@@ -528,7 +529,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         TurnPage(arrowData);
                     }
                 }
-                else if (Input.GetMouseButtonDown(1) && !nodePropertiesUIConnector.gameObject.activeInHierarchy)
+                else if (Input.GetMouseButtonDown(1)
+                    && !nodePropertiesUIConnector.gameObject.activeInHierarchy)
                 {
                     if (driveNode != null)
                     {
