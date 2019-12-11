@@ -7,12 +7,12 @@ namespace Gui3dFileSystemNavigationUnity.Data
         public DirectoryNode currentDirectory;
         public ArrowDirection direction;
 
+        private Arrow() : base() { return; }
+
         public enum ArrowDirection
         {
             Left,
             Right
         }
-
-        private Arrow() : base() { return; }
     }
 }
