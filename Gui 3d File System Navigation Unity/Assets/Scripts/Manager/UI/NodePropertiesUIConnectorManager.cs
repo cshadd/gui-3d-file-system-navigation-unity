@@ -273,7 +273,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 var extendedInfo = selectedDriveNode.extendedInfo;
                 textContent.text = "<b>Name:</b> " + container.Name + "\n" +
                                "<b>Type:</b> Drive (" + baseContainer.DriveType + ")\n" +
-                               "<b>Size:</b> " + extendedInfo.size + " bytes\n" +
+                               "<b>Size:</b> " + extendedInfo.size + " objects\n" +
                                "<b>Date Created:</b> " + container.CreationTime + "\n" +
                                "<b>Date Modified:</b> " + container.LastWriteTime + "\n" +
                                "<b>Attributes:</b> " + container.Attributes + "\n" +
@@ -380,7 +380,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                                "<b>Date Modified:</b> " + container.LastWriteTime + "\n" +
                                "<b>Date Accessed:</b> " + container.LastAccessTime + "\n" +
                                "<b>---------------------</b>" + "\n" +
-                               "<b>Attributes:</b> " + container.Attributes; ;
+                               "<b>Attributes:</b> " + container.Attributes;
             }
             return;
         }
