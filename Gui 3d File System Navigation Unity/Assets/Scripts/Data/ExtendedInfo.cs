@@ -22,7 +22,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
             isAccessDenied = false;
             isShowingInternal = false;
             location = null;
-            size = 0;
+            size = -1;
             return this;
         }
     }

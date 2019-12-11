@@ -25,7 +25,6 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         private NodeHoverUIConnectorManager nodeHoverUIConnector;
         [SerializeField]
         private NodePropertiesUIConnectorManager nodePropertiesUIConnector;
-        [SerializeField]
         private Ray ray;
         private RaycastHit raycastHit;
         [SerializeField]
@@ -99,8 +98,6 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         }
         private GameObject CreateIsland(DirectoryNode directoryNode)
         {
-            Debug.Log(count);
-
             var island = GameObject.CreatePrimitive(PrimitiveType.Cube);
             island.transform.parent = directoryNode.transform;
             island.transform.name = "Island of " + directoryNode.name;
@@ -259,17 +256,19 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         }
         public void TurnPage(Arrow arrowData)
         {
-            var island = arrowData.currentDirectory.transform.Find("Island of " + arrowData.currentDirectory.name);
+            var activeCounter = 0;
+            var island = arrowData.currentDirectory.transform.Find("Island of "
+                + arrowData.currentDirectory.name);
             var currentIslandPosition = island.position;
             var islandData = island.GetComponent<Island>();
             var x = -4;
             var y = 0.3f;
             var z = 4;
-            int activeCounter = 0;
 
             if (arrowData.direction == Arrow.ArrowDirection.Right)
             {
-                if (islandData.pageNumber < (Mathf.Ceil(arrowData.currentDirectory.directoryNodes.Count + arrowData.currentDirectory.fileNodes.Count) / MaxIslandItemNumber))
+                if (islandData.pageNumber < (Mathf.Ceil(arrowData.currentDirectory.directoryNodes.Count
+                    + arrowData.currentDirectory.fileNodes.Count) / MaxIslandItemNumber))
                 {
                     islandData.pageNumber++;
                     foreach (DirectoryNode childDirectoryNode in arrowData.currentDirectory.directoryNodes)
@@ -455,7 +454,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         {
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             var hit = Physics.Raycast(ray, out raycastHit);
-            if (hit)
+            if (hit
+                && !nodePropertiesUIConnector.gameObject.activeInHierarchy)
             {
                 var raycastHitTransform = raycastHit.transform;
                 var arrowData = raycastHitTransform.GetComponent<Arrow>();
@@ -465,8 +465,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 var islandData = raycastHitTransform.GetComponent<Island>();
                 var rodData = raycastHitTransform.GetComponent<Rod>();
 
-                if (Input.GetMouseButtonDown(0)
-                    && !nodePropertiesUIConnector.gameObject.activeInHierarchy)
+                if (Input.GetMouseButtonDown(0))
                 {
                     if (directoryNode != null
                         && !directoryNode.extendedInfo.isShowingInternal)
@@ -536,8 +535,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         TurnPage(arrowData);
                     }
                 }
-                else if (Input.GetMouseButtonDown(1)
-                    && !nodePropertiesUIConnector.gameObject.activeInHierarchy)
+                else if (Input.GetMouseButtonDown(1))
                 {
                     if (driveNode != null)
                     {
