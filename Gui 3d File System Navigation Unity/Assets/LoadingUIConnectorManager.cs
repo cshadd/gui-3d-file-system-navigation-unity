@@ -4,24 +4,24 @@ using UnityEngine.UI;
 
 namespace Gui3dFileSystemNavigationUnity.Manager
 {
-    public class CurrentDirectoryUIConnectorManager : AbstractUIConnectorManager
+    public class LoadingUIConnectorManager : AbstractUIConnectorManager
     {
         [SerializeField]
-        private Text textCurrentDirectoryPath;
+        private Text textLoading;
 
-        private CurrentDirectoryUIConnectorManager() : base() { return; }
+        private LoadingUIConnectorManager() : base() { return; }
 
         public void Clear()
         {
-            textCurrentDirectoryPath.text = "";
+            textLoading.text = "";
             return;
         }
         public override void ExecuteUI<T>(AbstractSystemNode<T> node)
         {
             base.ExecuteUI(node);
             var container = node.Container;
-
-            textCurrentDirectoryPath.text = "Current Directory: " + container.FullName;
+            Debug.LogWarning("Loading Node: " + container.FullName);
+            textLoading.text = "Loading Node: " + container.FullName;
             return;
         }
     }
