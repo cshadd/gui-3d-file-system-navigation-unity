@@ -22,10 +22,14 @@ namespace Gui3dFileSystemNavigationUnity.Data
             {
                 extendedInfo.icon = iconDatabase.GrabIcon("Default Directory");
             }
+
+            DirectoryInfo[] directories = null;
+            FileInfo[] files = null;
+
             try
             {
-                Container.GetDirectories();
-                Container.GetFiles();
+                directories = Container.GetDirectories();
+                files = Container.GetFiles();
             }
             catch (IOException ex)
             {
@@ -40,6 +44,10 @@ namespace Gui3dFileSystemNavigationUnity.Data
             if (parentDirectory != null && parentDirectory.Container != null)
             {
                 extendedInfo.location = parentDirectory.Container.FullName;
+            }
+            if (directories != null && files != null)
+            {
+                extendedInfo.size = directories.Length + files.Length;
             }
             return assignment;
         }

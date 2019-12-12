@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Gui3dFileSystemNavigationUnity.Data.Arrow">
+    <Position X="0.5" Y="0.5" Width="1.75" />
+    <Members>
+      <Method Name="Arrow" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Gui3dFileSystemNavigationUnity.Data.Arrow.ArrowDirection">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Data\Arrow.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Data\Arrow.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gui3dFileSystemNavigationUnity.Data.ExtendedInfo">
+    <Position X="2.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAgAIAAAAACEAAAAAABAQAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Data\ExtendedInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gui3dFileSystemNavigationUnity.Data.IconDatabase">
+    <Position X="4.5" Y="0.5" Width="1.5" />
+    <Members>
+      <Field Name="entries" Hidden="true" />
+      <Method Name="IconDatabase" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="Gui3dFileSystemNavigationUnity.Data.IconDatabase.IconEntry">
+        <Members>
+          <Method Name="IconEntry" Hidden="true" />
+        </Members>
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\Data\IconDatabase.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Data\IconDatabase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gui3dFileSystemNavigationUnity.Data.Island">
+    <Position X="6.25" Y="0.5" Width="1.5" />
+    <Members>
+      <Method Name="Island" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Data\Island.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Gui3dFileSystemNavigationUnity.Data.Rod">
+    <Position X="6.25" Y="2" Width="1.5" />
+    <Members>
+      <Method Name="Rod" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Data\Rod.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

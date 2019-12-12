@@ -37,6 +37,10 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         [SerializeField]
         private ScrollRect scrollRectContent;
         [SerializeField]
+        private Scrollbar scrollbarHorizontal;
+        [SerializeField]
+        private Scrollbar scrollbarVertical;
+        [SerializeField]
         private DriveNode selectedDriveNode;
         [SerializeField]
         private DirectoryNode selectedDirectoryNode;
@@ -259,6 +263,9 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             scrollRectContent.gameObject.SetActive(true);
             textContent.gameObject.SetActive(true);
 
+            scrollbarHorizontal.value = 0;
+            scrollbarVertical.value = 1;
+
             if (selectedDriveNode != null)
             {
                 var baseContainer = selectedDriveNode.BaseContainer;
@@ -266,7 +273,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 var extendedInfo = selectedDriveNode.extendedInfo;
                 textContent.text = "<b>Name:</b> " + container.Name + "\n" +
                                "<b>Type:</b> Drive (" + baseContainer.DriveType + ")\n" +
-                               "<b>Size:</b> " + extendedInfo.size + " bytes\n" +
+                               "<b>Size:</b> " + extendedInfo.size + " objects\n" +
                                "<b>Date Created:</b> " + container.CreationTime + "\n" +
                                "<b>Date Modified:</b> " + container.LastWriteTime + "\n" +
                                "<b>Attributes:</b> " + container.Attributes + "\n" +
@@ -279,6 +286,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 textContent.text = "<b>Name:</b> " + container.Name + "\n" +
                                "<b>Type:</b> Directory\n" +
                                "<b>Folder Path:</b> " + extendedInfo.location + "\n" +
+                               "<b>Size:</b> " + extendedInfo.size + " objects\n" +
                                "<b>Date Created:</b> " + container.CreationTime + "\n" +
                                "<b>Date Modified:</b> " + container.LastWriteTime + "\n" +
                                "<b>Attributes:</b> " + container.Attributes + "\n" +
@@ -311,6 +319,9 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             scrollRectContent.gameObject.SetActive(true);
             textContent.gameObject.SetActive(true);
 
+            scrollbarHorizontal.value = 0;
+            scrollbarVertical.value = 1;
+
             if (selectedDriveNode != null)
             {
                 var baseContainer = selectedDriveNode.BaseContainer;
@@ -327,6 +338,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                                "<b>Free Space:</b> " + baseContainer.TotalFreeSpace + " bytes\n" +
                                "<b>User Free Space:</b> " + baseContainer.AvailableFreeSpace + " bytes\n" +
                                "<b>Total Size:</b> " + baseContainer.TotalSize + " bytes\n" +
+                               "<b>Size:</b> " + extendedInfo.size + " objects\n" +
                                "<b>---------------------</b>" + "\n" +
                                "<b>Date Created:</b> " + container.CreationTime + "\n" +
                                "<b>Date Modified:</b> " + container.LastWriteTime + "\n" +
@@ -343,7 +355,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                                "<b>Type:</b> Directory\n" +
                                "<b>Description:</b> " + container.GetType() + "\n" +
                                "<b>---------------------</b>" + "\n" +
-                               "<b>Location:</b> " + extendedInfo.location + "\n" + 
+                               "<b>Location:</b> " + extendedInfo.location + "\n" +
+                               "<b>Size:</b> " + extendedInfo.size + " objects\n" +
                                "<b>---------------------</b>" + "\n" +
                                "<b>Date Created:</b> " + container.CreationTime + "\n" +
                                "<b>Date Modified:</b> " + container.LastWriteTime + "\n" +
@@ -367,7 +380,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                                "<b>Date Modified:</b> " + container.LastWriteTime + "\n" +
                                "<b>Date Accessed:</b> " + container.LastAccessTime + "\n" +
                                "<b>---------------------</b>" + "\n" +
-                               "<b>Attributes:</b> " + container.Attributes; ;
+                               "<b>Attributes:</b> " + container.Attributes;
             }
             return;
         }
@@ -382,6 +395,9 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             inputFieldEditor.gameObject.SetActive(false);
             scrollRectContent.gameObject.SetActive(true);
             textContent.gameObject.SetActive(false);
+
+            scrollbarHorizontal.value = 0;
+            scrollbarVertical.value = 1;
 
             if (selectedDirectoryNode != null)
             {
@@ -495,15 +511,21 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             scrollRectContent.gameObject.SetActive(true);
             textContent.gameObject.SetActive(true);
 
+            scrollbarHorizontal.value = 0;
+            scrollbarVertical.value = 1;
+
             if (selectedDriveNode != null)
             {
                 var container = selectedDriveNode.Container;
                 var extendedInfo = selectedDriveNode.extendedInfo;
                 textContent.text = "<b>Name:</b> " + container.Name + "\n" +
                                "<b>---------------------</b>" + "\n" +
-                               "<b>Read Only:</b> " + ((container.Attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly) + "\n" +
-                               "<b>Encrypted:</b> " + ((container.Attributes & FileAttributes.Encrypted) == FileAttributes.Encrypted) + "\n" +
-                               "<b>System:</b> " + ((container.Attributes & FileAttributes.System) == FileAttributes.System);
+                               "<b>Read Only:</b> " + ((container.Attributes & FileAttributes.ReadOnly)
+                               == FileAttributes.ReadOnly) + "\n" +
+                               "<b>Encrypted:</b> " + ((container.Attributes & FileAttributes.Encrypted)
+                               == FileAttributes.Encrypted) + "\n" +
+                               "<b>System:</b> " + ((container.Attributes & FileAttributes.System)
+                               == FileAttributes.System);
             }
             else if (selectedDirectoryNode != null)
             {
@@ -511,9 +533,12 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 var extendedInfo = selectedDirectoryNode.extendedInfo;
                 textContent.text = "<b>Name:</b> " + container.Name + "\n" +
                                "<b>---------------------</b>" + "\n" +
-                               "<b>Read Only:</b> " + ((container.Attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly) + "\n" +
-                               "<b>Encrypted:</b> " + ((container.Attributes & FileAttributes.Encrypted) == FileAttributes.Encrypted) + "\n" +
-                               "<b>System:</b> " + ((container.Attributes & FileAttributes.System) == FileAttributes.System);
+                               "<b>Read Only:</b> " + ((container.Attributes & FileAttributes.ReadOnly)
+                               == FileAttributes.ReadOnly) + "\n" +
+                               "<b>Encrypted:</b> " + ((container.Attributes & FileAttributes.Encrypted)
+                               == FileAttributes.Encrypted) + "\n" +
+                               "<b>System:</b> " + ((container.Attributes & FileAttributes.System)
+                               == FileAttributes.System);
             }
             else if (selectedFileNode != null)
             {
@@ -521,9 +546,12 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 var extendedInfo = selectedFileNode.extendedInfo;
                 textContent.text = "<b>Name:</b> " + container.Name + "\n" +
                                "<b>---------------------</b>" + "\n" +
-                               "<b>Read Only:</b> " + ((container.Attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly) + "\n" +
-                               "<b>Encrypted:</b> " + ((container.Attributes & FileAttributes.Encrypted) == FileAttributes.Encrypted) + "\n" +
-                               "<b>System:</b> " + ((container.Attributes & FileAttributes.System) == FileAttributes.System);
+                               "<b>Read Only:</b> " + ((container.Attributes & FileAttributes.ReadOnly)
+                               == FileAttributes.ReadOnly) + "\n" +
+                               "<b>Encrypted:</b> " + ((container.Attributes & FileAttributes.Encrypted)
+                               == FileAttributes.Encrypted) + "\n" +
+                               "<b>System:</b> " + ((container.Attributes & FileAttributes.System)
+                               == FileAttributes.System);
             }
             return;
         }

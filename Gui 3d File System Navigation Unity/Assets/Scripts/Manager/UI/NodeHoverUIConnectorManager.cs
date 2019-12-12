@@ -21,7 +21,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         }
         public override void ExecuteUI<T>(AbstractSystemNode<T> node)
         {
-            base.ExecuteUI<T>(node);
+            base.ExecuteUI(node);
             var container = node.Container;
             var extendedInfo = node.extendedInfo;
 

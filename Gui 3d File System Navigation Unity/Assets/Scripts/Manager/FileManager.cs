@@ -25,7 +25,6 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         private NodeHoverUIConnectorManager nodeHoverUIConnector;
         [SerializeField]
         private NodePropertiesUIConnectorManager nodePropertiesUIConnector;
-        [SerializeField]
         private Ray ray;
         private RaycastHit raycastHit;
         [SerializeField]
@@ -37,24 +36,23 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 
         private FileManager() : base() { return; }
 
-        private GameObject CreateArrow(DirectoryNode directoryNode, ArrowDirection direction)
+        private GameObject CreateArrow(DirectoryNode directoryNode, Arrow.ArrowDirection direction)
         {
-            var arrow = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+            var arrow = GameObject.CreatePrimitive(PrimitiveType.Quad);
             arrow.transform.parent = directoryNode.transform;
             arrow.transform.name = direction + " Arrow of " + directoryNode.name;
 
             var island = directoryNode.transform.Find("Island of " + directoryNode.name);
-            if (direction == ArrowDirection.Left)
+            if (direction == Arrow.ArrowDirection.Left)
             {
                 arrow.transform.position =
                   island.transform.position + new Vector3(-4, 2, 5);
             }
-            else if (direction == ArrowDirection.Right)
+            else if (direction == Arrow.ArrowDirection.Right)
             {
                 arrow.transform.position =
                     island.transform.position + new Vector3(4, 2, 5);
             }
-
 
             var arrowData = arrow.AddComponent<Arrow>();
             arrowData.currentDirectory = directoryNode;
@@ -100,8 +98,6 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         }
         private GameObject CreateIsland(DirectoryNode directoryNode)
         {
-            Debug.Log(count);
-
             var island = GameObject.CreatePrimitive(PrimitiveType.Cube);
             island.transform.parent = directoryNode.transform;
             island.transform.name = "Island of " + directoryNode.name;
@@ -127,7 +123,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             currentIsland = islandData;
 
             var islandRenderer = island.GetComponent<Renderer>();
-            islandRenderer.material.SetColor("_Color", Color.white);
+            var redIslandColor = new Color32(222, 85, 115, 255);
+            islandRenderer.material.SetColor("_Color", redIslandColor);
 
             return island;
         }
@@ -139,7 +136,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         {
             var currentIslandItemNumber = 0;
             var x = -4;
-            var y = 0;
+            var y = 0.3f;
             var z = 4;
 
             foreach (DirectoryNode childDirectoryNode in directoryNode.parentDirectory.directoryNodes)
@@ -149,10 +146,10 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                     + childDirectoryNode.name);
                 var childDirectoryNodeRod = childDirectoryNode.transform.Find("Rod of "
                     + childDirectoryNode.name);
-                var childDirectoryNodeLeftArrow = childDirectoryNode.transform.Find(ArrowDirection.Left + " Arrow of "
-                    + childDirectoryNode.name);
-                var childDirectoryNodeRightArrow = childDirectoryNode.transform.Find(ArrowDirection.Right + " Arrow of "
-                    + childDirectoryNode.name);
+                var childDirectoryNodeLeftArrow = childDirectoryNode.transform.Find(Arrow.ArrowDirection.Left
+                    + " Arrow of " + childDirectoryNode.name);
+                var childDirectoryNodeRightArrow = childDirectoryNode.transform.Find(Arrow.ArrowDirection.Right
+                    + " Arrow of " + childDirectoryNode.name);
                 if (childDirectoryNodeIsland != null)
                 {
                     Destroy(childDirectoryNodeIsland.gameObject);
@@ -175,7 +172,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             {
                 var island = CreateIsland(directoryNode);
                 var currentIslandPosition = island.transform.position;
-                var pageData = island.GetComponent<Island>();
+                var islandData = island.GetComponent<Island>();
                 CreateConnectingRod(directoryNode);
 
                 cameraConnector.Transition(island);
@@ -185,8 +182,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                     if (currentIslandItemNumber < MaxIslandItemNumber)
                     {
                         currentIslandItemNumber++;
-                        childDirectoryNode.transform.position =
-                            currentIslandPosition + new Vector3(x, y, z);
+                        childDirectoryNode.transform.position = currentIslandPosition + new Vector3(x, y, z);
 
                         x += 1;
                         if (x >= 5)
@@ -216,8 +212,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                     if (currentIslandItemNumber < MaxIslandItemNumber)
                     {
                         currentIslandItemNumber++;
-                        childFileNode.transform.position =
-                        currentIslandPosition + new Vector3(x, y, z);
+                        childFileNode.transform.position = currentIslandPosition + new Vector3(x, y, z);
                         childFileNode.transform.localScale = new Vector3(1, 2, 1);
 
                         x += 1;
@@ -234,7 +229,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         }
                         else
                         {
-                            childFileNodeRenderer.material.SetColor("_Color", Color.blue);
+                            var blueFileColor = new Color32(91, 204, 244, 255);
+                            childFileNodeRenderer.material.SetColor("_Color", blueFileColor);
                         }
                     }
                     else
@@ -245,11 +241,12 @@ namespace Gui3dFileSystemNavigationUnity.Manager
 
                 if (currentIslandItemNumber >= MaxIslandItemNumber)
                 {
-                    CreateArrow(directoryNode, ArrowDirection.Left);
-                    CreateArrow(directoryNode, ArrowDirection.Right);
-                    pageData.pageNumber++;
+                    CreateArrow(directoryNode, Arrow.ArrowDirection.Left);
+                    CreateArrow(directoryNode, Arrow.ArrowDirection.Right);
+                    islandData.pageNumber++;
                 }
             }
+
             return;
         }
         public void ResetCamera()
@@ -257,25 +254,27 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             cameraConnector.Transition(currentIsland.gameObject);
             return;
         }
-        public void TurnPage(Arrow arrowData)
+        private void TurnPage(Arrow arrow)
         {
-            var island = arrowData.currentDirectory.transform.Find("Island of " + arrowData.currentDirectory.name);
+            var activeCounter = 0;
+            var island = arrow.currentDirectory.transform.Find("Island of "
+                + arrow.currentDirectory.name);
             var currentIslandPosition = island.position;
-            var pageData = island.GetComponent<Island>();
+            var islandData = island.GetComponent<Island>();
             var x = -4;
-            var y = 0;
+            var y = 0.3f;
             var z = 4;
-            int activeCounter = 0;
 
-            if (arrowData.direction == ArrowDirection.Right)
+            if (arrow.direction == Arrow.ArrowDirection.Right)
             {
-                if (pageData.pageNumber < (Mathf.Ceil((float)arrowData.currentDirectory.directoryNodes.Count + (float)arrowData.currentDirectory.fileNodes.Count) / MaxIslandItemNumber))
+                if (islandData.pageNumber < (Mathf.Ceil(arrow.currentDirectory.directoryNodes.Count
+                    + arrow.currentDirectory.fileNodes.Count) / MaxIslandItemNumber))
                 {
-                    pageData.pageNumber++;
-                    foreach (DirectoryNode childDirectoryNode in arrowData.currentDirectory.directoryNodes)
+                    islandData.pageNumber++;
+                    foreach (DirectoryNode childDirectoryNode in arrow.currentDirectory.directoryNodes)
                     {
                         activeCounter++;
-                        if (Mathf.Ceil(((float)activeCounter / (float)MaxIslandItemNumber)) == pageData.pageNumber)
+                        if (Mathf.Ceil(((float)activeCounter / (float)MaxIslandItemNumber)) == islandData.pageNumber)
                         {
                             childDirectoryNode.transform.gameObject.SetActive(true);
                             childDirectoryNode.transform.position =
@@ -302,10 +301,10 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                             childDirectoryNode.transform.gameObject.SetActive(false);
                         }
                     }
-                    foreach (FileNode childFileNode in arrowData.currentDirectory.fileNodes)
+                    foreach (FileNode childFileNode in arrow.currentDirectory.fileNodes)
                     {
                         activeCounter++;
-                        if (Mathf.Ceil(((float)activeCounter / (float)MaxIslandItemNumber)) == pageData.pageNumber)
+                        if (Mathf.Ceil(((float)activeCounter / (float)MaxIslandItemNumber)) == islandData.pageNumber)
                         {
                             childFileNode.transform.gameObject.SetActive(true);
                             childFileNode.transform.position =
@@ -317,14 +316,15 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                                 x = -4;
                                 z -= 1;
                             }
-                            var childDirectoryNodeRenderer = childFileNode.GetComponent<Renderer>();
+                            var childFileNodeRenderer = childFileNode.GetComponent<Renderer>();
                             if (childFileNode.extendedInfo.isAccessDenied)
                             {
-                                childDirectoryNodeRenderer.material.SetColor("_Color", Color.red);
+                                childFileNodeRenderer.material.SetColor("_Color", Color.red);
                             }
                             else
                             {
-                                childDirectoryNodeRenderer.material.SetColor("_Color", Color.blue);
+                                var blueFileColor = new Color32(91, 204, 244, 255);
+                                childFileNodeRenderer.material.SetColor("_Color", blueFileColor);
                             }
                         }
                         else
@@ -334,15 +334,15 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                     }
                 }
             }
-            else if (arrowData.direction == ArrowDirection.Left)
+            else if (arrow.direction == Arrow.ArrowDirection.Left)
             {
-                if (pageData.pageNumber > 1)
+                if (islandData.pageNumber > 1)
                 {
-                    pageData.pageNumber--;
-                    foreach (DirectoryNode childDirectoryNode in arrowData.currentDirectory.directoryNodes)
+                    islandData.pageNumber--;
+                    foreach (DirectoryNode childDirectoryNode in arrow.currentDirectory.directoryNodes)
                     {
                         activeCounter++;
-                        if (Mathf.Ceil(((float)activeCounter / (float)MaxIslandItemNumber)) == pageData.pageNumber)
+                        if (Mathf.Ceil(((float)activeCounter / (float)MaxIslandItemNumber)) == islandData.pageNumber)
                         {
                             childDirectoryNode.gameObject.SetActive(true);
                             childDirectoryNode.transform.position =
@@ -367,10 +367,10 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         else
                             childDirectoryNode.gameObject.SetActive(false);
                     }
-                    foreach (FileNode childFileNode in arrowData.currentDirectory.fileNodes)
+                    foreach (FileNode childFileNode in arrow.currentDirectory.fileNodes)
                     {
                         activeCounter++;
-                        if (Mathf.Ceil((float)activeCounter / (float)MaxIslandItemNumber) == pageData.pageNumber)
+                        if (Mathf.Ceil(((float)activeCounter / (float)MaxIslandItemNumber)) == islandData.pageNumber)
                         {
                             childFileNode.gameObject.SetActive(true);
                             childFileNode.transform.position =
@@ -382,14 +382,15 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                                 x = -4;
                                 z -= 1;
                             }
-                            var childDirectoryNodeRenderer = childFileNode.GetComponent<Renderer>();
+                            var childFileNodeRenderer = childFileNode.GetComponent<Renderer>();
                             if (childFileNode.extendedInfo.isAccessDenied)
                             {
-                                childDirectoryNodeRenderer.material.SetColor("_Color", Color.red);
+                                childFileNodeRenderer.material.SetColor("_Color", Color.red);
                             }
                             else
                             {
-                                childDirectoryNodeRenderer.material.SetColor("_Color", Color.blue);
+                                var blueFileColor = new Color32(91, 204, 244, 255);
+                                childFileNodeRenderer.material.SetColor("_Color", blueFileColor);
                             }
                         }
                         else
@@ -423,7 +424,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
             count++;
 
             var x = -4;
-            var y = 0;
+            var y = 0.3f;
             var z = 4;
             foreach (DriveNode childDriveNode in root.driveNodes)
             {
@@ -453,7 +454,8 @@ namespace Gui3dFileSystemNavigationUnity.Manager
         {
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             var hit = Physics.Raycast(ray, out raycastHit);
-            if (hit)
+            if (hit
+                && !nodePropertiesUIConnector.gameObject.activeInHierarchy)
             {
                 var raycastHitTransform = raycastHit.transform;
                 var arrowData = raycastHitTransform.GetComponent<Arrow>();
@@ -463,12 +465,17 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                 var islandData = raycastHitTransform.GetComponent<Island>();
                 var rodData = raycastHitTransform.GetComponent<Rod>();
 
-                if (Input.GetMouseButtonDown(0) && !nodePropertiesUIConnector.gameObject.activeInHierarchy)
+                if (Input.GetMouseButtonDown(0))
                 {
                     if (directoryNode != null
                         && !directoryNode.extendedInfo.isShowingInternal)
                     {
                         OpenDirectory(directoryNode);
+                    }
+                    else if (fileNode != null)
+                    {
+                        Debug.Log("Sending " + fileNode.name + " to UI.");
+                        nodePropertiesUIConnector.ExecuteUI(fileNode);
                     }
                     else if (rodData != null)
                     {
@@ -503,10 +510,10 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         var next = rodData.currentDirectory;
                         var nextIsland = next.transform.Find("Island of "
                             + next.name);
-                        var nextLeftArrow = next.transform.Find(ArrowDirection.Left + " Arrow of "
-                            + next.name);
-                        var nextRightArrow = next.transform.Find(ArrowDirection.Right + " Arrow of "
-                            + next.name);
+                        var nextLeftArrow = next.transform.Find(Arrow.ArrowDirection.Left
+                            + " Arrow of " + next.name);
+                        var nextRightArrow = next.transform.Find(Arrow.ArrowDirection.Right
+                            + " Arrow of " + next.name);
                         if (nextIsland != null)
                         {
                             Destroy(nextIsland.gameObject);
@@ -528,7 +535,7 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                         TurnPage(arrowData);
                     }
                 }
-                else if (Input.GetMouseButtonDown(1) && !nodePropertiesUIConnector.gameObject.activeInHierarchy)
+                else if (Input.GetMouseButtonDown(1))
                 {
                     if (driveNode != null)
                     {
@@ -558,22 +565,28 @@ namespace Gui3dFileSystemNavigationUnity.Manager
                     if (driveNode != null)
                     {
                         selector.SetActive(true);
-                        selector.transform.position =
-                            raycastHit.transform.position;
+                        var selectorPosition = new Vector3(raycastHit.transform.position.x,
+                            raycastHit.transform.position.y + selector.transform.localScale.y,
+                            raycastHit.transform.position.z);
+                        selector.transform.position = selectorPosition;
                         nodeHoverUIConnector.ExecuteUI(driveNode);
                     }
                     else if (directoryNode != null)
                     {
                         selector.SetActive(true);
-                        selector.transform.position =
-                            raycastHit.transform.position;
+                        var selectorPosition = new Vector3(raycastHit.transform.position.x,
+                            raycastHit.transform.position.y + selector.transform.localScale.y,
+                            raycastHit.transform.position.z);
+                        selector.transform.position = selectorPosition;
                         nodeHoverUIConnector.ExecuteUI(directoryNode);
                     }
                     else if (fileNode != null)
                     {
                         selector.SetActive(true);
-                        selector.transform.position =
-                            raycastHit.transform.position;
+                        var selectorPosition = new Vector3(raycastHit.transform.position.x,
+                            raycastHit.transform.position.y + selector.transform.localScale.y,
+                            raycastHit.transform.position.z);
+                        selector.transform.position = selectorPosition;
                         nodeHoverUIConnector.ExecuteUI(fileNode);
                     }
                     else if (arrowData != null)

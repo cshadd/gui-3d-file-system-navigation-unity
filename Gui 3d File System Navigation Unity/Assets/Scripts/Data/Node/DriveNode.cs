@@ -8,7 +8,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
 
         private DriveNode(string path = null) : base(path) { return; }
 
-        public new ISystemNode<DirectoryInfo> Assign(DirectoryInfo container,
+        public override ISystemNode<DirectoryInfo> Assign(DirectoryInfo container,
             DirectoryNode parent = null)
         {
             var assignment = base.Assign(container, parent);

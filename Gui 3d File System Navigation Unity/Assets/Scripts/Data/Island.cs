@@ -6,6 +6,7 @@ namespace Gui3dFileSystemNavigationUnity.Data
     {
         public DirectoryNode currentDirectory;
         public int pageNumber = 0;
+
         private Island() : base() { return; }
     }
 }

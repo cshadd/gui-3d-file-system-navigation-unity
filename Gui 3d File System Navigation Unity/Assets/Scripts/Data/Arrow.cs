@@ -8,10 +8,11 @@ namespace Gui3dFileSystemNavigationUnity.Data
         public ArrowDirection direction;
 
         private Arrow() : base() { return; }
-    }
-    public enum ArrowDirection
-    {
-        Left,
-        Right
+
+        public enum ArrowDirection
+        {
+            Left,
+            Right
+        }
     }
 }
